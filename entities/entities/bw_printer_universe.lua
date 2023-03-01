@@ -4,15 +4,14 @@ ENT.Base = "bw_base_moneyprinter"
 ENT.Model = "models/props_lab/reciever01a.mdl"
 ENT.Skin = 0
 
-ENT.Capacity 		= 12500
+ENT.Capacity 		= 200000
 ENT.PrintInterval 	= 1
-ENT.PrintAmount		= 25
+ENT.PrintAmount		= 400
 
-ENT.PrintName = "Gold Printer"
+ENT.PrintName = "Universe Printer"
 
-ENT.FontColor = Color(204, 153, 0)
+ENT.FontColor = Color(255, 0, 200)
 ENT.BackColor = color_black
 
 ENT.IsValidRaidable = true
-
-ENT.PresetMaxHealth = 250
+ENT.PresetMaxHealth = 5000

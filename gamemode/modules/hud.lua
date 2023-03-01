@@ -85,14 +85,17 @@ function MODULE:DrawStructureInfo(ent)
 	curx = curx - W / 2
 	cury = cury - H / 2
 
-	surface.SetDrawColor(shade)
-	surface.DrawRect(curx, cury, W, H)
+	if (ent:GetClass() != "prop_physics") then
+		surface.SetDrawColor(shade)
+		surface.DrawRect(curx, cury, W, H)
 
-	surface.SetFont(Font)
-	w, h = surface.GetTextSize(name)
+		surface.SetFont(Font)
+		w, h = surface.GetTextSize(name)
 
-	draw.DrawText(name, Font, oldx - w / 2, cury, shade)
-	draw.DrawText(name, Font, oldx - w / 2, cury, textc)
+	 
+		draw.DrawText(name, Font, oldx - w / 2, cury, shade)
+		draw.DrawText(name, Font, oldx - w / 2, cury, textc)
+	end
 
 	if ent:Health() > 0 then
 
@@ -116,7 +119,7 @@ function MODULE:DrawStructureInfo(ent)
 
 	end
 
-	if ent.GetPower then
+	/*if ent.GetPower then
 
 		cury = cury + H + 1
 
@@ -136,9 +139,9 @@ function MODULE:DrawStructureInfo(ent)
 		draw.DrawText(PowerStr, Font2, oldx - w / 2, cury + Padding, shade)
 		draw.DrawText(PowerStr, Font2, oldx - w / 2, cury + Padding, color_white)
 
-	end
+	end*/
 
-	if ent:BadlyDamaged() then
+	if ent.BadlyDamaged and ent:BadlyDamaged() then
 
 		cury = cury + H + 1
 
@@ -162,9 +165,10 @@ function MODULE:DrawDisplay()
 	local me = LocalPlayer()
 	local Ent = me:GetEyeTrace().Entity
 
-	if BaseWars.Ents:ValidClose(Ent, me, 200) and (Ent.IsElectronic or Ent.IsGenerator or Ent.DrawStructureDisplay) then
+	if BaseWars.Ents:ValidClose(Ent, me, 200) and (Ent.IsElectronic or Ent.IsGenerator or Ent.DrawStructureDisplay or Ent:GetClass() == "prop_physics") then
 
 		self:DrawStructureInfo(Ent)
+		return
 
 	end
 
@@ -195,8 +199,8 @@ function MODULE:Paint()
 	local KarmaText = string.format(BaseWars.LANG.KarmaText, Karma)
 
 	local Level = me:GetLevel()
-	local XP = me:GetXP()
-	local NextLevelXP = me:GetXPNextLevel()
+	local XP = BaseWars.NumberFormat(me:GetXP())
+	local NextLevelXP = BaseWars.NumberFormat(me:GetXPNextLevel())
 	local LevelText = string.format(BaseWars.LANG.LevelText, Level)
 	local XPText = string.format(BaseWars.LANG.XPText, XP, NextLevelXP)
 	local LvlText = LevelText .. ",     " .. XPText

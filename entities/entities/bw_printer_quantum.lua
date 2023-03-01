@@ -4,9 +4,9 @@ ENT.Base = "bw_base_moneyprinter"
 ENT.Model = "models/props_lab/reciever01a.mdl"
 ENT.Skin = 0
 
-ENT.Capacity 		= 30000000
+ENT.Capacity 		= 150000
 ENT.PrintInterval 	= 1
-ENT.PrintAmount		= 10250
+ENT.PrintAmount		= 300
 
 ENT.PrintName = "Quantum Printer"
 

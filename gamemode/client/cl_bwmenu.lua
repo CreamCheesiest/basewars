@@ -104,9 +104,10 @@ local function PrepMenu()
 
 	local ftionTab = tabPanel:MakeTab("Factions", "icon16/layers.png")
 	local raidsTab = tabPanel:MakeTab("Raids", "icon16/building_delete.png")
+	local bountyTab = tabPanel:MakeTab("Bounties", "icon16/exclamation.png")
 	local rulesTab = tabPanel:MakeTab("Rules", "icon16/script.png")
 
-	return mainFrame, tabPanel, ftionTab, raidsTab, rulesTab
+	return mainFrame, tabPanel, ftionTab, raidsTab, bountyTab, rulesTab 
 
 end
 
@@ -182,6 +183,108 @@ local function MakePlayerList(pnl)
 			local plyInFaction, plyFaction = ply:InFaction(), ply:GetFaction()
 
 			pnl:SetColumnText(2, plyInFaction and plyFaction or "<NONE>")
+
+		end
+
+	end
+
+	function plyList:Think()
+
+		self:UpdatePlayers()
+
+	end
+
+	function plyList:OnRowSelected(id, panel)
+
+		if not panel or not IsValid(panel) then return end
+
+		self.SelectedPly = GetPlayer(panel:GetColumnText(1))
+
+	end
+
+	plyList:UpdatePlayers()
+
+	return plyList
+
+end
+
+local function MakeBountyList(pnl)
+
+	local plyList = pnl:Add("DListView")
+
+	plyList:AddColumn("Player")
+	plyList:AddColumn("Bounty")
+
+	plyList:Dock(FILL)
+
+	plyList.PlayerLines = {}
+
+	net.Receive("BountyTableSend", function(len, ply)
+		plys = net.ReadTable()
+	end)
+
+	local function GetPlayer(t)
+
+		for steamid, bounty in pairs(plys) do
+
+			if player.GetBySteamID(steamid):Nick() == t then
+			return ply end
+
+		end
+
+		return false
+
+	end
+
+	function plyList:UpdatePlayers()
+
+		net.Start( "BountyTableRequest" )
+		net.SendToServer()
+
+		if plys == nil then return end
+
+		for steamid, bounty in pairs(plys) do
+
+			if (steamid == "BOT") then return end
+
+			local ply = player.GetBySteamID(steamid)
+
+			--if ply == me then continue end
+
+			if not self.PlayerLines[ply] then
+
+				local line = self:AddLine(ply:Nick(), BaseWars.LANG.CURRENCY .. bounty or "<NONE>")
+				self.PlayerLines[ply] = line
+
+			end
+
+		end
+
+		for ply, pnl in pairs(self.PlayerLines) do
+
+			if not IsValid(pnl) then
+
+				pnl:Remove()
+				continue
+
+			end
+
+			if not pnl.SetColumnText then
+
+				pnl:Remove()
+				continue
+
+			end
+
+			if not IsValid(ply) then
+
+				local id = pnl:GetID()
+				self:RemoveLine(id)
+				self.PlayerLines[ply] = nil
+
+				continue
+
+			end
 
 		end
 
@@ -629,7 +732,7 @@ local function CreatePopupDialog(c, id, ...)
 
 end
 
-local function MakeMenu(mainFrame, tabPanel, ftionTab, raidsTab, rulesTab)
+local function MakeMenu(mainFrame, tabPanel, ftionTab, raidsTab, bountyTab, rulesTab)
 
 	function mainFrame:OpenMenuThing(c, i, ...)
 
@@ -829,8 +932,9 @@ local function MakeMenu(mainFrame, tabPanel, ftionTab, raidsTab, rulesTab)
 
 			local InFac 	= me:InFaction()
 			local InFac2 	= Enemy and Enemy:InFaction() and not (Enemy:InFaction(me:GetFaction()))
+			print("Player: " .. tostring(InFac) .. " Enemy: ".. tostring(InFac2))
 
-			if not Enemy or (InFac and not InFac2) or (InFac2 and not InFac) then self:SetDisabled(true) else self:SetDisabled(false) self.Enemy = Enemy end
+			if not Enemy or (InFac and InFac2) or (InFac2 and InFac) then self:SetDisabled(true) else self:SetDisabled(false) self.Enemy = Enemy end
 
 		end
 
@@ -855,6 +959,47 @@ local function MakeMenu(mainFrame, tabPanel, ftionTab, raidsTab, rulesTab)
 			self:SetDisabled(Disabled)
 
 		end
+
+	end
+
+	do -- Bounty tab
+
+		bountyTab:DockPadding(16, 8, 16, 16)
+		local bountyLabel = bountyTab:Add("DLabel")
+
+		bountyLabel:Dock(TOP)
+		bountyLabel:SetText("Bounties")
+		bountyLabel:SetFont(bigFont)
+		bountyLabel:SetDark(true)
+		bountyLabel:SizeToContents()
+
+		local yourfLabel = bountyTab:Add("DLabel")
+
+		yourfLabel:SetPos(128 + 8, 20)
+		yourfLabel:SetText("")
+		yourfLabel:SetFont(medFont)
+		yourfLabel:SetDark(true)
+		yourfLabel:SizeToContents()
+
+		function yourfLabel:Think()
+
+			local inFaction, myFaction = me:InFaction(), me:GetFaction()
+
+			if not inFaction then
+
+				self:SetText("You're not currently in a faction.")
+
+			else
+
+				self:SetText("Your faction: " .. myFaction)
+
+			end
+
+			self:SizeToContents()
+
+		end
+
+		local plyList = MakeBountyList(bountyTab)
 
 	end
 

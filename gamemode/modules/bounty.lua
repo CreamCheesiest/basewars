@@ -5,6 +5,11 @@ MODULE.BountyTable = {}
 local tag = "BaseWars.Bounty"
 local PLAYER = debug.getregistry().Player
 
+if SERVER then
+	util.AddNetworkString( "BountyTableRequest" )
+	util.AddNetworkString( "BountyTableSend" )
+end
+
 function MODULE:__INIT()
 
 	if __BASEWARS_BOUNTY_BACKUP then
@@ -20,7 +25,16 @@ end
 
 if SERVER then
 
+	local check = false
+
+	net.Receive( "BountyTableRequest", function(len, ply)
+		net.Start("BountyTableSend")
+		net.WriteTable(BaseWars.Bounty:GetBountyTbl())
+		net.Send(ply)
+	end)
+
 	function MODULE:GetBountyTbl()
+		if (BaseWars.Bounty.BountyTable == nil) then return end
 		return BaseWars.Bounty.BountyTable
 	end
 
@@ -30,7 +44,7 @@ if SERVER then
 		if who:GetMoney() < amt then return false, BaseWars.LANG.BountyNotEnoughMoney end
 
 		local tbl = self:GetBountyTbl()
-
+		
 		who:TakeMoney( amt )
 		tbl[ply:SteamID()] = amt
 
@@ -46,7 +60,7 @@ if SERVER then
 		tbl[ply:SteamID()] = nil
 
 		ply:SetNWInt(tag, 0)
-
+		
 		PrintMessage(3, "Bounty on " .. ply:Name() .. " has been removed.")
 		BaseWars.UTIL.Log("Players " .. ply:Name() .. " bounty was removed." )
 
@@ -82,4 +96,5 @@ function MODULE:GetBounty(ply)
 	end
 
 end
+
 PLAYER.GetBounty = Curry(MODULE.GetBounty)

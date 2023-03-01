@@ -4,7 +4,7 @@ ENT.Type = "anim"
 ENT.PrintName = "Radar Transmitter"
 ENT.Model = "models/props_rooftop/roof_dish001.mdl"
 
-ENT.PowerRequired = 20
+ENT.PowerRequired = 0
 ENT.PowerCapacity = 5000
 
 ENT.AllwaysRaidable = true

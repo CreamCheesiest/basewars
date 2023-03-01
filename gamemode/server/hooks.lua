@@ -26,6 +26,12 @@ end)
 
 hook.Add("BaseWars_PlayerEmptyPrinter", "XPRewards", function(ply, ent, money)
 
+	ply:AddXP(math.max(0, money))
+
+end)
+
+hook.Add("BaseWars_PlayerUpgradePrinter", "XPRewards", function(ply, ent, money)
+
 	ply:AddXP(math.max(0, money / 500))
 
 end)

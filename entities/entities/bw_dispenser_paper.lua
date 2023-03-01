@@ -12,8 +12,8 @@ ENT.Sound				= Sound("HL1/fvox/blip.wav")
 ENT.Radius				= 600
 ENT.PaperAmt			= 50
 
-ENT.PowerRequired		= 15
-ENT.Drain				= 55
+ENT.PowerRequired		= 0
+ENT.Drain				= 0
 
 ENT.PowerCapacity 		= 25000
 

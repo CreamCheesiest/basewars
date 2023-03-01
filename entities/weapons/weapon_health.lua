@@ -84,8 +84,13 @@ function SWEP:PrimaryAttack()
 
 		if SERVER then
 
-			ent:SetHealth(math.min(ent:GetMaxHealth(), ent:Health() + self.HealAmount))
-			if Armor then ent:SetArmor(Armor) end
+			if (ent:GetClass() != "prop_physics") then
+				ent:SetHealth(math.min(ent:GetMaxHealth(), ent:Health() + self.HealAmount))
+				if Armor then ent:SetArmor(Armor) end
+			else
+				ent:SetHealth(math.min(ent:GetMaxHealth(), ent:Health() + ent:GetMaxHealth()/100))
+				if Armor then ent:SetArmor(Armor) end
+			end
 
 		end
 

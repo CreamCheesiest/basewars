@@ -145,7 +145,7 @@ if SERVER then
 			return end
 
 			ply:SetMoney(plyMoney - price)
-			ply:EmitSound("mvm/mvm_money_pickup.wav")
+			ply:EmitSound("chaching.wav")
 
 			ply:Notify(string.format(BaseWars.LANG.SpawnMenuBuy, item, BaseWars.NumberFormat(price)), BASEWARS_NOTIFICATION_MONEY)
 
@@ -631,6 +631,8 @@ local Panels = {
 
 	Loadout = MakeTab("Loadout"),
 
+	Fun = MakeTab("Fun")
+
 }
 
 local Tabs = {
@@ -645,6 +647,12 @@ local Tabs = {
 		Name = "Loadout",
 		AssociatedPanel = "Loadout",
 		Icon = "icon16/gun.png",
+	},
+
+	fun = {
+		Name = "Fun",
+		AssociatedPanel = "Fun",
+		Icon = "icon16/emoticon_grin.png",
 	},
 
 }
@@ -762,7 +770,7 @@ local function RemoveTabs()
 	local ply = LocalPlayer()
 	if not ply or not IsValid(ply) then return end
 
-	--local Admin = ply:IsAdmin()
+	local Admin = ply:IsAdmin()
 
 	function spawnmenu.Reload()
 
@@ -776,17 +784,17 @@ local function RemoveTabs()
 	end
 
 	spawnmenu.RemoveCreationTab("#spawnmenu.category.saves")
-	spawnmenu.RemoveCreationTab("#spawnmenu.category.dupes")
-	spawnmenu.RemoveCreationTab("#spawnmenu.category.postprocess")
 
-	--if not Admin then
+	if not Admin then
 
 		spawnmenu.RemoveCreationTab("#spawnmenu.category.vehicles")
 		spawnmenu.RemoveCreationTab("#spawnmenu.category.weapons")
 		spawnmenu.RemoveCreationTab("#spawnmenu.category.npcs")
-		--spawnmenu.RemoveCreationTab("#spawnmenu.category.entities")
+		spawnmenu.RemoveCreationTab("#spawnmenu.category.entities")
+		spawnmenu.RemoveCreationTab("#spawnmenu.category.dupes")
+		spawnmenu.RemoveCreationTab("#spawnmenu.category.postprocess")
 
-	--end
+	end
 
 	spawnmenu.Reload()
 

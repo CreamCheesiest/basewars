@@ -6,11 +6,11 @@ ENT.Type = "anim"
 ENT.PrintName = "Ballistic Turret"
 ENT.Model = "models/Combine_turrets/Floor_turret.mdl"
  
-ENT.PowerRequired = 10
+ENT.PowerRequired = 0
 ENT.PowerMin = 1000
 ENT.PowerCapacity = 2500
  
-ENT.Drain = 35
+ENT.Drain = 0
  
 ENT.Damage = 6
 ENT.Radius = 750

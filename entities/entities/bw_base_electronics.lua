@@ -8,7 +8,7 @@ ENT.Model = "models/props_c17/metalPot002a.mdl"
 ENT.Skin = 0
 
 ENT.IsElectronic = true
-ENT.PowerRequired = 5
+ENT.PowerRequired = 0
 ENT.PowerCapacity = 1000
 
 function ENT:DrainPower(val)
