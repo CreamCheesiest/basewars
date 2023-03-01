@@ -5,10 +5,12 @@ MODULE.BountyTable = {}
 local tag = "BaseWars.Bounty"
 local PLAYER = debug.getregistry().Player
 
-if SERVER then
+/*if SERVER then
 	util.AddNetworkString( "BountyTableRequest" )
 	util.AddNetworkString( "BountyTableSend" )
-end
+	util.AddNetworkString( "BountyTableRequestIcon" )
+	util.AddNetworkString( "BountyTableSendIcon" )
+end*/
 
 function MODULE:__INIT()
 
@@ -27,11 +29,11 @@ if SERVER then
 
 	local check = false
 
-	net.Receive( "BountyTableRequest", function(len, ply)
+	/*net.Receive( "BountyTableRequest", function(len, ply)
 		net.Start("BountyTableSend")
 		net.WriteTable(BaseWars.Bounty:GetBountyTbl())
 		net.Send(ply)
-	end)
+	end)*/
 
 	function MODULE:GetBountyTbl()
 		if (BaseWars.Bounty.BountyTable == nil) then return end
@@ -44,7 +46,9 @@ if SERVER then
 		if who:GetMoney() < amt then return false, BaseWars.LANG.BountyNotEnoughMoney end
 
 		local tbl = self:GetBountyTbl()
-		
+
+		ply:SetNW2Bool("hasBounty", true)
+		ply:SetNW2Int("bounty", amt)	
 		who:TakeMoney( amt )
 		tbl[ply:SteamID()] = amt
 
@@ -60,6 +64,7 @@ if SERVER then
 		tbl[ply:SteamID()] = nil
 
 		ply:SetNWInt(tag, 0)
+		ply:SetNW2Bool("hasBounty", false)
 		
 		PrintMessage(3, "Bounty on " .. ply:Name() .. " has been removed.")
 		BaseWars.UTIL.Log("Players " .. ply:Name() .. " bounty was removed." )
@@ -76,6 +81,8 @@ if SERVER then
 		local amt = tbl[victim:SteamID()]
 
 		if not amt then return end
+
+		victim:SetNW2Bool("hasBounty", false)
 
 		attacker:GiveMoney( amt )
 		tbl[victim:SteamID()] = nil
@@ -96,5 +103,33 @@ function MODULE:GetBounty(ply)
 	end
 
 end
-
 PLAYER.GetBounty = Curry(MODULE.GetBounty)
+
+
+if CLIENT then
+
+	local function DrawName( ply )
+		if ( !IsValid( ply ) ) then return end 
+		if ( ply == LocalPlayer() ) then return end -- Don't draw a name when the player is you
+		if ( !ply:Alive() ) then return end -- Check if the player is alive 
+
+		for _, p in next, player.GetAll() do
+			local Distance = LocalPlayer():GetPos():Distance( p:GetPos() ) --Get the distance between you and the player
+			if ( Distance < 1000 ) and p:GetNW2Bool("hasBounty") then --If the distance is less than 1000 units, it will draw the name
+
+				local offset = Vector( 0, 0, 85 )
+				local ang = LocalPlayer():EyeAngles()
+				local pos = p:GetPos() + offset + ang:Up()
+			
+				ang:RotateAroundAxis( ang:Forward(), 90 )
+				ang:RotateAroundAxis( ang:Right(), 90 )
+			
+				render.SetMaterial(Material("icon16/exclamation.png"))
+				render.DrawSprite(pos, 5, 5)
+
+			end
+		end
+		
+	end
+	hook.Add( "PostPlayerDraw", "DrawName", DrawName )
+end

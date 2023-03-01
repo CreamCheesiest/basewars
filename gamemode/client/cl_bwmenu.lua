@@ -219,15 +219,15 @@ local function MakeBountyList(pnl)
 
 	plyList.PlayerLines = {}
 
-	net.Receive("BountyTableSend", function(len, ply)
+	/*net.Receive("BountyTableSend", function(len, ply)
 		plys = net.ReadTable()
-	end)
+	end)*/
 
 	local function GetPlayer(t)
 
-		for steamid, bounty in pairs(plys) do
+		for _,ply in next, player.GetAll() do
 
-			if player.GetBySteamID(steamid):Nick() == t then
+			if ply:Nick() == t then
 			return ply end
 
 		end
@@ -238,22 +238,18 @@ local function MakeBountyList(pnl)
 
 	function plyList:UpdatePlayers()
 
-		net.Start( "BountyTableRequest" )
-		net.SendToServer()
+		/*net.Start( "BountyTableRequest" )
+		net.SendToServer()*/
 
-		if plys == nil then return end
+		for _, ply in next, player.GetAll() do
 
-		for steamid, bounty in pairs(plys) do
-
-			if (steamid == "BOT") then return end
-
-			local ply = player.GetBySteamID(steamid)
+			if not ply:GetNW2Bool("hasBounty") then continue end
 
 			--if ply == me then continue end
 
 			if not self.PlayerLines[ply] then
 
-				local line = self:AddLine(ply:Nick(), BaseWars.LANG.CURRENCY .. bounty or "<NONE>")
+				local line = self:AddLine(ply:Nick(), BaseWars.LANG.CURRENCY .. ply:GetNW2Int("bounty") or "<NONE>")
 				self.PlayerLines[ply] = line
 
 			end
@@ -278,6 +274,16 @@ local function MakeBountyList(pnl)
 
 			if not IsValid(ply) then
 
+				local id = pnl:GetID()
+				self:RemoveLine(id)
+				self.PlayerLines[ply] = nil
+
+				continue
+
+			end
+
+			if not ply:GetNW2Bool("hasBounty") then
+				
 				local id = pnl:GetID()
 				self:RemoveLine(id)
 				self.PlayerLines[ply] = nil
@@ -932,7 +938,6 @@ local function MakeMenu(mainFrame, tabPanel, ftionTab, raidsTab, bountyTab, rule
 
 			local InFac 	= me:InFaction()
 			local InFac2 	= Enemy and Enemy:InFaction() and not (Enemy:InFaction(me:GetFaction()))
-			print("Player: " .. tostring(InFac) .. " Enemy: ".. tostring(InFac2))
 
 			if not Enemy or (InFac and InFac2) or (InFac2 and InFac) then self:SetDisabled(true) else self:SetDisabled(false) self.Enemy = Enemy end
 
