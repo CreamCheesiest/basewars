@@ -138,7 +138,7 @@ function GM:OnEntityCreated(ent)
 		if Class == "prop_physics" and ent:Health() == 0 then
 
 			local HP = (BaseWars.Ents:Valid(ent:GetPhysicsObject()) and ent:GetPhysicsObject():GetMass() or 50) * BaseWars.Config.UniversalPropConstant
-			HP = math.Clamp(HP, 0, 5000)
+			HP = math.Clamp(HP, 0, 500)
 
 			ent:SetHealth(HP)
 			ent:SetMaxHealth(HP)

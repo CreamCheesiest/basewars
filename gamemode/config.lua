@@ -321,7 +321,7 @@ BaseWars.Config = {
 	DefaultLimit		= 3,
 	SpawnOffset			= Vector(0, 0, 40),
 
-	UniversalPropConstant = 50,
+	UniversalPropConstant = 5,
 	DestroyReturn 		= 0.8,
 
 	RestrictProps 		= false,
