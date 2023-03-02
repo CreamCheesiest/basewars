@@ -7,11 +7,11 @@ ENT.PrintName = "Tesla Coil"
 ENT.Model = "models/props_c17/substation_transformer01d.mdl"
 ENT.Material = "models/alyx/emptool_glow"
 
-ENT.PowerRequired = 10
+ENT.PowerRequired = 0
 ENT.PowerMin = 8000
 ENT.PowerCapacity = 12500
  
-ENT.Drain = 1500
+ENT.Drain = 0
  
 ENT.Damage 	= 60
 ENT.Radius 	= 300

@@ -38,7 +38,7 @@ BaseWars.LANG.__LANGUAGELOOK.ENGLISH = {
 	CannotPurchaseRaid			= "You cannot purchase that in a raid!",
 
 	NoPrinters							= "Not enough raidable printers!",
-	OnCoolDown							= "Currently on CoolDown from being raided!",
+	OnCoolDown							= "Currently on cooldown from being raided!",
 
 	PayOutOwner							= "You got " .. CURRENCY .. "%s for the destruction of your %s!",
 	PayOut									= "You got " .. CURRENCY .. "%s for destroying a %s!",

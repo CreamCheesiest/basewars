@@ -118,6 +118,13 @@ function(aimEnt)
 	return aimEnt:GetMoney() > 0 and color1 or color3, color2
 end)
 
+LookEnt:RegisterEnt("bw_moneydrawer", UseBind, function(aimEnt)
+	return "Collect", "money"
+end,
+function(aimEnt)
+	return aimEnt:GetMoney() > 0 and color1 or color3, color2
+end)
+
 LookEnt:RegisterEnt("bw_spawnpoint", UseBind, function(aimEnt)
 	return aimEnt:GetUsable() and "Activate" or "Look at", "spawnpoint"
 end,

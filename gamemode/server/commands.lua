@@ -194,7 +194,18 @@ BaseWars.Commands.AddCommand({"upg", "upgrade", "upgr"}, function(ply)
 
 end, false)
 
-BaseWars.Commands.AddCommand({"tell", "msg"}, function(ply, line, who)
+BaseWars.Commands.AddCommand({"sethp"}, function(ply)
+
+	local trace = ply:GetEyeTrace()
+
+	local Ent = trace.Entity
+	if not ply:IsAdmin() then return false end
+
+	Ent:SetHealth(Ent:Health()/2)
+
+end, false)
+
+/*BaseWars.Commands.AddCommand({"tell", "msg"}, function(ply, line, who)
 
 	if not easylua then return false, "easylua is required for this command, tell your dev to change how it works or install easylua" end
 
@@ -208,7 +219,7 @@ BaseWars.Commands.AddCommand({"tell", "msg"}, function(ply, line, who)
 
 	Targ:ChatPrint(ply:Nick() .. " -> " .. Msg)
 
-end, false)
+end, false)*/
 
 BaseWars.Commands.AddCommand("psa", function(ply, line, text)
 
@@ -295,8 +306,6 @@ end, false)
 
 BaseWars.Commands.AddCommand({"givemoney", "pay", "moneygive"}, function(caller, line, ply, amount)
 
-	if not easylua then return false, "easylua is required for this command, tell your dev to change how it works or install easylua" end
-
 	if not amount then return false, BaseWars.LANG.InvalidAmount end
 
 	amount, ply = amount:Trim(), ply and ply:Trim() or ""
@@ -329,9 +338,9 @@ BaseWars.Commands.AddCommand({"givemoney", "pay", "moneygive"}, function(caller,
 	if amount == 0 then return false, "Fuck you Broly" end
 
 	if ply ~= "" and ply ~= nil then
-
-		ply = easylua.FindEntity(ply)
-
+		for _,plyt in pairs(player.GetAll()) do
+			if plyt:Nick() == ply then ply = plyt:Nick() return end
+		end
 	else return false, BaseWars.LANG.InvalidPlayer end
 
 	if not BaseWars.Ents:ValidPlayer(ply) then return false, BaseWars.LANG.InvalidPlayer end
@@ -349,15 +358,86 @@ BaseWars.Commands.AddCommand({"givemoney", "pay", "moneygive"}, function(caller,
 
 end, false)
 
+local function compare(a, b)
+
+	if a == b then return true end
+	if a:find(b, nil, true) then return true end
+	if a:lower() == b:lower() then return true end
+	if a:lower():find(b:lower(), nil, true) then return true end
+
+	return false
+end
+
+function FindEntity(str)
+	str = tostring(str)
+	if not str then return NULL end
+
+	-- unique id
+	local ply = player.GetByUniqueID(str)
+	if ply and ply:IsPlayer() then
+		return ply
+	end
+
+	-- steam id
+	if str:find("STEAM") then
+		for key, _ply in pairs(player.GetAll()) do
+			if _ply:SteamID() == str then
+				return _ply
+			end
+		end
+	end
+
+	if tonumber(str) then
+		ply = Entity(tonumber(str))
+		if ply:IsValid() then
+			return ply
+		end
+	end
+
+	-- community id
+	if #str == 17 then
+
+	end
+
+	-- ip
+	if str:find("%d+%.%d+%.%d+%.%d") then
+		for key, _ply in pairs(player.GetAll()) do
+			if _ply:IPAddress():find(str) then
+				return _ply
+			end
+		end
+	end
+
+	for key, ent in pairs(ents.GetAll()) do
+
+		if ent.GetName and compare(ent:GetName(), str) then
+			return ent
+		end
+
+		if compare(ent:GetClass(), str) then
+			return ent
+		end
+
+		if key == tonumber(str) then return ent end
+		if key == tonumber(str:sub(2)) then return ent end
+
+		if ent:GetModel() and compare(ent:GetModel(), str) then
+			return ent
+		end
+	end
+
+	return ents.FindByClass(str)[1] or NULL
+end
+
 BaseWars.Commands.AddCommand({"bounty", "place", "placebounty"}, function(ply, line, who, amount)
 
-	if not easylua then return false, "easylua is required for this command, tell your dev to change how it works or install easylua" end
+	--if not easylua then return false, "easylua is required for this command, tell your dev to change how it works or install easylua" end
 
 	if not who then return false, BaseWars.LANG.InvalidPlayer end
 
 	if not amount then return false, BaseWars.LANG.InvalidAmount end
 
-	local Targ = easylua.FindEntity(who)
+	local Targ = FindEntity(who)
 
 	if not BaseWars.Ents:ValidPlayer(Targ) then return false, BaseWars.LANG.InvalidPlayer end
 

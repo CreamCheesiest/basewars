@@ -44,7 +44,7 @@ function ENT:SetupDataTables()
 	self:NetworkVar("Bool", 0, "WaterProof")
 	self:NetworkVar("Bool", 1, "Usable")
 	
-	self:NetworkVar("Int", 0, "Power")
+	self:NetworkVar("Int", 1, "Power")
 	self:NetworkVar("Int", 1, "MaxPower")
 	
 	self:StableNetwork()

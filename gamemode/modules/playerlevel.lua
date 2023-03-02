@@ -3,6 +3,7 @@ MODULE.Author 	= "Trixter"
 
 local tag = "BaseWars.PlayerLevel"
 local tag_escaped = "basewars_playerlevel"
+local e = 2.7182818284590452
 local PLAYER = debug.getregistry().Player
 
 local function isPlayer(ply)
@@ -47,7 +48,7 @@ PLAYER.GetXP = Curry(MODULE.GetXP)
 
 function MODULE:GetXPNextLevel(ply)
 	local n = ply:GetLevel()
-	return (n + 1) * 250
+	return (500 * n) + 500
 end
 PLAYER.GetXPNextLevel = Curry(MODULE.GetXPNextLevel)
 

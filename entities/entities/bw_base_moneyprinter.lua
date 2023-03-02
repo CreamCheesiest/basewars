@@ -7,13 +7,13 @@ ENT.Base = "bw_base_electronics"
 ENT.Model = "models/props_lab/reciever01a.mdl"
 ENT.Skin = 0
 
-ENT.Capacity 		= 10000
+ENT.Capacity 		= 5000
 ENT.Money 			= 0
 ENT.MaxPaper		= 2500
-ENT.PrintInterval 	= 1.1
-ENT.PrintAmount		= 3
-ENT.MaxLevel 		= 10
-ENT.UpgradeCost 	= 1000
+ENT.PrintInterval 	= 1
+ENT.PrintAmount		= 10
+ENT.MaxLevel 		= 20
+ENT.UpgradeCost 	= 2500
 
 ENT.PrintName 		= "Basic Printer"
 
@@ -130,10 +130,12 @@ if SERVER then
 			ply:TakeMoney(calcM)
 			self.CurrentValue = (self.CurrentValue or 0) + calcM
 
+			hook.Run("BaseWars_PlayerUpgradePrinter", ply, self, calcM)	
+
 		end
 
 		self:AddLevel(1)
-		self:EmitSound("replay/rendercomplete.wav")
+		self:EmitSound("ui/buttonclick.wav")
 
 	end
 
@@ -180,10 +182,41 @@ if SERVER then
 		self:TakeMoney(money)
 
 		ply:GiveMoney(money)
-		ply:EmitSound("mvm/mvm_money_pickup.wav")
+		self:PlaySound(ply)
 
 		hook.Run("BaseWars_PlayerEmptyPrinter", ply, self, money)
 
+	end
+
+	function ENT:PlaySound(ply)
+		int = math.random(3)
+		if (int == 1) then
+			ply:EmitSound("collect1.wav")
+		elseif (int == 2) then
+			ply:EmitSound("collect2.wav")
+		else
+			ply:EmitSound("collect3.wav")
+		end
+	end
+
+	function ENT:DrawerTakeMoney(ent)
+		
+		local money = self:GetMoney()
+
+		local Res, Msg = hook.Run("BaseWars_PlayerCanEmptyPrinter", ply, self, money)
+		if Res == false then
+
+			if Msg then
+
+				ply:Notify(Msg, BASEWARS_NOTIFICATION_ERROR)
+
+			end
+
+		return end
+
+		self:TakeMoney(money)
+
+		ent:SuckMoney(money)
 	end
 
 	function ENT:UseFuncBypass(activator, caller, usetype, value)

@@ -4,9 +4,9 @@ ENT.Base = "bw_base_moneyprinter"
 ENT.Model = "models/props_lab/reciever01a.mdl"
 ENT.Skin = 0
 
-ENT.Capacity 		= 35000
+ENT.Capacity 		= 10000
 ENT.PrintInterval 	= 1
-ENT.PrintAmount		= 12
+ENT.PrintAmount		= 20
 
 ENT.PrintName = "Silver Printer"
 

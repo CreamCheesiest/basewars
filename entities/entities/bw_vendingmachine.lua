@@ -3,7 +3,7 @@ ENT.Type = "anim"
 
 ENT.PrintName = "Vending Machine"
 
-ENT.PowerRequired = 2
+ENT.PowerRequired = 0
 ENT.PowerCapacity = 3000
 
 ENT.Items 		= {

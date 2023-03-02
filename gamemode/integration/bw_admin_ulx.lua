@@ -14,7 +14,7 @@ function ulx.addmoney(calling_ply, target_plys, amt)
 
 	end
 
-	ulx.fancyLogAdmin(calling_ply, "#A gave " .. BaseWars.LANG.Currency .. "#s to #T", affected_plys, amt)
+	ulx.fancyLogAdmin(calling_ply, "#A gave " .. BaseWars.LANG.CURRENCY .. "#s to #T", affected_plys, amt)
 
 end
 
@@ -36,7 +36,7 @@ function ulx.takemoney(calling_ply, target_plys, amt)
 		table.insert(affected_plys, v)
 
 	end
-	ulx.fancyLogAdmin(calling_ply, "#A took " .. BaseWars.LANG.Currency .. "#s from #T", affected_plys, amt)
+	ulx.fancyLogAdmin(calling_ply, "#A took " .. BaseWars.LANG.CURRENCY .. "#s from #T", affected_plys, amt)
 
 end
 
@@ -58,7 +58,7 @@ function ulx.setmoney(calling_ply, target_plys, amt)
 		table.insert(affected_plys, v)
 
 	end
-	ulx.fancyLogAdmin(calling_ply, "#A set #T's money to " .. BaseWars.LANG.Currency .. "#s", affected_plys, amt)
+	ulx.fancyLogAdmin(calling_ply, "#A set #T's money to " .. BaseWars.LANG.CURRENCY .. "#s", affected_plys, amt)
 
 end
 

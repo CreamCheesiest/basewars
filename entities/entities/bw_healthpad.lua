@@ -5,10 +5,10 @@ ENT.Type = "anim"
 ENT.PrintName = "HealthPad"
 ENT.Model = "models/props_lab/teleplatform.mdl"
  
-ENT.PowerRequired = 10
+ENT.PowerRequired = 0
 ENT.PowerCapacity = 5000
  
-ENT.Drain = 50
+ENT.Drain = 0
  
 ENT.RegenRate = 1
 ENT.Plys = {}

@@ -6,11 +6,11 @@ ENT.Type = "anim"
 ENT.PrintName = "Laser Turret"
 ENT.Model = "models/Combine_turrets/Floor_turret.mdl"
  
-ENT.PowerRequired = 10
+ENT.PowerRequired = 0
 ENT.PowerMin = 1000
 ENT.PowerCapacity = 2500
  
-ENT.Drain = 150
+ENT.Drain = 0
  
 ENT.Damage = 80
 ENT.Radius = 1250

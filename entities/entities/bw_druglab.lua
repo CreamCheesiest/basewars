@@ -6,10 +6,10 @@ ENT.Type = "anim"
 ENT.PrintName = "Drug Lab"
 ENT.Model = "models/props_lab/crematorcase.mdl"
  
-ENT.PowerRequired = 10
+ENT.PowerRequired = 0
 ENT.PowerCapacity = 5000
  
-ENT.Drain = 15
+ENT.Drain = 0
  
 ENT.Status = "Press e to start cooking!"
  
