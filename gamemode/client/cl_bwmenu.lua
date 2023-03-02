@@ -105,9 +105,10 @@ local function PrepMenu()
 	local ftionTab = tabPanel:MakeTab("Factions", "icon16/layers.png")
 	local raidsTab = tabPanel:MakeTab("Raids", "icon16/building_delete.png")
 	local bountyTab = tabPanel:MakeTab("Bounties", "icon16/exclamation.png")
+	local invTab = tabPanel:MakeTab("Inventory", "icon16/box.png")
 	local rulesTab = tabPanel:MakeTab("Rules", "icon16/script.png")
 
-	return mainFrame, tabPanel, ftionTab, raidsTab, bountyTab, rulesTab 
+	return mainFrame, tabPanel, ftionTab, raidsTab, bountyTab, invTab, rulesTab 
 
 end
 
@@ -219,10 +220,6 @@ local function MakeBountyList(pnl)
 
 	plyList.PlayerLines = {}
 
-	/*net.Receive("BountyTableSend", function(len, ply)
-		plys = net.ReadTable()
-	end)*/
-
 	local function GetPlayer(t)
 
 		for _,ply in next, player.GetAll() do
@@ -237,9 +234,6 @@ local function MakeBountyList(pnl)
 	end
 
 	function plyList:UpdatePlayers()
-
-		/*net.Start( "BountyTableRequest" )
-		net.SendToServer()*/
 
 		for _, ply in next, player.GetAll() do
 
@@ -738,7 +732,7 @@ local function CreatePopupDialog(c, id, ...)
 
 end
 
-local function MakeMenu(mainFrame, tabPanel, ftionTab, raidsTab, bountyTab, rulesTab)
+local function MakeMenu(mainFrame, tabPanel, ftionTab, raidsTab, bountyTab, invTab, rulesTab)
 
 	function mainFrame:OpenMenuThing(c, i, ...)
 

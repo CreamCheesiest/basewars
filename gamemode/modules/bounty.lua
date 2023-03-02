@@ -29,12 +29,6 @@ if SERVER then
 
 	local check = false
 
-	/*net.Receive( "BountyTableRequest", function(len, ply)
-		net.Start("BountyTableSend")
-		net.WriteTable(BaseWars.Bounty:GetBountyTbl())
-		net.Send(ply)
-	end)*/
-
 	function MODULE:GetBountyTbl()
 		if (BaseWars.Bounty.BountyTable == nil) then return end
 		return BaseWars.Bounty.BountyTable
