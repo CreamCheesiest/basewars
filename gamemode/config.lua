@@ -768,6 +768,7 @@ BaseWars.SpawnList.Models.Entities["Structures (T2)"] = {
 BaseWars.SpawnList.Models.Entities["Defense (T1)"] = {
 
 	-- T1
+
 	["Ballistic Turret"] 			= BaseWars.GSL{Model = "models/Combine_turrets/Floor_turret.mdl", Price = 80000, ClassName = "bw_turret_ballistic", Limit = 2, Level = 15},
 	["Laser Turret"] 				= BaseWars.GSL{Model = "models/Combine_turrets/Floor_turret.mdl", Price = 120000, ClassName = "bw_turret_laser", Limit = 1, Level = 18},
 
@@ -776,8 +777,9 @@ BaseWars.SpawnList.Models.Entities["Defense (T1)"] = {
 BaseWars.SpawnList.Models.Entities["Defense (T2)"] = {
 
 	-- T2
-	["Tesla Coil"]					= BaseWars.GSL{Model = "models/props_c17/substation_transformer01d.mdl", Price = 5000000, ClassName = "bw_tesla", Limit = 1, Level = 30},
 
+	["Tesla Coil"]					= BaseWars.GSL{Model = "models/props_c17/substation_transformer01d.mdl", Price = 5000000, ClassName = "bw_tesla", Limit = 1, Level = 30},
+	["Jammer"]					= BaseWars.GSL{Model = "models/hunter/blocks/cube05x05x025.mdl", Price = 5000000, ClassName = "bw_base_jammer", Limit = 2, Level = 150},
 }
 
 BaseWars.SpawnList.Models.Entities["Consumables (T1)"] = {
