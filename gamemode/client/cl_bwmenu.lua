@@ -1002,6 +1002,12 @@ local function MakeMenu(mainFrame, tabPanel, ftionTab, raidsTab, bountyTab, invT
 
 	end
 
+	do -- Inventory tab
+
+		
+
+	end
+
 	do -- Rules tab
 
 		rulesTab:DockPadding(16, 8, 16, 16)

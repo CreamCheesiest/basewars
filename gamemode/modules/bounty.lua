@@ -5,13 +5,6 @@ MODULE.BountyTable = {}
 local tag = "BaseWars.Bounty"
 local PLAYER = debug.getregistry().Player
 
-/*if SERVER then
-	util.AddNetworkString( "BountyTableRequest" )
-	util.AddNetworkString( "BountyTableSend" )
-	util.AddNetworkString( "BountyTableRequestIcon" )
-	util.AddNetworkString( "BountyTableSendIcon" )
-end*/
-
 function MODULE:__INIT()
 
 	if __BASEWARS_BOUNTY_BACKUP then
