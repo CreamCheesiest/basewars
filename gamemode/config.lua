@@ -876,6 +876,7 @@ BaseWars.SpawnList.Models.Fun["Synthesizer"] = {
 BaseWars.SpawnList.Models.Loadout["Weapons - T2"] = {
 
 	["Heal Gun"]					= BaseWars.GSL{Gun = true, Model = "models/weapons/w_physics.mdl", Price = 100000, ClassName = "weapon_health", Level = 15},
+	-- ["Radar"]					= BaseWars.GSL{Gun = true, Model = "models/weapons/w_motion_tracker.mdl", Price = 100000, ClassName = "weapon_radar", Level = 15},
 	--["Frag"]						= BaseWars.GSL{Gun = true, Model = "models/weapons/w_grenade.mdl", Price = 45000, ClassName = "weapon_frag", Level = 20},
 	--["Gas grenade"]						= BaseWars.GSL{Gun = true, Model = "models/weapons/w_eq_flashbang_thrown.mdl", Price = 150000, ClassName = "bw_gasnade", Level = 50},
 
