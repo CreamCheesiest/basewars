@@ -34,6 +34,10 @@ if SERVER then
     AddCSLuaFile("cl_init.lua")
     resource.AddSingleFile( 'models/c_motion_tracker.mdl' )
     resource.AddSingleFile( 'models/w_motion_tracker.mdl' )
+
+    
+
+
 end
 
 
