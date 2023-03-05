@@ -7,43 +7,28 @@ ENT.Spawnable = true
 ENT.AdminSpawnable = true
 ENT.Model = "models/props_lab/reciever01b.mdl"
 
-
+AddCSLuaFile()
 
 local fontName = "BaseWars.MoneyPrinter"
 local active = 'OFF'
 local toggle = false
 
--- function ENT:SetupDataTables()
--- 	self:NetworkVar("Int", 0, "t1price")
--- 	self:NetworkVar("Entity", 0, "t1owning_ent")
--- 	self:NetworkVar("Int", 1, "jamount") -- Amount
-	
--- end
+
+
 
 
 if SERVER then 
-    AddCSLuaFile()
-    function ENT:ArmedColor(toggle) 
-        if(toggle) then 
-            self:SetColor(Color(0,255,0))
-        else
-            self:SetColor( Color(100,0,0) )
-        end 
-    end
-    
     
     function ENT:ActiveJammer(toggle)
-        self:ArmedColor(toggle)
+       
     end 
     
     function ENT:BadlyDamaged()
         if(self:Health() <= (self:GetMaxHealth() / 5)) then 
             toggle = false
-            self:ArmedColor(toggle)
             self:SetNetworkedBool("ActiveStats", toggle)
             self:SetNWBool("ActiveStats",toggle)
             active = "UNAVAILABLE"
-            print("Item "..self.PrintName.." is damage, please repair")
             return true
         end
     end
@@ -57,7 +42,6 @@ if SERVER then
             toggle = not toggle -- invert the value of toggle
             active = toggle -- set active to the new value of toggle
             self:ActiveJammer(toggle)
-            -- self:SetNetworkedBool("ActiveStats", active)
             self:SetNWBool("ActiveStats",toggle)
         end
     end
@@ -113,6 +97,31 @@ else
     end
 
     if CLIENT then
+
+                -- Define a unique identifier for the message
+            
+
+        function ENT:JammerRing(pos)
+            local emitter = ParticleEmitter( pos) -- Particle emitter in this position
+            for i = 1, 180 do -- Do 100 particles
+                local part = emitter:Add( "sprites/glow04_noz", pos ) -- Create a new particle at pos
+                if ( part ) then
+                    part:SetStartSize(1)
+                    part:SetEndSize(3)
+                    part:SetVelocity(Vector(math.sin(i), math.cos(i), 0) * 3000)
+                    part:SetStartAlpha(255)
+                    part:SetEndAlpha(255)
+                    part:SetDieTime(0.01)
+                    part:SetRoll(math.random(0, 360))
+                    part:SetRollDelta(math.random(-10, 10))
+                    part:SetColor(100,0,0)
+                end
+            end
+            
+            emitter:Finish()
+        end
+
+
         function ENT:DrawDisplay(pos, ang, scale)
 
             local w, h = 170 * 2, 136 * 2
@@ -123,19 +132,21 @@ else
 
             if !activeStatus then
                 draw.DrawText("JAMMER IS OFF", fontName .. ".Huge", w / 2, h / 2 - 32, Color(255,0,0), TEXT_ALIGN_CENTER)
+                self:SetNWBool("JammerActive", false)
             return end
+            self:SetNWBool("JammerActive", true)
             draw.DrawText(self.PrintName, fontName, w / 2, 4, self.FontColor, TEXT_ALIGN_CENTER)
-
-            if disabled then return end
-
             --active status
-            surface.SetDrawColor(self.FontColor)
-            surface.DrawLine(0, 30, w, 30)--draw.RoundedBox(0, 0, 30, w, 1, self.FontColor)
-            draw.DrawText(inUse, fontName .. ".Big",w/ 2, 32, self.FontColor, TEXT_ALIGN_CENTER)
-            surface.DrawLine(0, 68, w, 68)--draw.RoundedBox(0, 0, 68, w, 1, self.FontColor)
-            surface.DrawLine(0, 100, w, 100)--draw.RoundedBox(0, 0, 68, w, 1, self.FontColor)
-            draw.DrawText("Self Power Left:", fontName .. ".Med",4, 80, self.FontColor, TEXT_ALIGN_LEFT)
-    end
+             surface.SetDrawColor(self.FontColor)
+             surface.DrawLine(0, 30, w, 30)--draw.RoundedBox(0, 0, 30, w, 1, self.FontColor)
+             draw.DrawText(inUse, fontName .. ".Big",w/ 2, 32, self.FontColor, TEXT_ALIGN_CENTER)
+             surface.DrawLine(0, 68, w, 68)--draw.RoundedBox(0, 0, 68, w, 1, self.FontColor)
+
+            -- if disabled then return end
+            local jammerPos =  self:GetPos()
+            self:JammerRing(jammerPos)
+           
+        end
 
         function ENT:Calc3D2DParams()
 

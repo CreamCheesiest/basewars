@@ -62,6 +62,12 @@ end
 local sv_aimt_maxrange = CreateConVar( 'sv_aimt_maxrange', '2000', { FCVAR_REPLICATED, FCVAR_ARCHIVE } )
 
 
+if SERVER then 
+		
+end 
+
+
+
 net.Receive( 'GAMEMODE_MOTIONTRACKER_ADDFAKE', function()
 	local start, dest, time = net.ReadVector(), net.ReadVector(), net.ReadFloat()
 	table.insert( faketargets, { pos = start, vel = Vector( 0, 0, 500 ), mv = { dst = dest, len = time, perc = 0 }, lt = CurTime() + time } )
