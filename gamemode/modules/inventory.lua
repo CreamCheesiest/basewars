@@ -121,8 +121,6 @@ if SERVER then
         BaseWars.Inventory:SendInvToClient(ply, inv)
     end)
 
-    hook.Add("PlayerDisconnected", tag .. ".Save", Curry(MODULE.SaveInv))
-
     net.Receive(tag .. ".Client", function()
         local Class = net.ReadString()
         local Model = net.ReadString()
@@ -175,7 +173,7 @@ if SERVER then
 
         ply:StripWeapon(weap:GetClass())
         BaseWars.Inventory:AddToInv(ply, weap)
-    
+
     end, false)
-    
+
 end
