@@ -43,7 +43,7 @@ function ENT:SetupDataTables()
 
 	self:NetworkVar("Bool", 0, "WaterProof")
 	self:NetworkVar("Bool", 1, "Usable")
-	
+	self:NetworkVar("Bool", 0, "Active") 
 	self:NetworkVar("Int", 1, "Power")
 	self:NetworkVar("Int", 1, "MaxPower")
 	
@@ -80,11 +80,10 @@ if SERVER then
 
 		self:SetModel(self.Model)
 		self:SetSkin(self.Skin)
-
 		self:PhysicsInit(SOLID_VPHYSICS)
 		self:SetSolid(SOLID_VPHYSICS)
 		self:SetMoveType(MOVETYPE_VPHYSICS)
-
+		
 		self:SetUseType(SIMPLE_USE)
 		self:AddEffects(EF_ITEM_BLINK)
 		
@@ -100,6 +99,7 @@ if SERVER then
 		self:SetWaterProof(BaseWars.Config.Ents.Electronics.WaterProof)
 		
 		self:Init()
+		self:SetActive(false)
 		
 		self:SetMaxHealth(self:Health())
 

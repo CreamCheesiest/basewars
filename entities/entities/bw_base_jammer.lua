@@ -6,6 +6,7 @@ ENT.Category = "Jammer"
 ENT.Spawnable = true
 ENT.AdminSpawnable = true
 ENT.Model = "models/props_lab/reciever01b.mdl"
+ENT.Active = false  
 
 AddCSLuaFile()
 
@@ -16,9 +17,9 @@ local toggle = false
 
 
 
-
 if SERVER then 
-    
+
+    util.AddNetworkString("JammerToggle")
     function ENT:ActiveJammer(toggle)
        
     end 
@@ -26,8 +27,7 @@ if SERVER then
     function ENT:BadlyDamaged()
         if(self:Health() <= (self:GetMaxHealth() / 5)) then 
             toggle = false
-            self:SetNetworkedBool("ActiveStats", toggle)
-            self:SetNWBool("ActiveStats",toggle)
+            self:SetActive(false)
             active = "UNAVAILABLE"
             return true
         end
@@ -39,10 +39,8 @@ if SERVER then
         local delay = 1
         if not self.timer or CurTime() > self.timer then -- check if the timer is not set or has expired
             self.timer = CurTime() + delay -- set the timer to expire in delay seconds
-            toggle = not toggle -- invert the value of toggle
-            active = toggle -- set active to the new value of toggle
-            self:ActiveJammer(toggle)
-            self:SetNWBool("ActiveStats",toggle)
+            self.Active = not self.Active
+            self:SetActive(self.Active)
         end
     end
     
@@ -90,17 +88,17 @@ else
 	})
 
 
-    function ENT:Initialize()
-        self:DrawShadow(true)
-        local titleAcive = "off"
-        self.FontColor = color_white
-    end
+  
 
     if CLIENT then
 
-                -- Define a unique identifier for the message
-            
+        function ENT:Initialize()
+            self:DrawShadow(true)
+            local titleAcive = "off"
+            self.FontColor = color_white
+        end
 
+                -- Define a unique identifier for the message
         function ENT:JammerRing(pos)
             local emitter = ParticleEmitter( pos) -- Particle emitter in this position
             for i = 1, 180 do -- Do 100 particles
@@ -120,21 +118,16 @@ else
             
             emitter:Finish()
         end
-
-
         function ENT:DrawDisplay(pos, ang, scale)
-
+            
             local w, h = 170 * 2, 136 * 2
-            local activeStatus = self:GetNWBool("ActiveStats")
             local inUse = 'ON'
             
             draw.RoundedBox(4, 0, 0, w, h, Pw and self.BackColor or color_black)
-
-            if !activeStatus then
+            if !self:GetActive() then
                 draw.DrawText("JAMMER IS OFF", fontName .. ".Huge", w / 2, h / 2 - 32, Color(255,0,0), TEXT_ALIGN_CENTER)
-                self:SetNWBool("JammerActive", false)
+                
             return end
-            self:SetNWBool("JammerActive", true)
             draw.DrawText(self.PrintName, fontName, w / 2, 4, self.FontColor, TEXT_ALIGN_CENTER)
             --active status
              surface.SetDrawColor(self.FontColor)
@@ -142,7 +135,7 @@ else
              draw.DrawText(inUse, fontName .. ".Big",w/ 2, 32, self.FontColor, TEXT_ALIGN_CENTER)
              surface.DrawLine(0, 68, w, 68)--draw.RoundedBox(0, 0, 68, w, 1, self.FontColor)
 
-            -- if disabled then return end
+        
             local jammerPos =  self:GetPos()
             self:JammerRing(jammerPos)
            
