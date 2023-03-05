@@ -795,7 +795,7 @@ BaseWars.SpawnList.Models.Entities["Defense (T2)"] = {
 
 	-- T2
   ["Tesla Coil"]					= BaseWars.GSL{Model = "models/props_c17/substation_transformer01d.mdl", Price = 5000000, ClassName = "bw_tesla", Limit = 1, Level = 30},
-	["Jammer"]					= BaseWars.GSL{Model = "models/hunter/blocks/cube05x05x025.mdl", Price = 5000000, ClassName = "bw_base_jammer", Limit = 2, Level = 150},
+	["Jammer"]					= BaseWars.GSL{Model = "models/props_lab/reciever01b.mdl", Price = 5000000, ClassName = "bw_base_jammer", Limit = 99, Level = 150},
 }
 
 BaseWars.SpawnList.Models.Entities["Consumables (T1)"] = {
@@ -876,6 +876,7 @@ BaseWars.SpawnList.Models.Fun["Synthesizer"] = {
 BaseWars.SpawnList.Models.Loadout["Weapons - T2"] = {
 
 	["Heal Gun"]					= BaseWars.GSL{Gun = true, Model = "models/weapons/w_physics.mdl", Price = 100000, ClassName = "weapon_health", Level = 15},
+	["Radar"]					= BaseWars.GSL{Gun = true, Model = "models/weapons/w_motion_tracker.mdl", Price = 100000, ClassName = "weapon_radar", Level = 15},
 	--["Frag"]						= BaseWars.GSL{Gun = true, Model = "models/weapons/w_grenade.mdl", Price = 45000, ClassName = "weapon_frag", Level = 20},
 	--["Gas grenade"]						= BaseWars.GSL{Gun = true, Model = "models/weapons/w_eq_flashbang_thrown.mdl", Price = 150000, ClassName = "bw_gasnade", Level = 50},
 
