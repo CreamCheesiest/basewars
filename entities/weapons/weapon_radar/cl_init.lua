@@ -61,7 +61,7 @@ local function DrawDots( w, h)
 	
 	
 	for i, v in pairs( ents.FindInSphere( p_pos, maxRange ) ) do
-		if v:IsPlayer() and v != LocalPlayer() or v:GetClass() == 'bw_base_moneyprinter' or v:GetClass() == 'bw_base_jammer'  then
+		if v:IsPlayer() and v != LocalPlayer() or v:GetClass() == 'bw_base_moneyprinter' or v.Base == 'bw_base_moneyprinter' or v:GetClass() == 'bw_base_jammer'  then
 			table.insert( targets, v )
         end
 	end
