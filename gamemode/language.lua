@@ -74,6 +74,12 @@ BaseWars.LANG.__LANGUAGELOOK.ENGLISH = {
 	DeadBuy									= "Dead people buy nothing.",
 	EntLimitReached					= "You have reached the limit of \"%s\"s.",
 
+	AddToInventory					= "You have added %s to your inventory!",
+	AlreadyOwns						= "You already have this weapon equipped!",
+
+	ClearingWeapons					= "In 1 minute, all dropped weapons will be deleted.",
+	ClearedWeapons					= "All dropped weapons have been deleted.",
+
 	StuckText								= "You are stuck inside a wall, prop, or player! Remain calm and press [CTRL], if it does not work press [SPACE].",
 
 	FailedToAuth						= "Steam failed to authenticate your SteamID, uh oh!",

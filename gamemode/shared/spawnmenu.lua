@@ -15,6 +15,8 @@ local function LimitDeduct(self, ent, ply)
 			ply:GetTable()["limit_" .. ent] = ply:GetTable()["limit_" .. ent] - 1
 		end
 
+		if e:GetClass() == "arc9_ammo_big" then return end
+
 		e:o_OnRemove()
 	end
 

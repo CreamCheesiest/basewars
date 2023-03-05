@@ -25,8 +25,8 @@ hook.Add("BaseWars_PlayerBuyEntity", "XPRewards", function(ply, ent)
 end)
 
 hook.Add("BaseWars_PlayerEmptyPrinter", "XPRewards", function(ply, ent, money)
-	
-	if(ply:GetLevel() >= 200) then
+
+	if (ply:GetLevel() >= 200) then
 		ply:AddXP(math.max(0, money / 12))
 	elseif (ply:GetLevel() >= 180) then
 		ply:AddXP(math.max(0, money / 10))
@@ -38,6 +38,8 @@ hook.Add("BaseWars_PlayerEmptyPrinter", "XPRewards", function(ply, ent, money)
 		ply:AddXP(math.max(0, money / 4))
 	elseif (ply:GetLevel() >= 100) then
 		ply:AddXP(math.max(0, money / 2))
+	else
+		ply:AddXP(math.max(0, money))
 	end
 
 end)

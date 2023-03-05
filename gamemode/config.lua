@@ -638,11 +638,11 @@ BaseWars.SpawnList.Models.Entities = {}
 BaseWars.SpawnList.Models.Loadout = {}
 BaseWars.SpawnList.Models.Fun = {}
 
-/*BaseWars.SpawnList.Models.Loadout["Ammo"] = {
+BaseWars.SpawnList.Models.Loadout["Ammo"] = {
 
-	["Ammo Crate"] 		= BaseWars.GSL{Model = "models/items/arc9/ammo_middle_box.mdl", Price = 1000, ClassName = "arc9_ammo_big", Level = 10},
+	["Ammo Crate"] 		= BaseWars.GSL{Model = "models/items/arc9/ammo_middle_box.mdl", Price = 5000, ClassName = "arc9_ammo_big", Level = 10},
 
-}*/
+}
 
 BaseWars.SpawnList.Models.Loadout["Melee Weapons - T1"] = {
 
