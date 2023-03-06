@@ -21,6 +21,7 @@ local faketargets	= {}
 local Printers  = {}
 local Jammers = {}
 local IsJammed = false
+local jamRadius = 625
 
 local nextglitch	= 0
 local glitchamount	= 0
@@ -61,7 +62,7 @@ local function DrawDots( w, h)
 	
 	
 	for i, v in pairs( ents.FindInSphere( p_pos, maxRange ) ) do
-		if v:IsPlayer() and v != LocalPlayer() or v:GetClass() == 'bw_base_moneyprinter' or v.Base == 'bw_base_moneyprinter' or v:GetClass() == 'bw_base_jammer'  then
+		if v:GetClass() == 'bw_base_moneyprinter' or v.Base == 'bw_base_moneyprinter' or v:GetClass() == 'bw_base_jammer'  then
 			table.insert( targets, v )
         end
 	end
@@ -81,7 +82,7 @@ local function DrawDots( w, h)
             for _, jammer in pairs(jammers) do
                 if IsValid(jammer) and jammer:GetActive() then
                     local dist = jammer:GetPos():Distance(p_pos)
-                    if dist < 350 then
+                    if dist < jamRadius then
                         IsJammed = true
                         return
                     else 
@@ -327,7 +328,7 @@ function DrawMotionTracker()
             --     1 )
         end
     end
-    print(math.Round(glitchamount))
+    -- print(math.Round(glitchamount))
     if glitchamount > 0 then
         surface.SetDrawColor( 255, 150, 150, 255 * glitchamount )
         surface.SetMaterial( mat_screen_glitchovr )
