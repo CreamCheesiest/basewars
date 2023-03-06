@@ -701,6 +701,31 @@ local function MakeMenu(mainFrame, tabPanel, ftionTab, raidsTab, bountyTab, rule
             local Disabled = not (me:InRaid() and (not me:InFaction() or me:InFaction(nil, true)))
             self:SetDisabled(Disabled)
         end
+
+        local btnScan = btns:Add("DButton")
+        btnScan:DockMargin(8, 0, 0, 0)
+        btnScan:Dock(LEFT)
+        btnScan:SetWide(128)
+        btnScan:SetImage("icon16/zoom.png")
+        btnScan:SetText("Scan")
+
+        function btnScan:DoClick()
+            me:Scan(self.Enemy)
+        end
+
+        function btnScan:Think()
+            local Enemy = plyList.SelectedPly
+            Enemy = BaseWars.Ents:ValidPlayer(Enemy) and Enemy
+            local InFac = me:InFaction()
+            local InFac2 = Enemy and Enemy:InFaction() and not Enemy:InFaction(me:GetFaction())
+
+            if not Enemy or (InFac and InFac2) or (InFac2 and InFac) then
+                self:SetDisabled(true)
+            else
+                self:SetDisabled(false)
+                self.Enemy = Enemy
+            end
+        end
     end
 
     -- Bounty tab

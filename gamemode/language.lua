@@ -34,6 +34,14 @@ BaseWars.LANG.__LANGUAGELOOK.ENGLISH = {
 	RaidSelfNoFac						= "You cannot raid a faction as a factionless player!",
 	RaidNoFaction						= "You cannot use faction functions during a raid!",
 	CantRaidSelf						= "You can't raid yourself or your faction!",
+	
+	CantScanSelf			= "You can't raid yourself or your faction!",
+	ScanTargNoFac						= "You cannot scan a factionless player as a faction!",
+	ScanSelfNoFac						= "You cannot scan a faction as a factionless player!",
+	ScanStart								= "%s scanned %s.",
+	ScanResult							= "%s has %s raidable(s).",
+	ScanOnCoolDown							= "Target is currently on cooldown from being scanned recently!",
+	ScanTargetUnraidable					= "Your target is not scannable! (%s)",
 
 	CannotPurchaseRaid			= "You cannot purchase that in a raid!",
 

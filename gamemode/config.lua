@@ -61,6 +61,10 @@ BaseWars.Config = {
 		NeededPrinters	= 1,
 	},
 
+	Scan = {
+		CoolDownTime	= 60 * 2
+	},
+
 	AFK  = {
 		Time 	= 300,
 	},
