@@ -519,6 +519,15 @@ BaseWars.Config.Help = {
 		"'interactions_enabled 0' into your console.",
 
 	},
+
+	["How do I access my weapons that I've picked up?"] = {
+
+		"To access your inventory, press F3 and go to the inventory tab.",
+		"From there, you left click to equip, right click to drop.",
+		"If you want to move an item from your hands to your inventory, type /inv",
+		"And yes, your inventory is saved across server restarts and disconnects!"
+
+	}
 }
 
 BaseWars.Config.DrugHelp = {
