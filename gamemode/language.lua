@@ -84,7 +84,7 @@ BaseWars.LANG.__LANGUAGELOOK.ENGLISH = {
 
 	FailedToAuth						= "Steam failed to authenticate your SteamID, uh oh!",
 
-	MainMenuControl					= "F3 - Open Main Menu (Rules, Factions, Raids)",
+	MainMenuControl					= "F3 - Open Main Menu (Rules, Factions, Raids, Inventory)",
 	SpawnMenuControl				= " - Open Buy Menu (Entities, Weapons)", -- Key is detected automatically, do not add one.
 	KarmaText								= "Your Karma is currently %s",
 	LevelText               = "Level: %s",
