@@ -52,6 +52,18 @@ hook.Add("BaseWars_PlayerUpgradePrinter", "XPRewards", function(ply, ent, money)
 
 end)
 
+hook.Add( "PlayerInitialSpawn", "SpawnMessage", function( ply )
+	for i,plys in ipairs(player.GetAll()) do
+		plys:ChatPrint("Player " .. ply:Nick() .. " has spawned into the game")
+	end
+end)
+
+hook.Add("PlayerDisconnected", "DisconnectMessage", function(ply)
+	for i,plys in ipairs(player.GetAll()) do
+		plys:ChatPrint("Player " .. ply:Nick() .. " has left the game")
+	end
+end)
+
 timer.Create("BaseWars_KarmaRecover", 5 * 60, 0, function()
 
 	for k, v in next, player.GetAll() do

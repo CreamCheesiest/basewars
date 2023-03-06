@@ -59,6 +59,7 @@ do
 		IncludeCS("shared/playuhr.lua")
 		IncludeCS("shared/customnick.lua")
 		IncludeCS("shared/hostnamefix.lua")
+		IncludeCS("shared/resources.lua")
 
 	end
 
