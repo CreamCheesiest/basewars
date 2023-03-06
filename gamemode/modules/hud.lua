@@ -283,7 +283,7 @@ function MODULE:Paint()
 	draw.DrawText(round(suF), tag, pbarW + 98, sH - 128 - 16 - 8, shade, TEXT_ALIGN_LEFT)
 	draw.DrawText(round(suF), tag, pbarW + 96, sH - 128 - 16 - 10, trans, TEXT_ALIGN_LEFT)
 
-	if me.Stuck and me:Stuck() and me:GetMoveType() == MOVETYPE_WALK then
+	/*if me.Stuck and me:Stuck() and me:GetMoveType() == MOVETYPE_WALK then
 
 		if not StuckTime then StuckTime = CurTime() end
 
@@ -298,7 +298,7 @@ function MODULE:Paint()
 
 		StuckTime = nil
 
-	end
+	end*/
 
 end
 hook.Add("HUDPaint", tag .. ".Paint", Curry(MODULE.Paint))

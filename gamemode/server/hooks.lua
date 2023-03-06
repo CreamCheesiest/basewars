@@ -26,6 +26,8 @@ end)
 
 hook.Add("BaseWars_PlayerEmptyPrinter", "XPRewards", function(ply, ent, money)
 
+	money = money / 2 -- Flat rate cut to levelling
+
 	if (ply:GetLevel() >= 200) then
 		ply:AddXP(math.max(0, money / 12))
 	elseif (ply:GetLevel() >= 180) then

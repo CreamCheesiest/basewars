@@ -170,7 +170,7 @@ local function MakeBountyList(pnl)
 
             --if ply == me then continue end
             if not self.PlayerLines[ply] then
-                local line = self:AddLine(ply:Nick(), BaseWars.LANG.CURRENCY .. ply:GetNW2Int("bounty") or "<NONE>")
+                local line = self:AddLine(ply:Nick(), BaseWars.LANG.CURRENCY .. BaseWars.NumberFormat(ply:GetNW2Int("bounty")) or "<NONE>")
                 self.PlayerLines[ply] = line
             end
         end
