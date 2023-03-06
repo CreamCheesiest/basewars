@@ -10,7 +10,7 @@ ENT.Model 				= "models/props_lab/plotter.mdl"
 ENT.Sound				= Sound("HL1/fvox/blip.wav")
 
 ENT.Radius				= 600
-ENT.PaperAmt			= 50
+ENT.PaperAmt			= 200
 
 ENT.PowerRequired		= 0
 ENT.Drain				= 0
