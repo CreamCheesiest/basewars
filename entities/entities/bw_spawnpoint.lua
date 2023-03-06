@@ -4,7 +4,7 @@ ENT.Type = "anim"
 ENT.PrintName = "SpawnPoint"
 ENT.Model = "models/props_trainstation/trainstation_clock001.mdl"
 
-ENT.PowerRequired = 1
+ENT.PowerRequired = 0
 ENT.PowerCapacity = 5000
 
 ENT.AllwaysRaidable = true
