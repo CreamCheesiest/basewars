@@ -808,7 +808,7 @@ BaseWars.SpawnList.Models.Entities["Defense (T2)"] = {
 
 	-- T2
   ["Tesla Coil"]					= BaseWars.GSL{Model = "models/props_c17/substation_transformer01d.mdl", Price = 5000000, ClassName = "bw_tesla", Limit = 1, Level = 30},
-	["Jammer"]					= BaseWars.GSL{Model = "models/props_lab/reciever01b.mdl", Price = 5000000, ClassName = "bw_base_jammer", Limit = 99, Level = 150},
+	["Jammer"]					= BaseWars.GSL{Model = "models/props_lab/reciever01b.mdl", Price = 3000000, ClassName = "bw_base_jammer", Limit = 99, Level = 150},
 }
 
 BaseWars.SpawnList.Models.Entities["Consumables (T1)"] = {

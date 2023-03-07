@@ -75,24 +75,21 @@ local function DrawDots( w, h)
             local Jammer = ''
 			if !IsValid( v ) then continue end
 			local dist = v:GetPos():Distance( p_pos )
-            
-
-
-            local jammers = ents.FindByClass("bw_base_jammer")
-            for _, jammer in pairs(jammers) do
-                if IsValid(jammer) and jammer:GetActive() then
-                    local dist = jammer:GetPos():Distance(p_pos)
-                    if dist < jamRadius then
-                        IsJammed = true
-                        return
-                    else 
-                        IsJammed = false
-                    end
-                else 
+            if v:GetClass() == "bw_base_jammer" then
+                for _, jammer in pairs(ents.FindByClass("bw_base_jammer")) do
+                  if jammer:GetActive() then
+                        local dist = jammer:GetPos():Distance(p_pos)
+                        if dist < jammer:GetJammerRadius() then
+                            IsJammed = true
+                            return
+                        else
+                            IsJammed = false
+                        end
+                  else 
                     IsJammed = false
+                  end
                 end
             end
-
 
             local perc = math.Clamp( v:GetVelocity():Length() / 300, 0, 1 )
 			local range = 1 - math.Clamp( ( dist - ( maxRange - 200 ) ) / 200, 0, 1 )

@@ -43,10 +43,8 @@ function ENT:SetupDataTables()
 
 	self:NetworkVar("Bool", 0, "WaterProof")
 	self:NetworkVar("Bool", 1, "Usable")
-	self:NetworkVar("Bool", 0, "Active") 
 	self:NetworkVar("Int", 1, "Power")
 	self:NetworkVar("Int", 1, "MaxPower")
-	
 	self:StableNetwork()
 	
 end
@@ -99,9 +97,8 @@ if SERVER then
 		self:SetWaterProof(BaseWars.Config.Ents.Electronics.WaterProof)
 		
 		self:Init()
-		self:SetActive(false)
-		
 		self:SetMaxHealth(self:Health())
+		
 
 	end
 	
