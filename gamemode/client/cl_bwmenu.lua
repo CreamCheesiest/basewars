@@ -165,13 +165,15 @@ local function MakeBountyList(pnl)
     end
 
     function plyList:UpdatePlayers()
+
         for _, ply in next, player.GetAll() do
             if not ply:GetNW2Bool("hasBounty") then continue end
-
+            
             --if ply == me then continue end
             if not self.PlayerLines[ply] then
                 local line = self:AddLine(ply:Nick(), BaseWars.LANG.CURRENCY .. BaseWars.NumberFormat(ply:GetNW2Int("bounty")) or "<NONE>")
                 self.PlayerLines[ply] = line
+                bountyPrice = ply:GetNW2Int("bounty")
             end
         end
 
@@ -187,6 +189,13 @@ local function MakeBountyList(pnl)
             end
 
             if not IsValid(ply) then
+                local id = pnl:GetID()
+                self:RemoveLine(id)
+                self.PlayerLines[ply] = nil
+                continue
+            end
+
+            if bountyPrice ~= ply:GetNW2Int("bounty") then
                 local id = pnl:GetID()
                 self:RemoveLine(id)
                 self.PlayerLines[ply] = nil
@@ -678,7 +687,7 @@ local function MakeMenu(mainFrame, tabPanel, ftionTab, raidsTab, bountyTab, rule
             local InFac = me:InFaction()
             local InFac2 = Enemy and Enemy:InFaction() and not Enemy:InFaction(me:GetFaction())
 
-            if not Enemy or (InFac and InFac2) or (InFac2 and InFac) then
+            if not Enemy or (InFac and not InFac2) or (InFac2 and not InFac) then
                 self:SetDisabled(true)
             else
                 self:SetDisabled(false)
@@ -710,7 +719,7 @@ local function MakeMenu(mainFrame, tabPanel, ftionTab, raidsTab, bountyTab, rule
         btnScan:SetText("Scan")
 
         function btnScan:DoClick()
-            me:Scan(self.Enemy)
+            me:StartScan(self.Enemy)
         end
 
         function btnScan:Think()

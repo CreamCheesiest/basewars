@@ -62,7 +62,7 @@ BaseWars.Config = {
 	},
 
 	Scan = {
-		CoolDownTime	= 60 * 2
+		CoolDownTime	= 60
 	},
 
 	AFK  = {
@@ -82,7 +82,7 @@ BaseWars.Config = {
 	},
 
 	Adverts = {
-		Time = 60 * 2,
+		Time = 60 * 5,
 	},
 
 	SpawnWeps = {
@@ -762,6 +762,18 @@ BaseWars.SpawnList.Models.Loadout["Throwables - T1"] = {
 
 }
 
+BaseWars.SpawnList.Models.Loadout["Utility - T1"] = {
+
+	["Heal Gun"]					= BaseWars.GSL{Gun = true, Model = "models/weapons/w_physics.mdl", Price = 100000, ClassName = "weapon_health", Level = 15},
+	["Radar"]					= BaseWars.GSL{Gun = true, Model = "models/weapons/w_motion_tracker.mdl", Price = 100000, ClassName = "weapon_radar", Level = 15},
+	["C4"]						= BaseWars.GSL{Gun = true, Model = "models/weapons/w_c4.mdl" , Price = 100000, ClassName = "bw_weapon_c4", Level = 60}
+	--["Frag"]						= BaseWars.GSL{Gun = true, Model = "models/weapons/w_grenade.mdl", Price = 45000, ClassName = "weapon_frag", Level = 20},
+	--["Gas grenade"]						= BaseWars.GSL{Gun = true, Model = "models/weapons/w_eq_flashbang_thrown.mdl", Price = 150000, ClassName = "bw_gasnade", Level = 50},
+
+}
+
+
+
 /*BaseWars.SpawnList.Models.Entities["Generators (T1)"] = {
 
 	["Solar Panel"]					= BaseWars.GSL{Model = "models/props_lab/miniteleport.mdl", Price = 1500, ClassName = "bw_gen_solar"},
@@ -808,7 +820,7 @@ BaseWars.SpawnList.Models.Entities["Defense (T2)"] = {
 
 	-- T2
   ["Tesla Coil"]					= BaseWars.GSL{Model = "models/props_c17/substation_transformer01d.mdl", Price = 5000000, ClassName = "bw_tesla", Limit = 1, Level = 30},
-	["Jammer"]					= BaseWars.GSL{Model = "models/props_lab/reciever01b.mdl", Price = 3000000, ClassName = "bw_base_jammer", Limit = 99, Level = 150},
+	["Jammer"]					= BaseWars.GSL{Model = "models/props_lab/reciever01b.mdl", Price = 3000000, ClassName = "bw_base_jammer", Limit = 4, Level = 150},
 }
 
 BaseWars.SpawnList.Models.Entities["Consumables (T1)"] = {
@@ -885,12 +897,3 @@ BaseWars.SpawnList.Models.Fun["Synthesizer"] = {
 	["Antidote"]					= BaseWars.GSL{Drug = true, Price = 25000, ClassName = "Antidote"},
 
 }*/
-
-BaseWars.SpawnList.Models.Loadout["Weapons - T2"] = {
-
-	["Heal Gun"]					= BaseWars.GSL{Gun = true, Model = "models/weapons/w_physics.mdl", Price = 100000, ClassName = "weapon_health", Level = 15},
-	["Radar"]					= BaseWars.GSL{Gun = true, Model = "models/weapons/w_motion_tracker.mdl", Price = 100000, ClassName = "weapon_radar", Level = 15},
-	--["Frag"]						= BaseWars.GSL{Gun = true, Model = "models/weapons/w_grenade.mdl", Price = 45000, ClassName = "weapon_frag", Level = 20},
-	--["Gas grenade"]						= BaseWars.GSL{Gun = true, Model = "models/weapons/w_eq_flashbang_thrown.mdl", Price = 150000, ClassName = "bw_gasnade", Level = 50},
-
-}

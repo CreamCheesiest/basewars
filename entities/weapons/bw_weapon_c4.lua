@@ -34,9 +34,9 @@ function SWEP:PrimaryAttack()
 	if CLIENT then return end
 
 	local tr = util.TraceLine({
-		start = self.Owner:GetShootPos(),
-		endpos = self.Owner:GetShootPos() + self.Owner:GetAimVector() * 128,
-		filter = self.Owner
+		start = self:GetOwner():GetShootPos(),
+		endpos = self:GetOwner():GetShootPos() + self:GetOwner():GetAimVector() * 128,
+		filter = self:GetOwner()
 	})
 
 	if not tr.Hit then return end
@@ -58,7 +58,7 @@ function SWEP:PrimaryAttack()
 		ent:SetAngles(ang)
 		ent:Spawn()
 		ent:Activate()
-		ent.Owner = self.Owner
+		ent.Owner = self:GetOwner()
 		ent:Plant(not p:IsWorld() and p)
 
 		self:Remove()
@@ -73,18 +73,17 @@ function SWEP:SecondaryAttack()
 
 	if CLIENT then return end
 
-	local ply = self.Owner
+	local ply = self:GetOwner()
 
 	if not ply:IsAdmin() then return end
 	
-	local p = ent
 	local ent = ents.Create("bw_c4")
 
 	ent:SetPos(ply:GetShootPos() + ply:GetAimVector() * 16)
 	ent:SetAngles(ply:GetAimVector():Angle())
 	ent:Spawn()
 	ent:Activate()
-	ent.Owner = self.Owner
+	ent.Owner = self:GetOwner()
 	
 	local po = ent:GetPhysicsObject()
 

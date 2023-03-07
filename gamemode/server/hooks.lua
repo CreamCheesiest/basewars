@@ -26,23 +26,31 @@ end)
 
 hook.Add("BaseWars_PlayerEmptyPrinter", "XPRewards", function(ply, ent, money)
 
-	money = money / 2 -- Flat rate cut to levelling
+	-- money = money / 2 -- Flat rate cut to levelling
 
-	if (ply:GetLevel() >= 200) then
-		ply:AddXP(math.max(0, money / 12))
-	elseif (ply:GetLevel() >= 180) then
-		ply:AddXP(math.max(0, money / 10))
-	elseif (ply:GetLevel() >= 160) then
-		ply:AddXP(math.max(0, money / 8))
-	elseif (ply:GetLevel() >= 140) then
-		ply:AddXP(math.max(0, money / 6))
-	elseif (ply:GetLevel() >= 120) then
-		ply:AddXP(math.max(0, money / 4))
-	elseif (ply:GetLevel() >= 100) then
-		ply:AddXP(math.max(0, money / 2))
-	else
-		ply:AddXP(math.max(0, money))
+	-- if (ply:GetLevel() >= 200) then
+	-- 	ply:AddXP(math.max(0, money / 12))
+	-- elseif (ply:GetLevel() >= 180) then
+	-- 	ply:AddXP(math.max(0, money / 10))
+	-- elseif (ply:GetLevel() >= 160) then
+	-- 	ply:AddXP(math.max(0, money / 8))
+	-- elseif (ply:GetLevel() >= 140) then
+	-- 	ply:AddXP(math.max(0, money / 6))
+	-- elseif (ply:GetLevel() >= 120) then
+	-- 	ply:AddXP(math.max(0, money / 4))
+	-- elseif (ply:GetLevel() >= 100) then
+	-- 	ply:AddXP(math.max(0, money / 2))
+	-- else
+	-- 	ply:AddXP(math.max(0, money))
+	-- end
+
+	local lvl = ply:GetLevel()
+
+	local function getDivisor(level)
+		divisor = 24^(level / 20)
 	end
+
+	ply:AddXP(math.max(0, money / getDivisor(lvl)))
 
 end)
 

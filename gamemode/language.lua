@@ -39,7 +39,7 @@ BaseWars.LANG.__LANGUAGELOOK.ENGLISH = {
 	ScanTargNoFac						= "You cannot scan a factionless player as a faction!",
 	ScanSelfNoFac						= "You cannot scan a faction as a factionless player!",
 	ScanStart								= "%s scanned %s.",
-	ScanResult							= "%s has %s raidable(s).",
+	ScanResult							= "%s has %s raidable(s) worth $%s",
 	ScanOnCoolDown							= "Target is currently on cooldown from being scanned recently!",
 	ScanTargetUnraidable					= "Your target is not scannable! (%s)",
 

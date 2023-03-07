@@ -55,7 +55,7 @@ if SERVER then
 
 	local plant = Sound("weapons/c4/c4_plant.wav")
 	function ENT:Plant(ent)
-		self:SetParent(ent)
+		if ent then self:SetParent(ent) end
 		self:SetMoveType(MOVETYPE_NONE)
 		self:EmitSound(plant)
 		self:StartCountdown()
@@ -81,7 +81,7 @@ if SERVER then
 		exp:Spawn()
 		exp:Activate()
 		exp:Fire("explode")
-		exp.Owner = self.Owner
+		exp.Owner = self:GetOwner()
 
 		self:ExplodeEffects()
 		SafeRemoveEntity(self)
@@ -207,10 +207,8 @@ else
 	hook.Add("HUDPaint","BaseWars.DrawBomb_EndGame",function()
 
 		if not IsValid(LocalPlayer()) then return end
-
 		for _, ent in pairs(ents.GetAll()) do
 			if IsValid(ent) and (ent:GetClass() == "bw_c4" or ent.Base == "bw_c4") and ent.ShowTimer and ent:GetNW2Bool("show") then
-
 				local pos = ent:GetPos()
 
 				if pos:Distance(LocalPlayer():GetPos()) > 1200 then continue end

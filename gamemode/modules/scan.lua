@@ -1,6 +1,6 @@
 MODULE.Name = "Scan"
 MODULE.Author = "CreamCheese"
-MODULE.Realm = 3
+
 local tag = "BaseWars.Scan"
 local PLAYER = debug.getregistry().Player
 
@@ -8,9 +8,29 @@ if SERVER then
     util.AddNetworkString(tag)
 end
 
-function MODULE:Scan(len, ply)
+function MODULE:HandleNetMessage(len, ply)
+    local me = ply
     local target = net.ReadEntity()
+    countRaidables = 0
+    value = 0
 
+    for _, ent in ipairs(ents.GetAll()) do
+        if ent:CPPIGetOwner() == target and ent.IsValidRaidable then
+            countRaidables = countRaidables + 1
+            if (ent.Base == "bw_base_moneyprinter" or ent:GetClass() == "bw_base_moneyprinter") then
+                value = value + ent.CurrentValue
+            else
+                value = value + ent.Price
+            end
+        end
+    end
+
+    self:Scan(me, target)
+end
+
+net.Receive(tag, Curry(MODULE.HandleNetMessage))
+
+function MODULE:Scan(ply, target)
     if not target or not target:IsPlayer() then
         ErrorNoHalt("ScanStart, invalid target.")
         debug.Trace()
@@ -22,7 +42,6 @@ function MODULE:Scan(len, ply)
         net.Start(tag)
         net.WriteEntity(target)
         net.SendToServer()
-
         return
     end
 
@@ -90,17 +109,12 @@ function MODULE:Scan(len, ply)
         target.__ScanCoolDown = CurTime() + ScanCooldown
     end
 
-    local countRaidables = 0
-
-    for _, ent in ipairs(ents.GetAll()) do
-        if ent.IsValidRaidable and ent:GetOwner() == target then
-            countRaidables = countRaidables + 1
-        end
-    end
-
     BaseWars.Util_Player:NotificationAll(string.format(BaseWars.LANG.ScanStart, ply:Nick(), target:Nick()), BASEWARS_NOTIFICATION_RAID)
-    ply:Notify(string.format(BaseWars.LANG.ScanResult, target:Nick(), countRaidables), BASEWARS_NOTIFICATION_RAID)
+    ply:Notify(string.format(BaseWars.LANG.ScanResult, target:Nick(), countRaidables, BaseWars.NumberFormat(value)), BASEWARS_NOTIFICATION_RAID)
     EmitSound(Sound("buttons/blip1.wav"), target:GetPos(), target:EntIndex())
+    timer.Create("scanSound", 0.5,2, function()
+        EmitSound(Sound("buttons/blip1.wav"), target:GetPos(), target:EntIndex())
+    end)
 end
 
 PLAYER.StartScan = Curry(MODULE.Scan)
@@ -119,4 +133,3 @@ function MODULE:CheckScannable(ply, nocool, fac)
 end
 
 PLAYER.Scannable = Curry(MODULE.CheckScannable)
-net.Receive(tag, Curry(MODULE.Scan))
