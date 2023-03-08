@@ -47,7 +47,7 @@ hook.Add("BaseWars_PlayerEmptyPrinter", "XPRewards", function(ply, ent, money)
 	local lvl = ply:GetLevel()
 
 	local function getDivisor(level)
-		divisor = 24^(level / 20)
+		return 24^(level / 200) or 1
 	end
 
 	ply:AddXP(math.max(0, money / getDivisor(lvl)))

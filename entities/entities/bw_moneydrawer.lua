@@ -227,7 +227,7 @@ else
         local ang = self:GetAngles()
 
         pos = pos + ang:Up() * 26
-        pos = pos + ang:Forward() * 12
+        pos = pos + ang:Forward() * 13
         pos = pos + ang:Right() * 27.5
 
         ang:RotateAroundAxis(ang:Up(), 90)
