@@ -729,7 +729,7 @@ local function MakeMenu(mainFrame, tabPanel, ftionTab, raidsTab, bountyTab, rule
             local InFac2 = Enemy and Enemy:InFaction() and not Enemy:InFaction(me:GetFaction())
             local hasRadar = me:GetNW2Bool("BaseWars_HasRadar")
 
-            if not Enemy or (InFac and not InFac2) or (InFac2 and not InFac) then
+            if not hasRadar then
                 self:SetDisabled(true)
             elseif hasRadar then
                 self:SetDisabled(false)
@@ -796,7 +796,6 @@ local function MakeMenu(mainFrame, tabPanel, ftionTab, raidsTab, bountyTab, rule
                     net.WriteString(item.classname)
                     net.WriteString(item.worldmodel)
                     net.WriteString(item.printname)
-                    net.WriteString(me:SteamID()) -- Player
                     net.WriteBool(isLeftClicked)
                     net.SendToServer()
                     itemIcon:Remove()
@@ -807,7 +806,6 @@ local function MakeMenu(mainFrame, tabPanel, ftionTab, raidsTab, bountyTab, rule
                     net.WriteString(item.classname)
                     net.WriteString(item.worldmodel)
                     net.WriteString(item.printname)
-                    net.WriteString(me:SteamID()) -- Player
                     net.WriteBool(false)
                     net.SendToServer()
                     itemIcon:Remove()

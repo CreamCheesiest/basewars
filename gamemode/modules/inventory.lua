@@ -21,13 +21,13 @@ function MODULE:GetInv(ply)
     end
 end
 
+PLAYER.GetInv = Curry(MODULE.GetInv)
+
 function MODULE:SendInvToClient(ply, inv)
     net.Start(tag)
     net.WriteString(inv)
     net.Send(ply)
 end
-
-PLAYER.GetInv = Curry(MODULE.GetInv)
 
 if SERVER then
     util.AddNetworkString(tag)
@@ -96,6 +96,8 @@ if SERVER then
     hook.Add("PlayerCanPickupWeapon", "InventoryAdd", function(ply, weap)
         local contains = false
 
+        if not weap:IsValid() then return end
+
         for blweapon, bool in pairs(BaseWars.Config.WeaponDropBlacklist) do
             if weap:GetClass() == blweapon then
                 contains = true
@@ -121,12 +123,35 @@ if SERVER then
         BaseWars.Inventory:SendInvToClient(ply, inv)
     end)
 
-    net.Receive(tag .. ".Client", function()
+    function MODULE:ValidateData(class, model, printname, ply)
+        if class and model and printname and ply then
+            return true
+        else
+            return false
+        end
+    end
+
+    function MODULE:hasItem(ply, item)
+        local inv = ply:GetInv()
+        for k, v in pairs(inv) do
+            PrintTable(v)
+            if v["classname"] == item then
+                return true
+            end
+        end
+        return false
+    end
+
+    PLAYER.hasItem = Curry(MODULE.hasItem)
+
+    net.Receive(tag .. ".Client", function(len, ply)
         local Class = net.ReadString()
         local Model = net.ReadString()
         local printname = net.ReadString()
-        local ply = player.GetBySteamID(net.ReadString())
         isLeftClicked = net.ReadBool()
+
+        if not BaseWars.Inventory:ValidateData(Class, Model, printname, ply) then print("Unvalidated data being sent from " .. tostring(ply)) return end
+        if not ply:hasItem(Class) then print(ply:SteamID() .. " is potentially attempting to abuse the inventory system by giving themselves a weapon they do not have!") return end
 
         if isLeftClicked then
             for _,w in pairs(ply:GetWeapons()) do
