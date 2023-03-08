@@ -727,10 +727,11 @@ local function MakeMenu(mainFrame, tabPanel, ftionTab, raidsTab, bountyTab, rule
             Enemy = BaseWars.Ents:ValidPlayer(Enemy) and Enemy
             local InFac = me:InFaction()
             local InFac2 = Enemy and Enemy:InFaction() and not Enemy:InFaction(me:GetFaction())
+            local hasRadar = me:GetNW2Bool("BaseWars_HasRadar")
 
-            if not Enemy or (InFac and InFac2) or (InFac2 and InFac) then
+            if not Enemy or (InFac and not InFac2) or (InFac2 and not InFac) then
                 self:SetDisabled(true)
-            else
+            elseif hasRadar then
                 self:SetDisabled(false)
                 self.Enemy = Enemy
             end

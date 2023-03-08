@@ -39,6 +39,7 @@ function MODULE:Scan(ply, target)
     end
 
     if CLIENT then
+        if not LocalPlayer():GetNW2Bool("BaseWars_HasRadar") then return end
         net.Start(tag)
         net.WriteEntity(target)
         net.SendToServer()
