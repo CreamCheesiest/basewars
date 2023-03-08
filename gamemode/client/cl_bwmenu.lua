@@ -796,7 +796,6 @@ local function MakeMenu(mainFrame, tabPanel, ftionTab, raidsTab, bountyTab, rule
                     net.WriteString(item.classname)
                     net.WriteString(item.worldmodel)
                     net.WriteString(item.printname)
-                    net.WriteString(me:SteamID()) -- Player
                     net.WriteBool(isLeftClicked)
                     net.SendToServer()
                     itemIcon:Remove()
@@ -807,7 +806,6 @@ local function MakeMenu(mainFrame, tabPanel, ftionTab, raidsTab, bountyTab, rule
                     net.WriteString(item.classname)
                     net.WriteString(item.worldmodel)
                     net.WriteString(item.printname)
-                    net.WriteString(me:SteamID()) -- Player
                     net.WriteBool(false)
                     net.SendToServer()
                     itemIcon:Remove()
@@ -838,14 +836,46 @@ local function MakeMenu(mainFrame, tabPanel, ftionTab, raidsTab, bountyTab, rule
         rulesLabel:SetDark(true)
         -- rulesLabel:SetExpensiveShadow(2, shadowColor)
         rulesLabel:SizeToContents()
-        local rulesHTML = rulesTab:Add("DHTML")
+        -- local rulesHTML = rulesTab:Add("DHTML")
+        local rulesHTML = rulesTab:Add("DPanel")
         rulesHTML:Dock(FILL)
 
-        if BaseWars.Config.Rules.IsHTML then
-            rulesHTML:SetHTML(BaseWars.Config.Rules.HTML or [[Error Loading HTML]])
-        else
-            rulesHTML:OpenURL(BaseWars.Config.Rules.HTML)
-        end
+        local rulesLabel2 = rulesHTML:Add("DLabel")
+        local text = [[
+
+        1: No multi-basing. Bases must be continuous and connected physically.
+
+        2: NLR and RDM DO NOT EXIST, THIS ISN'T DARKRP.
+
+        3: You cannot base with other people if you aren't in a faction together.
+
+        4: Do not intentionally spawn camp at world spawn or at a spawnpoint, if caught doing this too many times, you'll get banned.
+
+        5: No prop/entity surfing, blocking or pushing. Zero tolerence, if caught, you will be banned.
+
+        6: Don't use props to transport yourself in any fashion for raid purposes. For example, do not create stairs to get on top of 
+            someone's base before raiding.
+
+        7. Creating forward operating bases (FOBs) are allowed for raiding purposes. Money printers cannot be stored at FOBs.
+            A FOB is used to hold dispensers and a forward spawn for a raid, not for making money.
+
+        8: No cheating/exploiting of any sort.
+
+        9: No chat spam.
+
+        10: Use common-sense.
+
+        11: All judgements made by admins are final.
+        ]]
+        rulesLabel2:SetFont(medFont)
+        rulesLabel2:SetText(text)
+        rulesLabel2:SetDark(true)
+        rulesLabel2:SizeToContents()
+        -- if BaseWars.Config.Rules.IsHTML then
+        --     rulesHTML:SetHTML(BaseWars.Config.Rules.HTML or [[Error Loading HTML]])
+        -- else
+        --     rulesHTML:OpenURL(BaseWars.Config.Rules.HTML)
+        -- end
     end
 
     mainFrame:SetVisible(false)
