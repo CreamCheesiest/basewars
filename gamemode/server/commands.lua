@@ -339,7 +339,7 @@ BaseWars.Commands.AddCommand({"givemoney", "pay", "moneygive"}, function(caller,
 
 	if ply ~= "" and ply ~= nil then
 		for _,plyt in pairs(player.GetAll()) do
-			if plyt:Nick() == ply then ply = plyt:Nick() return end
+			if plyt:Nick() == ply then ply = plyt break end
 		end
 	else return false, BaseWars.LANG.InvalidPlayer end
 
@@ -356,6 +356,15 @@ BaseWars.Commands.AddCommand({"givemoney", "pay", "moneygive"}, function(caller,
 	caller:ChatPrint(Gave)
 	ply:ChatPrint(Given)
 
+end, false)
+
+BaseWars.Commands.AddCommand({"sellall"}, function(ply)
+	for _, ent in pairs(ents:GetAll()) do
+		if ent:CPPIGetOwner() == ply and ent:GetClass() ~= "prop_physics" then
+			BaseWars.UTIL.PayOut(ent, ply)
+			ent:Remove()
+		end
+	end
 end, false)
 
 local function compare(a, b)

@@ -593,7 +593,6 @@ BaseWars.Config.CommandsHelp = {
     "/upg        /upgrade        /upgr",
 	"",
 	"Or use the BaseWars Upgrade tool in the Q menu."
-
   },
 
   ["Sell Items"] = {
@@ -602,8 +601,11 @@ BaseWars.Config.CommandsHelp = {
     "",
     "/sell        /destroy        /remove",
 	"",
-	"Or use the BaseWars Sell tool in the Q menu."
-
+	"Or use the BaseWars Sell tool in the Q menu.",
+	"",
+	"You can also use:",
+	"/sellall",
+	"To sell all your entities!"
   },
 
 
@@ -611,8 +613,6 @@ BaseWars.Config.CommandsHelp = {
     "Sometimes the noobs need a little extra defense.",
     "",
     "/dw        /dropweapon        /dropwep",
-
-
   },
 
   /*["Private Message"] = {
@@ -622,20 +622,16 @@ BaseWars.Config.CommandsHelp = {
 
   },*/
 
-  /*["Give Money to Player"] = {
-    "Share the wealth!",
+  ["Give Money to Player"] = {
+    "Share the wealth! (NOW WORKING AS OF 09/03/23)",
     "",
     "/givemoney (playername)        /pay (playername)        /moneygive (playername)",
-
-
-  },*/
+  },
 
   ["Place a Bounty"] = {
     "Need someone gone, but too lazy and rich? We have just the thing for you.",
     "",
     "/bounty  (playername)        /place (playername)        /placebounty (playername)",
-
-
   },
 }
 
