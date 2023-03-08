@@ -20,8 +20,8 @@ BaseWars.Config = {
 			Duration	= 120,
 		},
 		Steroid = {
-			Walk 		= 330,
-			Run 		= 580,
+			Walk 		= 180 * 2,
+			Run 		= 300 * 2,
 			Duration	= 120,
 		},
 		Regen = {
@@ -36,7 +36,7 @@ BaseWars.Config = {
 			Duration	= 80,
 		},
 		Rage = {
-			Mult 		= 1.675,
+			Mult 		= 1.2,
 			Duration	= 120,
 		},
 		Shield = {
@@ -56,8 +56,8 @@ BaseWars.Config = {
 	},
 
 	Raid = {
-		Time 			= 60 * 5,
-		CoolDownTime	= 60 * 15,
+		Time 			= 60 * 6,
+		CoolDownTime	= 60 * 5,
 		NeededPrinters	= 1,
 	},
 
@@ -330,7 +330,7 @@ BaseWars.Config = {
 
 	RestrictProps 		= false,
 
-	DispenserTime		= 2,
+	DispenserTime		= 0.5,
 
 	LevelSettings = {
 
@@ -580,7 +580,7 @@ BaseWars.Config.DrugHelp = {
 	["What does the Rage drug do?"] = {
 
 		"Rage will help you fight other players!",
-		"You will deal 70% more damage for 2 minutes",
+		"You will deal 20% more damage for 2 minutes",
 
 	},
 }
@@ -766,7 +766,9 @@ BaseWars.SpawnList.Models.Loadout["Utility - T1"] = {
 
 	["Heal Gun"]					= BaseWars.GSL{Gun = true, Model = "models/weapons/w_physics.mdl", Price = 100000, ClassName = "weapon_health", Level = 15},
 	["Radar"]					= BaseWars.GSL{Gun = true, Model = "models/weapons/w_motion_tracker.mdl", Price = 100000, ClassName = "weapon_radar", Level = 15},
-	["C4"]						= BaseWars.GSL{Gun = true, Model = "models/weapons/w_c4.mdl" , Price = 100000, ClassName = "bw_weapon_c4", Level = 60}
+	["C4"]						= BaseWars.GSL{Gun = true, Model = "models/weapons/w_c4.mdl" , Price = 100000, ClassName = "bw_weapon_c4", Level = 60},
+	["EMP Bomb"]				= BaseWars.GSL{Gun = true, Model = "models/weapons/w_slam.mdl" , Price = 100000, ClassName = "bw_cracker", Level = 50},
+	["Blowtorch"]				= BaseWars.GSL{Gun = true, Model = "models/weapons/w_irifle.mdl" , Price = 200000, ClassName = "bw_blowtorch", Level = 50},
 	--["Frag"]						= BaseWars.GSL{Gun = true, Model = "models/weapons/w_grenade.mdl", Price = 45000, ClassName = "weapon_frag", Level = 20},
 	--["Gas grenade"]						= BaseWars.GSL{Gun = true, Model = "models/weapons/w_eq_flashbang_thrown.mdl", Price = 150000, ClassName = "bw_gasnade", Level = 50},
 
@@ -785,11 +787,11 @@ BaseWars.SpawnList.Models.Loadout["Utility - T1"] = {
 
 BaseWars.SpawnList.Models.Entities["Dispensers (T1)"] = {
 
-	["Vending Machine"]				= BaseWars.GSL{Model = "models/props_interiors/VendingMachineSoda01a.mdl", Price = 20000, ClassName = "bw_vendingmachine"},
-	["Ammo Dispenser"]				= BaseWars.GSL{Model = "models/props_lab/reciever_cart.mdl", Price = 55000, ClassName = "bw_dispenser_ammo"},
-	["Armour Dispenser"]			= BaseWars.GSL{Model = "models/props_combine/suit_charger001.mdl", Price = 35000, ClassName = "bw_dispenser_armor"},
+	--["Vending Machine"]				= BaseWars.GSL{Model = "models/props_interiors/VendingMachineSoda01a.mdl", Price = 20000, ClassName = "bw_vendingmachine", Limit = 1},
+	["Ammo Dispenser"]				= BaseWars.GSL{Model = "models/props_lab/reciever_cart.mdl", Price = 55000, ClassName = "bw_dispenser_ammo", Limit = 2},
+	["Armour Dispenser"]			= BaseWars.GSL{Model = "models/props_combine/suit_charger001.mdl", Price = 35000, ClassName = "bw_dispenser_armor", Limit = 2},
 	["Printer-Paper Refiller"]		= BaseWars.GSL{Model = "models/props_lab/plotter.mdl", Price = 550000, ClassName = "bw_dispenser_paper", Limit = 1, Level = 8},
-	["HealthPad"]					= BaseWars.GSL{Model = "models/props_lab/teleplatform.mdl", Price = 50000, ClassName = "bw_healthpad", UseSpawnFunc = true},
+	["Heath Dispenser"]				= BaseWars.GSL{Model = "models/props_combine/health_charger001.mdl", Price = 50000, ClassName = "bw_dispenser_health", Limit = 2},
 
 }
 
@@ -812,14 +814,14 @@ BaseWars.SpawnList.Models.Entities["Structures (T2)"] = {
 BaseWars.SpawnList.Models.Entities["Defense (T1)"] = {
 
 	-- T1
-  ["Ballistic Turret"] 			= BaseWars.GSL{Model = "models/Combine_turrets/Floor_turret.mdl", Price = 80000, ClassName = "bw_turret_ballistic", Limit = 2, Level = 20},
+	["Ballistic Turret"] 			= BaseWars.GSL{Model = "models/Combine_turrets/Floor_turret.mdl", Price = 80000, ClassName = "bw_turret_ballistic", Limit = 4, Level = 20},
 	["Laser Turret"] 				= BaseWars.GSL{Model = "models/Combine_turrets/Floor_turret.mdl", Price = 120000, ClassName = "bw_turret_laser", Limit = 1, Level = 30},
 }
 
 BaseWars.SpawnList.Models.Entities["Defense (T2)"] = {
 
 	-- T2
-  ["Tesla Coil"]					= BaseWars.GSL{Model = "models/props_c17/substation_transformer01d.mdl", Price = 5000000, ClassName = "bw_tesla", Limit = 1, Level = 30},
+	["Tesla Coil"]					= BaseWars.GSL{Model = "models/props_c17/substation_transformer01d.mdl", Price = 5000000, ClassName = "bw_tesla", Limit = 1, Level = 30},
 	["Jammer"]					= BaseWars.GSL{Model = "models/props_lab/reciever01b.mdl", Price = 3000000, ClassName = "bw_base_jammer", Limit = 4, Level = 150},
 }
 
@@ -885,15 +887,15 @@ BaseWars.SpawnList.Models.Fun["Synthesizer"] = {
 	
 }
 
-/*BaseWars.SpawnList.Models.Loadout["Drugs"] = {
+BaseWars.SpawnList.Models.Loadout["Drugs"] = {
 
-	["DoubleJump"] 					= BaseWars.GSL{Drug = true, Price = 25000, ClassName = "DoubleJump"},
-	["Regen"] 						= BaseWars.GSL{Drug = true, Price = 25000, ClassName = "Regen"},
-	["PainKiller"] 					= BaseWars.GSL{Drug = true, Price = 25000, ClassName = "PainKiller"},
-	["Steroid"] 					= BaseWars.GSL{Drug = true, Price = 25000, ClassName = "Steroid"},
-	["Adrenaline"] 					= BaseWars.GSL{Drug = true, Price = 25000, ClassName = "Adrenaline"},
-	["Rage"] 						= BaseWars.GSL{Drug = true, Price = 25000, ClassName = "Rage"},
-	["Shield"] 						= BaseWars.GSL{Drug = true, Price = 25000, ClassName = "Shield"},
-	["Antidote"]					= BaseWars.GSL{Drug = true, Price = 25000, ClassName = "Antidote"},
+	["DoubleJump"] 					= BaseWars.GSL{Drug = true, Price = 1000000, ClassName = "DoubleJump"},
+	["Regen"] 						= BaseWars.GSL{Drug = true, Price = 1000000, ClassName = "Regen"},
+	["PainKiller"] 					= BaseWars.GSL{Drug = true, Price = 1000000, ClassName = "PainKiller"},
+	["Steroid"] 					= BaseWars.GSL{Drug = true, Price = 1000000, ClassName = "Steroid"},
+	["Adrenaline"] 					= BaseWars.GSL{Drug = true, Price = 1000000, ClassName = "Adrenaline"},
+	["Rage"] 						= BaseWars.GSL{Drug = true, Price = 1000000, ClassName = "Rage"},
+	["Shield"] 						= BaseWars.GSL{Drug = true, Price = 1000000, ClassName = "Shield"},
+	["Antidote"]					= BaseWars.GSL{Drug = true, Price = 1000000, ClassName = "Antidote"},
 
-}*/
+}

@@ -60,7 +60,7 @@ if CLIENT then
             name = "Ping",
             command = function(self, arg) return tostring(arg:Ping()) end
         }
-
+        
         surface.CreateFont("ScoreboardTitleFont", {
             font = "CloseCaption_Normal",
             size = 42,

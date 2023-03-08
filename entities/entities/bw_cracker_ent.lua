@@ -7,6 +7,7 @@ ENT.ExplodeRadius = 200
 ENT.ShowTimer = true
 ENT.Counter = 0
 ENT.RealCounter = 0
+ENT.DisableTime = 60
 ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
 
 if SERVER then
@@ -43,11 +44,11 @@ if SERVER then
 
     local plant = Sound("weapons/c4/c4_plant.wav")
 
-    function ENT:Plant(ent)
+    function ENT:Plant(ent, attacker)
         if ent then
             self:SetParent(ent)
         end
-
+        self.Attacker = attacker
         self:SetMoveType(MOVETYPE_NONE)
         self:EmitSound(plant)
         self:StartCountdown()
@@ -65,12 +66,9 @@ if SERVER then
         local function EMP(ent, health, damage)
             -- check if the entity is still valid
             if IsValid(ent) then
-                ent:SetHealth(health - damage) -- set the entity's health back to its initial value
+                ent:SetHealth(health)
+                ent:OnTakeDamage(damage)
                 timer.Remove("empTimer" .. tostring(ent))
-                if ent:Health() <= 0 then
-                    ent:Explode()
-                    return
-                end
                 ent.isEMPed = false
                 ent.EMPDamage = 30
                 ent.tempHealth = ent:Health()
@@ -78,7 +76,6 @@ if SERVER then
         end
 
         local maxRange = 200
-        local targets = {}
         local p_pos = self:GetPos()
 
         for i, v in pairs(ents.FindInSphere(p_pos, maxRange)) do
@@ -91,22 +88,21 @@ if SERVER then
             then
                 if not v.tempHealth then
                     v.tempHealth = v:Health() -- store the initial health of the entity
-                elseif not v.isEMPed then
-                    v.tempHealth = v:Health()
                 end
 
                 if not v.isEMPed then
                     v.isEMPed = true
+                    v.tempHealth = v:Health()
                     v:SetHealth(1) -- set the entity's health to 0
-                    v.EMPDamage = 30
-
-                    timer.Create("empTimer" .. tostring(v), 10, 0, function()
-                        EMP(v, v.tempHealth, v.EMPDamage)
+                    damageTable = DamageInfo()
+                    damageTable:SetDamage(30)
+                    damageTable:SetAttacker(self.Attacker)
+                    timer.Create("empTimer" .. tostring(v), self.DisableTime, 0, function()
+                        EMP(v, v.tempHealth, damageTable)
                     end)
                 else
-                    v.EMPDamage = v.EMPDamage + 30
-                    timer.Adjust("empTimer" .. tostring(v), 10, 0, function()
-                        EMP(v, v.tempHealth, v.EMPDamage)
+                    timer.Adjust("empTimer" .. tostring(v), self.DisableTime, 0, function()
+                        EMP(v, v.tempHealth, damageTable)
                     end)
                 end
             end

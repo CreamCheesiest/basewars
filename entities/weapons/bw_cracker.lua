@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
-SWEP.PrintName				= "Cracker"
+SWEP.PrintName				= "EMP Bomb"
 
 SWEP.Slot					= 5
 SWEP.SlotPos				= 3
@@ -8,7 +8,7 @@ SWEP.SlotPos				= 3
 SWEP.Spawnable				= true
 
 SWEP.ViewModel				= Model("models/weapons/c_slam.mdl")
-SWEP.WorldModel				= Model("models/weapons/w_c4.mdl")
+SWEP.WorldModel				= Model("models/weapons/w_slam.mdl")
 SWEP.ViewModelFOV			= 54
 SWEP.UseHands				= true
 
@@ -59,7 +59,7 @@ function SWEP:PrimaryAttack()
 		ent:Spawn()
 		ent:Activate()
 		ent.Owner = self.Owner
-		ent:Plant(not p:IsWorld() and p)
+		ent:Plant(not p:IsWorld() and p, ent.Owner)
         self:Remove()
 
 	end

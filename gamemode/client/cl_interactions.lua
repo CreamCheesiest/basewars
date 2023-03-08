@@ -149,6 +149,13 @@ function(aimEnt)
 	return aimEnt:GetUsable() and color1 or color3, color2
 end)
 
+LookEnt:RegisterEnt("bw_dispenser_health", UseBind, function(aimEnt)
+	return "Use", "Health dispenser"
+end,
+function(aimEnt)
+	return aimEnt:GetUsable() and color1 or color3, color2
+end)
+
 LookEnt:RegisterEnt("bw_base_jammer", UseBind, function(aimEnt)
 	return "Use", "Jammer"
 end,
