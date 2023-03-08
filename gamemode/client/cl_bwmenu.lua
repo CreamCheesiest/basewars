@@ -837,7 +837,7 @@ local function MakeMenu(mainFrame, tabPanel, ftionTab, raidsTab, bountyTab, rule
         -- rulesLabel:SetExpensiveShadow(2, shadowColor)
         rulesLabel:SizeToContents()
         -- local rulesHTML = rulesTab:Add("DHTML")
-        local rulesHTML = rulesTab:Add("DPanel")
+        local rulesHTML = rulesTab:Add("DScrollPanel")
         rulesHTML:Dock(FILL)
 
         local rulesLabel2 = rulesHTML:Add("DLabel")
@@ -853,24 +853,26 @@ local function MakeMenu(mainFrame, tabPanel, ftionTab, raidsTab, bountyTab, rule
 
         5: No prop/entity surfing, blocking or pushing. Zero tolerence, if caught, you will be banned.
 
-        6: Don't use props to transport yourself in any fashion for raid purposes. For example, do not create stairs to get on top of 
-            someone's base before raiding.
+        6: Don't use props to transport yourself in any fashion for raid purposes. For example, do not create stairs to get on top of someone's base before raiding.
 
-        7. Creating forward operating bases (FOBs) are allowed for raiding purposes. Money printers cannot be stored at FOBs.
-            A FOB is used to hold dispensers and a forward spawn for a raid, not for making money.
+        7. Creating forward operating bases (FOBs) are allowed for raiding purposes. Money printers cannot be stored at FOBs. A FOB is used to hold dispensers and a forward spawn for a raid, not for making money.
 
-        8: No cheating/exploiting of any sort.
+        8: No cheating/exploiting of any sort. If caught, permaban.
 
         9: No chat spam.
 
         10: Use common-sense.
 
         11: All judgements made by admins are final.
+        
         ]]
-        rulesLabel2:SetFont(medFont)
+        rulesLabel2:SetFont("Trebuchet18")
         rulesLabel2:SetText(text)
         rulesLabel2:SetDark(true)
-        rulesLabel2:SizeToContents()
+        rulesLabel2:SetWrap(true)
+        rulesLabel2:SetSize(rulesHTML:GetSize())
+        rulesLabel2:SetAutoStretchVertical(true)
+        rulesLabel2:Dock(FILL)
         -- if BaseWars.Config.Rules.IsHTML then
         --     rulesHTML:SetHTML(BaseWars.Config.Rules.HTML or [[Error Loading HTML]])
         -- else

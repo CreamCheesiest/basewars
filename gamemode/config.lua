@@ -342,7 +342,7 @@ BaseWars.Config = {
 
 BaseWars.NPCTable = {
 
-	["basewars_bangclaw_v1"] = {
+	/*["basewars_bangclaw_v1"] = {
 
 		[1] = {
 
@@ -396,7 +396,7 @@ BaseWars.NPCTable = {
 			Ang = Angle(0, 87, 0),
 		},
 
-	},
+	},*/
 
 }
 
@@ -545,7 +545,7 @@ BaseWars.Config.DrugHelp = {
 	["What does the Steroid drug do?"] = {
 
 		"Steroid increases your move speed!",
-		"You will move 45% faster for 2 minutes.",
+		"You will move 2x faster for 2 minutes.",
 
 	},
 
@@ -622,13 +622,13 @@ BaseWars.Config.CommandsHelp = {
 
   },*/
 
-  ["Give Money to Player"] = {
+  /*["Give Money to Player"] = {
     "Share the wealth!",
     "",
     "/givemoney (playername)        /pay (playername)        /moneygive (playername)",
 
 
-  },
+  },*/
 
   ["Place a Bounty"] = {
     "Need someone gone, but too lazy and rich? We have just the thing for you.",

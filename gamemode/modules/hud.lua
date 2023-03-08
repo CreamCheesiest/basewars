@@ -236,7 +236,8 @@ function MODULE:Paint()
 
 	-- Karma, XP + Controls
 	draw.DrawText(BaseWars.LANG.MainMenuControl, tag, sW - 5, (BaseWars.PSAText and 20 or 3), red, TEXT_ALIGN_RIGHT)
-	draw.DrawText(Key .. BaseWars.LANG.SpawnMenuControl, tag, sW - 5, (BaseWars.PSAText and 33 or 16), red, TEXT_ALIGN_RIGHT)
+	draw.DrawText(BaseWars.LANG.HelpMenuControl, tag, sW - 5, (BaseWars.PSAText and 33 or 16), red, TEXT_ALIGN_RIGHT)
+	draw.DrawText(Key .. BaseWars.LANG.SpawnMenuControl, tag, sW - 5, (BaseWars.PSAText and 46 or 29), red, TEXT_ALIGN_RIGHT)
 
 	draw.DrawText(os.date("%H:%M"), tag .. ".Time", sW / 2, (BaseWars.PSAText and 20 or 3), trans, TEXT_ALIGN_CENTER)
 

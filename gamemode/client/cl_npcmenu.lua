@@ -36,9 +36,9 @@ local white = Color(255, 255, 255)
 local gray = Color(192, 192, 192)
 local black = Color(0, 0, 0)
 
-local function PrepMenu(ent)
+local function PrepMenu()
 
-	local Name = ent.PrintName
+	local Name = "Help and Info"
 
 	local mainFrame = vgui.Create("DFrame")
 
@@ -139,16 +139,18 @@ local function PrepMenu(ent)
 	PopulateFromTable(HelpTab, BaseWars.Config.Help)
 	PopulateFromTable(DrugsTab, BaseWars.Config.DrugHelp)
 	PopulateFromTable(CommsTab, BaseWars.Config.CommandsHelp)
+
+	mainFrame:SetVisible(false)
 	return mainFrame
 
 end
 
 local pnl
-local function MakeNotExist(...)
+local function MakeNotExist()
 
 	if pnl and IsValid(pnl) then return end
 
-	pnl = PrepMenu(...)
+	pnl = PrepMenu()
 	
 end
 
@@ -160,3 +162,22 @@ end
 	
 end
 net.Receive(tag, ReceiveNet)
+
+hook.Add("Think", "BaseWars.HelpMenu.Open", function()
+	me = LocalPlayer()
+
+    if input.IsKeyDown(KEY_F4) then
+        if not a then
+            MakeNotExist()
+            a = true
+
+            if pnl:IsVisible() then
+                pnl:Close()
+            else
+                pnl:Show()
+            end
+        end
+    else
+        a = nil
+    end
+end)
