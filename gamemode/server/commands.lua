@@ -359,8 +359,9 @@ BaseWars.Commands.AddCommand({"givemoney", "pay", "moneygive"}, function(caller,
 end, false)
 
 BaseWars.Commands.AddCommand({"sellall"}, function(ply)
-	for _, ent in pairs(ents:GetAll()) do
-		if ent:CPPIGetOwner() == ply and ent:GetClass() ~= "prop_physics" then
+	local entities = ents.FindByClass("bw_*")
+	for _, ent in ipairs(entities) do
+		if ent:CPPIGetOwner() == ply then
 			BaseWars.UTIL.PayOut(ent, ply)
 			ent:Remove()
 		end
