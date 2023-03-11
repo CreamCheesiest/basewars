@@ -298,7 +298,7 @@ BaseWars.Commands.AddCommand({"steam", "sg", "group"}, function(ply)
 
 end, false)
 
-BaseWars.Commands.AddCommand({"forums", "forum", "f"}, function(ply)
+BaseWars.Commands.AddCommand({"discord", "disc", "d"}, function(ply)
 
 	ply:SendLua([[gui.OpenURL"]] .. BaseWars.Config.Forums .. [["]])
 
