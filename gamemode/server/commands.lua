@@ -281,6 +281,7 @@ BaseWars.Commands.AddCommand({"dw", "dropweapon", "dropwep"}, function(ply)
 		local Ent = ents.Create("bw_weapon")
 			Ent.WeaponClass = Class
 			Ent.Model = Model
+			Ent:SetNW2String("wepClassName", Ent.WeaponClass)
 			Ent:SetPos(SpawnPos)
 			Ent:SetAngles(SpawnAng)
 		Ent:Spawn()

@@ -158,6 +158,7 @@ if SERVER then
 			local Ent = ents.Create("bw_weapon")
 				Ent.WeaponClass = ent
 				Ent.Model = model
+				Ent:SetNW2String("wepClassName", Ent.WeaponClass)
 				Ent:SetPos(SpawnPos)
 				Ent:SetAngles(SpawnAng)
 			Ent:Spawn()
