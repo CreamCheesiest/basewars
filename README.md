@@ -60,28 +60,28 @@ This also ships with a modified version of Twitch Weaponry 2 (credited in the ga
 -- Manipulating players karma
 	ply:AddKarma(amt)
 	ply:SetKarma(amt)
-	
+
 -- Utility global functions
 	BaseWars.Raid:IsOnGoing()
-	
+
 	BaseWars.UTIL.Log(...)
 	BaseWars.UTIL.RefundAll(ply, returnAsTable) -- Call with no arg to do full server refund, with arg to refund only them, call with second arg to REFUND NO-ONE but get a 'UID = Money' table
-	
+
 	BaseWars.NumberFormat(number) -- Converts to scale suffixed, eg 8,100,000 -> 8.1 Million
-	
-	
+
+
 -- Utility metamethods
 	ply:InFaction(name, leader) -- args optional, ply:InFaction() for ANY faction, ply:InFaction(nil, true) if LEADER of ANY faction, ect
-	
+
 	ply:InRaid()
 	ply:Raidable(ignoreCooldown)
-	
+
 	ply:Notify(string, color) -- For strings try and keep them localised using BaseWars.LANG, and there are some global color enums, BASEWARS_NOTIFCATION_*
-	
-	
+
+
 -- Available hooks
 	hook.Add("BaseWars_PlayerEmptyPrinter", "name", function(ply, ent, money) end)
-	
+
 	hook.Add("BaseWars_PlayerBuyEntity", "name", function(ply, ent) end)
 	hook.Add("BaseWars_PlayerBuyGun", "name", function(ply, ent) end)
 	hook.Add("BaseWars_PlayerBuyDrug", "name", function(ply, ent) end)
@@ -92,12 +92,12 @@ This also ships with a modified version of Twitch Weaponry 2 (credited in the ga
 	hook.Add("BaseWars_PlayerCanBuyGun", "name", function(ply, class) end)
 	hook.Add("BaseWars_PlayerCanBuyDrug", "name", function(ply, class) end)
 	hook.Add("BaseWars_PlayerCanBuyProp", "name", function(ply, class) end)
-	
+
 -- Similar to the 'CanBuy', you can return false with an error message.
 	hook.Add("CanCreateFaction", "name", function(ply, name, password) end)
 	hook.Add("CanJoinFaction", "name", function(ply, name, password) end)
 	hook.Add("CanLeaveFaction", "name", function(ply, disband) end)
-	
+
 -- Same as above, false to make them unraidable, followed by a reason why.
 	hook.Add("PlayerIsRaidable", "name", function(ply) end)
 

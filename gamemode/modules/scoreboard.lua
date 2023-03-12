@@ -3,227 +3,227 @@ MODULE.Author = "CreamCheese"
 tag = "BaseWars.Scoreboard"
 
 if CLIENT then
-    ----------LAUNCH SEQUENCE----------
-    local CreateScoreboard = function()
-        local Scoreboard_Roundness = 8
-        local Scoreboard_Color = Color(0, 0, 0, 220)
-        local Scoreboard_XGap = 6
-        local Scoreboard_YGap = 6
-        local Scoreboard_TitleToNamesGap = 4
-        local Title_Height = 12
-        local Title_Color = Color(0, 60, 255)
-        local Title_Font = "ScoreboardTitleFont"
-        local Title_BackgroundRoundness = 4
-        local Title_BackgroundColor = Color(30, 30, 30, 200)
-        local Players_Spacing = 4
-        local Players_EdgeGap = 4
-        local Players_BackgroundRoundness = 4
-        local Players_BackgroundColor = Color(30, 30, 30, 200)
-        local PlayerBar_Height = 24
-        local PlayerBar_Color = Color(255, 255, 255)
-        local PlayerBar_Font = "ScoreboardPlayersFont"
-        local PlayerBar_BackgroundRoundness = 4
-        local PlayerBar_BackgroundColor = Color(0, 0, 0)
-        local InfoBar_Height = 32
-        local InfoBar_Color = Color(0, 60, 255)
-        local InfoBar_Font = "ScoreboardInfoFont"
-        local InfoBar_BackgroundRoundness = 4
-        local InfoBar_BackgroundColor = Color(30, 30, 30, 200)
-        local Columns = {}
+	----------LAUNCH SEQUENCE----------
+	local CreateScoreboard = function()
+		local Scoreboard_Roundness = 8
+		local Scoreboard_Color = Color(0, 0, 0, 220)
+		local Scoreboard_XGap = 6
+		local Scoreboard_YGap = 6
+		local Scoreboard_TitleToNamesGap = 4
+		local Title_Height = 12
+		local Title_Color = Color(0, 60, 255)
+		local Title_Font = "ScoreboardTitleFont"
+		local Title_BackgroundRoundness = 4
+		local Title_BackgroundColor = Color(30, 30, 30, 200)
+		local Players_Spacing = 4
+		local Players_EdgeGap = 4
+		local Players_BackgroundRoundness = 4
+		local Players_BackgroundColor = Color(30, 30, 30, 200)
+		local PlayerBar_Height = 24
+		local PlayerBar_Color = Color(255, 255, 255)
+		local PlayerBar_Font = "ScoreboardPlayersFont"
+		local PlayerBar_BackgroundRoundness = 4
+		local PlayerBar_BackgroundColor = Color(0, 0, 0)
+		local InfoBar_Height = 32
+		local InfoBar_Color = Color(0, 60, 255)
+		local InfoBar_Font = "ScoreboardInfoFont"
+		local InfoBar_BackgroundRoundness = 4
+		local InfoBar_BackgroundColor = Color(30, 30, 30, 200)
+		local Columns = {}
 
-        Columns[1] = {
-            name = "Name",
-            command = function(self, arg) return tostring(arg:Name()) end
-        }
+		Columns[1] = {
+			name = "Name",
+			command = function(self, arg) return tostring(arg:Name()) end
+		}
 
-        Columns[2] = {
-            name = "Rank",
-            command = function(self, arg) return arg:GetUserGroup() end
-        }
+		Columns[2] = {
+			name = "Rank",
+			command = function(self, arg) return arg:GetUserGroup() end
+		}
 
-        Columns[3] = {
-            name = "Faction",
-            command = function(self, arg) return team.GetName(arg:Team()) end
-        }
+		Columns[3] = {
+			name = "Faction",
+			command = function(self, arg) return team.GetName(arg:Team()) end
+		}
 
-        Columns[4] = {
-            name = "Level",
-            command = function(self, arg) return arg:GetLevel() end
-        }
+		Columns[4] = {
+			name = "Level",
+			command = function(self, arg) return arg:GetLevel() end
+		}
 
 		Columns[5] = {
-            name = "Money",
-            command = function(self, arg) return BaseWars.LANG.CURRENCY .. BaseWars.NumberFormat(arg:GetMoney()) end
-        }
+			name = "Money",
+			command = function(self, arg) return BaseWars.LANG.CURRENCY .. BaseWars.NumberFormat(arg:GetMoney()) end
+		}
 
-        Columns[6] = {
-            name = "Ping",
-            command = function(self, arg) return tostring(arg:Ping()) end
-        }
-        
-        surface.CreateFont("ScoreboardTitleFont", {
-            font = "CloseCaption_Normal",
-            size = 42,
-            weight = 1000,
-            antialias = true
-        })
+		Columns[6] = {
+			name = "Ping",
+			command = function(self, arg) return tostring(arg:Ping()) end
+		}
 
-        surface.CreateFont("ScoreboardInfoFont", {
-            font = "CloseCaption_Normal",
-            size = 28,
-            weight = 1000,
-            antialias = true
-        })
+		surface.CreateFont("ScoreboardTitleFont", {
+			font = "CloseCaption_Normal",
+			size = 42,
+			weight = 1000,
+			antialias = true
+		})
 
-        surface.CreateFont("ScoreboardPlayersFont", {
-            font = "CloseCaption_Normal",
-            size = 18,
-            weight = 500,
-            antialias = true
-        })
+		surface.CreateFont("ScoreboardInfoFont", {
+			font = "CloseCaption_Normal",
+			size = 28,
+			weight = 1000,
+			antialias = true
+		})
 
-        local Title_Text = GetHostName()
-        Scoreboard = vgui.Create("DFrame")
-        Scoreboard:SetSize(ScrW() * .75, ScrH() * .75)
-        Scoreboard:SetPos((ScrW() * .25) * .5, (ScrH() * .25) * .5)
-        Scoreboard:SetTitle("")
-        Scoreboard:SetDraggable(false)
-        Scoreboard:ShowCloseButton(false)
+		surface.CreateFont("ScoreboardPlayersFont", {
+			font = "CloseCaption_Normal",
+			size = 18,
+			weight = 500,
+			antialias = true
+		})
 
-        Scoreboard.Open = function(self)
-            Scoreboard:SetVisible(true)
-        end
+		local Title_Text = GetHostName()
+		Scoreboard = vgui.Create("DFrame")
+		Scoreboard:SetSize(ScrW() * .75, ScrH() * .75)
+		Scoreboard:SetPos((ScrW() * .25) * .5, (ScrH() * .25) * .5)
+		Scoreboard:SetTitle("")
+		Scoreboard:SetDraggable(false)
+		Scoreboard:ShowCloseButton(false)
 
-        Scoreboard.Close = function(self)
-            Scoreboard:SetVisible(false)
-        end
+		Scoreboard.Open = function(self)
+			Scoreboard:SetVisible(true)
+		end
 
-        Scoreboard.Paint = function(self)
-            draw.RoundedBox(Scoreboard_Roundness, 0, 0, self:GetWide(), self:GetTall(), Scoreboard_Color)
-        end
+		Scoreboard.Close = function(self)
+			Scoreboard:SetVisible(false)
+		end
 
-        Scoreboard.TitlePanel = vgui.Create("DPanel")
-        Scoreboard.TitlePanel:SetParent(Scoreboard)
-        Scoreboard.TitlePanel:SetPos(Scoreboard_XGap, Scoreboard_YGap)
-        surface.SetFont(Title_Font)
-        local w, h = surface.GetTextSize(Title_Text)
-        local Height = h + (Title_Height * 2)
-        Scoreboard.TitlePanel:SetSize(Scoreboard:GetWide() - (Scoreboard_XGap * 2), Height)
+		Scoreboard.Paint = function(self)
+			draw.RoundedBox(Scoreboard_Roundness, 0, 0, self:GetWide(), self:GetTall(), Scoreboard_Color)
+		end
 
-        Scoreboard.TitlePanel.Paint = function(self)
-            draw.RoundedBox(Title_BackgroundRoundness, 0, 0, self:GetWide(), self:GetTall(), Title_BackgroundColor)
-            surface.SetFont(Title_Font)
-            surface.SetTextColor(Title_Color.r, Title_Color.g, Title_Color.b, Title_Color.a)
-            surface.SetTextPos(self:GetWide() * .5 - (w * .5), self:GetTall() * .5 - (h * .5))
-            surface.DrawText(Title_Text)
-        end
+		Scoreboard.TitlePanel = vgui.Create("DPanel")
+		Scoreboard.TitlePanel:SetParent(Scoreboard)
+		Scoreboard.TitlePanel:SetPos(Scoreboard_XGap, Scoreboard_YGap)
+		surface.SetFont(Title_Font)
+		local w, h = surface.GetTextSize(Title_Text)
+		local Height = h + (Title_Height * 2)
+		Scoreboard.TitlePanel:SetSize(Scoreboard:GetWide() - (Scoreboard_XGap * 2), Height)
 
-        local Column_Width = Scoreboard:GetWide() - (Scoreboard_XGap * 2)
-        local ColumnGap_Width = Column_Width / #Columns
-        local ColumnGap_Half = ColumnGap_Width * .5
-        Scoreboard.NamesListPanel = vgui.Create("DPanelList")
-        Scoreboard.NamesListPanel.PlayerBars = {}
-        Scoreboard.NamesListPanel.NextRefresh = CurTime() + 3
-        Scoreboard.NamesListPanel:SetParent(Scoreboard)
-        Scoreboard.NamesListPanel:SetPos(Scoreboard_XGap, Scoreboard_YGap + Scoreboard.TitlePanel:GetTall() + Scoreboard_TitleToNamesGap + InfoBar_Height)
-        Scoreboard.NamesListPanel:SetSize(Scoreboard:GetWide() - (Scoreboard_XGap * 2), Scoreboard:GetTall() - Scoreboard.TitlePanel:GetTall() - (Scoreboard_YGap * 2) - Scoreboard_TitleToNamesGap - InfoBar_Height)
-        Scoreboard.NamesListPanel:SetSpacing(Players_Spacing)
-        Scoreboard.NamesListPanel:SetPadding(Players_EdgeGap)
-        Scoreboard.NamesListPanel:EnableHorizontal(false)
-        Scoreboard.NamesListPanel:EnableVerticalScrollbar(true)
+		Scoreboard.TitlePanel.Paint = function(self)
+			draw.RoundedBox(Title_BackgroundRoundness, 0, 0, self:GetWide(), self:GetTall(), Title_BackgroundColor)
+			surface.SetFont(Title_Font)
+			surface.SetTextColor(Title_Color.r, Title_Color.g, Title_Color.b, Title_Color.a)
+			surface.SetTextPos(self:GetWide() * .5 - (w * .5), self:GetTall() * .5 - (h * .5))
+			surface.DrawText(Title_Text)
+		end
 
-        Scoreboard.NamesListPanel.Refill = function(self)
-            self:Clear()
+		local Column_Width = Scoreboard:GetWide() - (Scoreboard_XGap * 2)
+		local ColumnGap_Width = Column_Width / #Columns
+		local ColumnGap_Half = ColumnGap_Width * .5
+		Scoreboard.NamesListPanel = vgui.Create("DPanelList")
+		Scoreboard.NamesListPanel.PlayerBars = {}
+		Scoreboard.NamesListPanel.NextRefresh = CurTime() + 3
+		Scoreboard.NamesListPanel:SetParent(Scoreboard)
+		Scoreboard.NamesListPanel:SetPos(Scoreboard_XGap, Scoreboard_YGap + Scoreboard.TitlePanel:GetTall() + Scoreboard_TitleToNamesGap + InfoBar_Height)
+		Scoreboard.NamesListPanel:SetSize(Scoreboard:GetWide() - (Scoreboard_XGap * 2), Scoreboard:GetTall() - Scoreboard.TitlePanel:GetTall() - (Scoreboard_YGap * 2) - Scoreboard_TitleToNamesGap - InfoBar_Height)
+		Scoreboard.NamesListPanel:SetSpacing(Players_Spacing)
+		Scoreboard.NamesListPanel:SetPadding(Players_EdgeGap)
+		Scoreboard.NamesListPanel:EnableHorizontal(false)
+		Scoreboard.NamesListPanel:EnableVerticalScrollbar(true)
 
-            for k, pl in pairs(player.GetAll()) do
-                local ID = tostring(pl:SteamID())
-                self.PlayerBars[ID] = vgui.Create("DPanel")
-                self.PlayerBars[ID]:SetPos(0, 0)
-                self.PlayerBars[ID]:SetSize(Scoreboard.NamesListPanel:GetWide() - (Players_Spacing * 2), PlayerBar_Height)
+		Scoreboard.NamesListPanel.Refill = function(self)
+			self:Clear()
 
-                self.PlayerBars[ID].Paint = function(self)
-                    draw.RoundedBox(PlayerBar_BackgroundRoundness, 0, 0, self:GetWide(), self:GetTall(), PlayerBar_BackgroundColor)
-                    surface.SetFont(PlayerBar_Font)
-                    surface.SetTextColor(PlayerBar_Color.r, PlayerBar_Color.g, PlayerBar_Color.b, PlayerBar_Color.a)
+			for k, pl in pairs(player.GetAll()) do
+				local ID = tostring(pl:SteamID())
+				self.PlayerBars[ID] = vgui.Create("DPanel")
+				self.PlayerBars[ID]:SetPos(0, 0)
+				self.PlayerBars[ID]:SetSize(Scoreboard.NamesListPanel:GetWide() - (Players_Spacing * 2), PlayerBar_Height)
 
-                    for k, v in pairs(Columns) do
-                        local w, h = surface.GetTextSize(v:command(pl))
+				self.PlayerBars[ID].Paint = function(self)
+					draw.RoundedBox(PlayerBar_BackgroundRoundness, 0, 0, self:GetWide(), self:GetTall(), PlayerBar_BackgroundColor)
+					surface.SetFont(PlayerBar_Font)
+					surface.SetTextColor(PlayerBar_Color.r, PlayerBar_Color.g, PlayerBar_Color.b, PlayerBar_Color.a)
 
-                        if k == 1 then
-                            surface.SetTextPos((ColumnGap_Half * k) - (w * .5), self:GetTall() * .5 - (h * .5))
-                        else
-                            surface.SetTextPos((ColumnGap_Width * (k - 1)) + ColumnGap_Half - (w * .5), self:GetTall() * .5 - (h * .5))
-                        end
+					for k, v in pairs(Columns) do
+						local w, h = surface.GetTextSize(v:command(pl))
 
-                        surface.DrawText(v:command(pl))
-                    end
-                end
+						if k == 1 then
+							surface.SetTextPos((ColumnGap_Half * k) - (w * .5), self:GetTall() * .5 - (h * .5))
+						else
+							surface.SetTextPos((ColumnGap_Width * (k - 1)) + ColumnGap_Half - (w * .5), self:GetTall() * .5 - (h * .5))
+						end
 
-                self:AddItem(self.PlayerBars[ID])
-            end
-        end
+						surface.DrawText(v:command(pl))
+					end
+				end
 
-        Scoreboard.NamesListPanel.Think = function(self)
-            if self:IsVisible() and Scoreboard.NamesListPanel.NextRefresh < CurTime() then
-                Scoreboard.NamesListPanel.NextRefresh = CurTime() + 3
-                Scoreboard.NamesListPanel:Refill()
-            end
-        end
+				self:AddItem(self.PlayerBars[ID])
+			end
+		end
 
-        Scoreboard.NamesListPanel.Paint = function(self)
-            draw.RoundedBox(Players_BackgroundRoundness, 0, 0, self:GetWide(), self:GetTall(), Players_BackgroundColor)
-        end
+		Scoreboard.NamesListPanel.Think = function(self)
+			if self:IsVisible() and Scoreboard.NamesListPanel.NextRefresh < CurTime() then
+				Scoreboard.NamesListPanel.NextRefresh = CurTime() + 3
+				Scoreboard.NamesListPanel:Refill()
+			end
+		end
 
-        Scoreboard.InfoBar = vgui.Create("DPanel")
-        Scoreboard.InfoBar:SetParent(Scoreboard)
-        Scoreboard.InfoBar:SetPos(Scoreboard_XGap, Scoreboard_YGap + Scoreboard.TitlePanel:GetTall() + Scoreboard_TitleToNamesGap)
-        Scoreboard.InfoBar:SetSize(Scoreboard:GetWide() - (Scoreboard_XGap * 2), InfoBar_Height)
+		Scoreboard.NamesListPanel.Paint = function(self)
+			draw.RoundedBox(Players_BackgroundRoundness, 0, 0, self:GetWide(), self:GetTall(), Players_BackgroundColor)
+		end
 
-        Scoreboard.InfoBar.Paint = function(self)
-            draw.RoundedBox(InfoBar_BackgroundRoundness, 0, 0, self:GetWide(), self:GetTall(), InfoBar_BackgroundColor)
-            surface.SetFont(InfoBar_Font)
-            surface.SetTextColor(InfoBar_Color.r, InfoBar_Color.g, InfoBar_Color.b, InfoBar_Color.a)
+		Scoreboard.InfoBar = vgui.Create("DPanel")
+		Scoreboard.InfoBar:SetParent(Scoreboard)
+		Scoreboard.InfoBar:SetPos(Scoreboard_XGap, Scoreboard_YGap + Scoreboard.TitlePanel:GetTall() + Scoreboard_TitleToNamesGap)
+		Scoreboard.InfoBar:SetSize(Scoreboard:GetWide() - (Scoreboard_XGap * 2), InfoBar_Height)
 
-            for k, v in pairs(Columns) do
-                local w, h = surface.GetTextSize(v.name)
+		Scoreboard.InfoBar.Paint = function(self)
+			draw.RoundedBox(InfoBar_BackgroundRoundness, 0, 0, self:GetWide(), self:GetTall(), InfoBar_BackgroundColor)
+			surface.SetFont(InfoBar_Font)
+			surface.SetTextColor(InfoBar_Color.r, InfoBar_Color.g, InfoBar_Color.b, InfoBar_Color.a)
 
-                if k == 1 then
-                    surface.SetTextPos((ColumnGap_Half * k) - (w * .5), self:GetTall() * .5 - (h * .5))
-                else
-                    surface.SetTextPos((ColumnGap_Width * (k - 1)) + ColumnGap_Half - (w * .5), self:GetTall() * .5 - (h * .5))
-                end
+			for k, v in pairs(Columns) do
+				local w, h = surface.GetTextSize(v.name)
 
-                surface.DrawText(v.name)
-            end
-        end
+				if k == 1 then
+					surface.SetTextPos((ColumnGap_Half * k) - (w * .5), self:GetTall() * .5 - (h * .5))
+				else
+					surface.SetTextPos((ColumnGap_Width * (k - 1)) + ColumnGap_Half - (w * .5), self:GetTall() * .5 - (h * .5))
+				end
 
-        Scoreboard.NamesListPanel:Refill()
-    end
+				surface.DrawText(v.name)
+			end
+		end
 
-    ----------Hooks----------
-    function ScoreboardOpened()
-        if not IsValid(Scoreboard) then
-            CreateScoreboard()
-        end
+		Scoreboard.NamesListPanel:Refill()
+	end
 
-        Scoreboard:Open()
-        gui.EnableScreenClicker(true)
+	----------Hooks----------
+	function ScoreboardOpened()
+		if not IsValid(Scoreboard) then
+			CreateScoreboard()
+		end
 
-        return true
-    end
+		Scoreboard:Open()
+		gui.EnableScreenClicker(true)
 
-    hook.Add("ScoreboardShow", "Open scoreboard.", ScoreboardOpened)
+		return true
+	end
 
-    function ScoreboardClosed()
-        if not IsValid(Scoreboard) then
-            CreateScoreboard()
-        end
+	hook.Add("ScoreboardShow", "Open scoreboard.", ScoreboardOpened)
 
-        gui.EnableScreenClicker(false)
-        Scoreboard:Close()
+	function ScoreboardClosed()
+		if not IsValid(Scoreboard) then
+			CreateScoreboard()
+		end
 
-        return true
-    end
+		gui.EnableScreenClicker(false)
+		Scoreboard:Close()
 
-    hook.Add("ScoreboardHide", "Close scoreboard.", ScoreboardClosed)
+		return true
+	end
+
+	hook.Add("ScoreboardHide", "Close scoreboard.", ScoreboardClosed)
 end
