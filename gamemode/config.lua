@@ -1,7 +1,7 @@
 BASEWARS_CHOSEN_LANGUAGE = "ENGLISH"
 
 BaseWars.Config = {
-	Forums 		= "https://discord.gg/PBtpq9rmg8",
+	Forums 		= "https://discord.gg/mkwKTxwrrb",
 	SteamGroup 	= "http://steamcommunity.com/groups/100acrebb",
 
 	Ents = {
