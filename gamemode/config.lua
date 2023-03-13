@@ -467,7 +467,7 @@ BaseWars.SpawnList.Models.Loadout["Pistols - T1"] = {
 		Model = "models/weapons/w_pist_elite.mdl",
 		Price = 20000,
 		ClassName = "arc9_go_elite_single",
-		Level = 10
+		Level = 5
 	},
 	["Five Seven"] = BaseWars.GSL{
 		Gun = true,
@@ -658,42 +658,42 @@ BaseWars.SpawnList.Models.Loadout["Shotguns - T1"] = {
 	["Benelli M3 Super 90"] = BaseWars.GSL{
 		Gun = true,
 		Model = "models/weapons/w_shot_m3super90.mdl",
-		Price = 100000,
+		Price = 200000,
 		ClassName = "arc9_go_m3",
 		Level = 35
 	},
 	["Dual Sawed-Off"] = BaseWars.GSL{
 		Gun = true,
 		Model = "models/weapons/csgo/w_akimbo_sawnoff.mdl",
-		Price = 200000,
+		Price = 500000,
 		ClassName = "arc9_go_akimbo_sawnoff",
 		Level = 40
 	},
 	["MAG-7"] = BaseWars.GSL{
 		Gun = true,
 		Model = "models/weapons/w_shot_m3super90.mdl",
-		Price = 150000,
+		Price = 300000,
 		ClassName = "arc9_go_mag7",
 		Level = 36
 	},
 	["Nova"] = BaseWars.GSL{
 		Gun = true,
 		Model = "models/weapons/w_shot_m3super90.mdl",
-		Price = 125000,
+		Price = 200000,
 		ClassName = "arc9_go_nova",
 		Level = 35
 	},
 	["Sawed-Off"] = BaseWars.GSL{
 		Gun = true,
 		Model = "models/weapons/w_shot_m3super90.mdl",
-		Price = 125000,
+		Price = 250000,
 		ClassName = "arc9_go_sawedoff",
 		Level = 36
 	},
 	["XM1014"] = BaseWars.GSL{
 		Gun = true,
 		Model = "models/weapons/w_shot_m3super90.mdl",
-		Price = 200000,
+		Price = 500000,
 		ClassName = "arc9_go_xm1014",
 		Level = 38
 	},
@@ -793,7 +793,7 @@ BaseWars.SpawnList.Models.Loadout["Sniper Rifles - T1"] = {
 	["G3SG1"] = BaseWars.GSL{
 		Gun = true,
 		Model = "models/weapons/w_snip_g3sg1.mdl",
-		Price = 1000000,
+		Price = 125000,
 		ClassName = "arc9_go_g1sg3",
 		Level = 250
 	},
@@ -807,14 +807,14 @@ BaseWars.SpawnList.Models.Loadout["Sniper Rifles - T1"] = {
 	["Scout"] = BaseWars.GSL{
 		Gun = true,
 		Model = "models/weapons/w_snip_scout.mdl",
-		Price = 800000,
+		Price = 100000,
 		ClassName = "arc9_go_scout",
 		Level = 200
 	},
 	["SSG08"] = BaseWars.GSL{
 		Gun = true,
 		Model = "models/weapons/w_snip_scout.mdl",
-		Price = 800000,
+		Price = 100000,
 		ClassName = "arc9_go_ssg08",
 		Level = 200
 	},
@@ -824,42 +824,42 @@ BaseWars.SpawnList.Models.Loadout["Throwables - T1"] = {
 	["Flash Bang"] = BaseWars.GSL{
 		Gun = true,
 		Model = "models/weapons/csgo/w_eq_flashbang.mdl",
-		Price = 50000,
+		Price = 7500,
 		ClassName = "arc9_go_nade_flashbang",
 		Level = 50
 	},
 	["Frag Grenade"] = BaseWars.GSL{
 		Gun = true,
 		Model = "models/weapons/csgo/w_eq_fraggrenade.mdl",
-		Price = 50000,
+		Price = 10000,
 		ClassName = "arc9_go_nade_frag",
 		Level = 60
 	},
 	["Incendiary Grenade"] = BaseWars.GSL{
 		Gun = true,
 		Model = "models/weapons/csgo/w_eq_incendiary.mdl",
-		Price = 50000,
+		Price = 10000,
 		ClassName = "arc9_go_nade_incendiary",
 		Level = 80
 	},
 	["Molotov"] = BaseWars.GSL{
 		Gun = true,
 		Model = "models/weapons/csgo/w_eq_molotov.mdl",
-		Price = 50000,
+		Price = 10000,
 		ClassName = "arc9_go_nade_molotov",
 		Level = 80
 	},
 	["Smoke Grenade"] = BaseWars.GSL{
 		Gun = true,
 		Model = "models/weapons/csgo/w_eq_smoke_grenade.mdl",
-		Price = 50000,
+		Price = 7500,
 		ClassName = "arc9_go_nade_smoke",
 		Level = 40
 	},
 	["Sonar Nade"] = BaseWars.GSL{
 		Gun = true,
 		Model = "models/weapons/csgo/w_eq_sensor_grenade.mdl",
-		Price = 500000,
+		Price = 25000,
 		ClassName = "arc9_go_nade_sonar",
 		Level = 200
 	},
@@ -869,7 +869,7 @@ BaseWars.SpawnList.Models.Loadout["Utility - T1"] = {
 	["Heal Gun"] = BaseWars.GSL{
 		Gun = true,
 		Model = "models/weapons/w_physics.mdl",
-		Price = 100000,
+		Price = 50000,
 		ClassName = "weapon_health",
 		Level = 15
 	},
@@ -897,7 +897,7 @@ BaseWars.SpawnList.Models.Loadout["Utility - T1"] = {
 	["Blowtorch"] = BaseWars.GSL{
 		Gun = true,
 		Model = "models/weapons/w_irifle.mdl",
-		Price = 200000,
+		Price = 100000,
 		ClassName = "bw_blowtorch",
 		Level = 50
 	},
@@ -959,7 +959,7 @@ BaseWars.SpawnList.Models.Entities["Structures (T1)"] = {
 	},
 	["Money Drawer"] = BaseWars.GSL{
 		Model = "models/props_c17/FurnitureDrawer001a.mdl",
-		Price = 100000,
+		Price = 20000,
 		ClassName = "bw_moneydrawer",
 		Level = 15,
 		Limit = 1
@@ -1137,15 +1137,6 @@ BaseWars.SpawnList.Models.Fun["Media"] = {
 		Model = "models/gmod_tower/suitetv_large.mdl",
 		Price = 25000,
 		ClassName = "mediaplayer_tv",
-		Level = 10
-	},
-}
-
-BaseWars.SpawnList.Models.Fun["Piano"] = {
-	["Piano"] = BaseWars.GSL{
-		Model = "models/fishy/furniture/piano.mdl",
-		Price = 25000,
-		ClassName = "gmt_instrument_piano",
 		Level = 10
 	},
 }
