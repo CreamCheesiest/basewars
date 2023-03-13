@@ -18,11 +18,11 @@ if CLIENT then
     },
     admin = {
         mute = true,
-        kick = false,
-        ban = false,
-        jail = false,
+        kick = true,
+        ban = true,
+        jail = true,
         bring = true,
-        goto = false,
+        goto = true,
         returnButton = true,
     },
     user = {
@@ -263,15 +263,16 @@ if CLIENT then
                     net.WriteEntity(Scoreboard.NamesListPanel.AdminBars[k])
                     net.SendToServer()
                 end
+				local playerType
                 if LocalPlayer():IsSuperAdmin() then
-                    local playerType = "superAdmin"
+                    playerType = "superAdmin"
                     self.AdminBars[ID]:SetAlpha(255)
                 elseif LocalPlayer():IsAdmin() then
-                    local playerType = "admin"
+                    playerType = "admin"
                     self.AdminBars[ID]:SetAlpha(255)
                 else 
-                    local playerType = "user"
-                    self.AdminBars[ID]:SetAlpha(0)
+                    playerType = "user"
+                    self.AdminBars[ID]:Remove()
                 end 
                 self:AddItem(self.AdminBars[ID]) 
                 muteButton:SetVisible(config[playerType].mute)

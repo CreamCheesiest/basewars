@@ -67,7 +67,7 @@ if SERVER then
 	function MODULE:AddToInv(ply, weap)
 		local inv = self:GetInv(ply)
 
-		if #inv > BaseWars.Config.Inventory.InventorySize then
+		if #inv >= BaseWars.Config.Inventory.InventorySize then
 			ply:Notify(BaseWars.LANG.FullInventory, BASEWARS_NOTIFICATION_ERROR)
 
 			return
