@@ -63,7 +63,6 @@ function ENT:Use(activator, caller, usetype, value)
 			if w:GetClass() == Class then
 				BaseWars.Inventory:AddToInv(activator, Wep)
 				self:Remove()
-
 				return
 			end
 		end
