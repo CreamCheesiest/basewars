@@ -724,8 +724,12 @@ local function MakeMenu(mainFrame, tabPanel, ftionTab, raidsTab, bountyTab, rule
 		function btnScan:Think()
 			local Enemy = plyList.SelectedPly
 			Enemy = BaseWars.Ents:ValidPlayer(Enemy) and Enemy
-			self:SetDisabled(false)
-			self.Enemy = Enemy
+			if not Enemy or (InFac and not InFac2) or (InFac2 and not InFac) then
+				self:SetDisabled(true)
+			else
+				self:SetDisabled(false)
+				self.Enemy = Enemy
+			end
 		end
 	end
 

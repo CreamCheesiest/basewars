@@ -10,7 +10,7 @@ local function Draw3DText(pos, ang, scale, text)
 	local ply = LocalPlayer()
 	local view = ply:GetViewModel() or ply
 	local dist = view:EyePos():Distance(pos)
-	local distance = 300
+	local distance = 100
 	local dir = (pos - view:EyePos()):GetNormalized()
 	local dot = view:EyeAngles():Forward():Dot(dir)
 	if not (dot > math.cos(math.rad(ply:GetFOV() / 1.69)) and dist < distance) then return end
