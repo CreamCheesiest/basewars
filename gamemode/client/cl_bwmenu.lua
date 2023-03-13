@@ -819,7 +819,7 @@ local function MakeMenu(mainFrame, tabPanel, ftionTab, raidsTab, bountyTab, rule
 				end
 			end
 
-			inventoryLabel:SetText("Used Inventory Slots: " .. inventorySlots .. " / " .. BaseWars.Config.Inventory.InventorySize)
+			inventoryLabel:SetText("Inventory Slots: " .. inventorySlots .. " / " .. BaseWars.Config.Inventory.InventorySize)
 			inventoryLoaded = true
 		end
 
