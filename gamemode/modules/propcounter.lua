@@ -12,7 +12,7 @@ if CLIENT then
 		weight = 800,
 	})
 
-	local propLimit = DPROP.DefaultPropLimit
+	local propLimit = DPROP.DefaultPropLimit or 50
 
 	function MODULE:drawPropCounter()
 		if me:IsValid() then
