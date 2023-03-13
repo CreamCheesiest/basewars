@@ -1,5 +1,4 @@
 setfenv(1, _G)
-
 --[[
 todo:
 	caret real_x should prioritise pixel width
@@ -8,22 +7,19 @@ todo:
 	proper tag stack
 	the ability to edit (remove and copy) custom tags that have a size (like textures)
 ]]
-
-local select        = select
-
-local string_byte   = string.byte
+local select = select
+local string_byte = string.byte
 local string_gmatch = string.gmatch
-local string_gsub   = string.gsub
-local string_sub    = string.sub
-
+local string_gsub = string.gsub
+local string_sub = string.sub
 local utf8 = {}
 
 function utf8.byte(char, offset)
 	if char == "" then return -1 end
 	offset = offset or 1
-	
 	local byte = string_byte(char, offset)
 	local length = 1
+
 	if byte >= 128 then
 		-- multi-byte sequence
 		if byte >= 240 then
@@ -53,35 +49,31 @@ function utf8.byte(char, offset)
 			byte = -1
 		end
 	else
-		-- single byte sequence
 	end
+	-- single byte sequence
+
 	return byte, length
 end
 
 -- Taken from http://cakesaddons.googlecode.com/svn/trunk/glib/lua/glib/unicode/utf8.lua
 function utf8.length(str)
 	local _, length = string_gsub(str, "[^\128-\191]", "")
+
 	return length
 end
 
 -- Taken from http://www.curse.com/addons/wow/utf8/546587
 function utf8.sub(str, i, j)
 	j = j or -1
-
 	local pos = 1
 	local bytes = #str
 	local length = 0
-
 	-- only set l if i or j is negative
 	local l = (i >= 0 and j >= 0) or utf8.length(str)
 	local start_char = (i >= 0) and i or l + i + 1
-	local end_char   = (j >= 0) and j or l + j + 1
-
+	local end_char = (j >= 0) and j or l + j + 1
 	-- can't have start before end!
-	if start_char > end_char then
-		return ""
-	end
-
+	if start_char > end_char then return "" end
 	-- byte offsets to pass to string.sub
 	local start_byte, end_byte = 1, bytes
 
@@ -105,11 +97,11 @@ end
 
 function utf8.totable(str)
 	local tbl = {}
-	
+
 	for uchar in string.gmatch(str, "([%z\1-\127\194-\244][\128-\191]*)") do
 		tbl[#tbl + 1] = uchar
 	end
-	
+
 	return tbl
 end
 
@@ -128,45 +120,49 @@ function Markup()
 	}
 
 	setmetatable(self, META)
-
 	self:Invalidate()
 
 	return self
 end
 
 local function get_set(tbl, name, def)
-    tbl["Set" .. name] = function(self, var) self[name] = var end
-    tbl["Get" .. name] = function(self, var) return self[name] end
-    tbl[name] = def
+	tbl["Set" .. name] = function(self, var)
+		self[name] = var
+	end
+
+	tbl["Get" .. name] = function(self, var) return self[name] end
+	tbl[name] = def
 end
 
 -- hex color parsing
 local function parse_hexcolor(col)
-	col=col:upper()
+	col = col:upper()
 	local l = col:len()
-
 	local rgb
+
 	if l == 6 or l == 8 then
-		rgb = { }
+		rgb = {}
+
 		for pair in string.gmatch(col, "%x%x") do
 			local i = tonumber(pair, 16)
+
 			if i then
 				table.insert(rgb, i)
 			end
-
 		end
 
 		while #rgb < 4 do
 			table.insert(rgb, 255)
 		end
-	elseif l==3 then
-		rgb = { }
+	elseif l == 3 then
+		rgb = {}
+
 		for pair in string.gmatch(col, "%x") do
-			local i = tonumber(pair..pair, 16)
+			local i = tonumber(pair .. pair, 16)
+
 			if i then
 				table.insert(rgb, i)
 			end
-
 		end
 
 		while #rgb < 4 do
@@ -176,7 +172,6 @@ local function parse_hexcolor(col)
 
 	return rgb and Color(unpack(rgb))
 end
-
 
 --
 get_set(META, "Table", {})
@@ -201,22 +196,21 @@ function META:SetLineWrap(b)
 end
 
 -- these are used by EXT.SetColor, EXT.SetFont etc
-local R, G, B, A = 255,255,255,255
+local R, G, B, A = 255, 255, 255, 255
 local X, Y = 0, 0
-
 local EXT
 local CURRENT_MATRIX
 local gmod = gmod
 local mstack = {}
 
 if gmod then
-	local TEMP_CLR = Color(R,G,B,A)
+	local TEMP_CLR = Color(R, G, B, A)
 	local TEMP_VEC = Vector(0, 0, 0)
 	local TEMP_ANG = Angle(0, 0, 0)
-
 	local white = Material("vgui/white")
 
-	do -- push pop helper
+	-- push pop helper
+	do
 		local stack = {}
 		local i = 0
 
@@ -224,6 +218,7 @@ if gmod then
 			stack[i] = mstack.matrix or Matrix()
 			mstack.matrix = identity and Matrix() or (Matrix() * stack[i])
 			i = i + 1
+
 			return mstack.matrix
 		end
 
@@ -234,22 +229,19 @@ if gmod then
 	end
 
 	function mstack.Translate(x, y, z)
-		TEMP_VEC.x=x or 0
-		TEMP_VEC.y=y or 0
-
+		TEMP_VEC.x = x or 0
+		TEMP_VEC.y = y or 0
 		mstack.matrix:Translate(TEMP_VEC)
 	end
 
 	function mstack.Rotate(a, x, y, z)
-		TEMP_ANG.y=a or 0
-
+		TEMP_ANG.y = a or 0
 		mstack.matrix:Rotate(TEMP_ANG)
 	end
 
 	function mstack.Scale(x, y, z)
-		TEMP_VEC.x=x or 0
-		TEMP_VEC.y=y or 0
-
+		TEMP_VEC.x = x or 0
+		TEMP_VEC.y = y or 0
 		mstack.matrix:Scale(TEMP_VEC)
 	end
 
@@ -257,84 +249,75 @@ if gmod then
 
 	EXT = {
 		SetClipboard = function(txt)
-			txt=tostring(txt or '')
-			local _,count=txt:gsub("\n","\n")
-			txt=txt..('_'):rep(count)
-
-			local b=vgui.Create('DTextEntry',nil,'ClipboardCopyHelper')
-				b:SetVisible(false)
-				b:SetText(txt)
-				b:SelectAllText()
-				b:CutSelected()
-				b:Remove()
+			txt = tostring(txt or '')
+			local _, count = txt:gsub("\n", "\n")
+			txt = txt .. ('_'):rep(count)
+			local b = vgui.Create('DTextEntry', nil, 'ClipboardCopyHelper')
+			b:SetVisible(false)
+			b:SetText(txt)
+			b:SelectAllText()
+			b:CutSelected()
+			b:Remove()
 		end,
 		GetClipboard = function() return "gmod has no way to get clipboard data!" end,
 		TypeOf = function(v)
-
-			if type(v) == "table" and
-				type(v.r) == "number" and
-				type(v.g) == "number" and
-				type(v.b) == "number"
-			then
-				return "color"
-			end
+			if type(v) == "table" and type(v.r) == "number" and type(v.g) == "number" and type(v.b) == "number" then return "color" end
 
 			return type(v)
 		end,
 		Rand = math.Rand,
-		LogF = function(fmt, ...) MsgN(string.format(fmt, ...)) end,
+		LogF = function(fmt, ...)
+			MsgN(string.format(fmt, ...))
+		end,
 		GetFrameTime = FrameTime,
 		GetTime = RealTime,
-
 		Color = Color,
-
 		CreateConVar = function(name, def) return CreateClientConVar(name, tostring(def), true, false) end,
 		GetConVarFloat = function(c) return c:GetFloat() end,
+		HSVToColor = function(h, s, v)
+			local c = HSVToColor(h % 360, s, v)
 
-		HSVToColor = function(h,s,v) local c = HSVToColor(h%360, s, v) return c.r, c.g, c.b end,
-		SetMaterial = function(mat) surface.SetMaterial(mat or white) end,
-		SetWhiteTexture = function(mat) surface.SetMaterial(white) end,
+			return c.r, c.g, c.b
+		end,
+		SetMaterial = function(mat)
+			surface.SetMaterial(mat or white)
+		end,
+		SetWhiteTexture = function(mat)
+			surface.SetMaterial(white)
+		end,
 		DrawLine = surface.DrawLine,
-		SetColor = function(r,g,b,a)
-			local oldr, oldg, oldb, olda = R,G,B,A
+		SetColor = function(r, g, b, a)
+			local oldr, oldg, oldb, olda = R, G, B, A
+			R = r or 0
+			G = g or 0
+			B = b or 0
+			A = a or 255
+			surface.SetTextColor(R, G, B, A)
+			surface.SetDrawColor(R, G, B, A)
 
-			R=r or 0
-			G=g or 0
-			B=b or 0
-			A=a or 255
-
-			surface.SetTextColor(R,G,B,A)
-			surface.SetDrawColor(R,G,B,A)
-
-			return oldr,oldg,oldb,olda
+			return oldr, oldg, oldb, olda
 		end,
-		GetColor = function()
-			return R,G,B,A
-		end,
+		GetColor = function() return R, G, B, A end,
 		DrawRect = surface.DrawTexturedRect,
 		CreateFont = surface.CreateFont,
-
 		GetTextSize = function(str)
 			--if #str == 0 then str = "" end
-
 			str = str:gsub("\t", "    ")
 			str = str:gsub("&", "¤")
-
 			local w, h = surface.GetTextSize(str)
 
 			return w, h
 		end,
-
-		SetTextPos = function( x, y, ... )
+		SetTextPos = function(x, y, ...)
 			OX, OY = x, y
-			surface.SetTextPos( x, y, ... )
+			surface.SetTextPos(x, y, ...)
 		end,
-		DrawText = function( ... )
+		DrawText = function(...)
 			local OR, OG, OB, OA = R, G, B, A
 			surface.SetTextColor(0, 0, 0, 66 * (A / 255))
-
 			local wide = 1
 			local each = 1
+
 			for dx = -wide, wide, each do
 				for dy = -wide, wide, each do
 					if dx == 0 and dy == 0 then continue end
@@ -342,11 +325,11 @@ if gmod then
 					surface.DrawText(...)
 				end
 			end
+
 			surface.SetTextPos(OX, OY)
 			surface.SetTextColor(OR, OG, OB, OA)
 			surface.DrawText(...)
 		end,
-
 		SetFont = function(font)
 			if not pcall(surface.SetFont, font) then
 				surface.SetFont("DermaDefault")
@@ -355,10 +338,12 @@ if gmod then
 		GetScreenHeight = ScrH,
 		GetScreenWidth = ScrW,
 		GetMousePos = function() return gui.MousePos() end,
-
-		SetCullClockWise = function(b) render.CullMode(b and MATERIAL_CULLMODE_CW or MATERIAL_CULLMODE_CCW) end,
+		SetCullClockWise = function(b)
+			render.CullMode(b and MATERIAL_CULLMODE_CW or MATERIAL_CULLMODE_CCW)
+		end,
 		FindMaterial = function(path)
-			local ExternalTextures = CreateClientConVar("chathud_allow_external_textures",0)
+			local ExternalTextures = CreateClientConVar("chathud_allow_external_textures", 0)
+
 			if _G.pac and path:find("http") and ExternalTextures:GetBool() then
 				local mat = CreateMaterial("chathud_texture_tag" .. util.CRC(path) .. "_" .. FrameNumber(), "UnlitGeneric", {})
 
@@ -378,11 +363,9 @@ if gmod then
 
 					if tex_path then
 						local params = {}
-
 						params["$basetexture"] = tex_path
 						params["$vertexcolor"] = 1
 						params["$vertexalpha"] = 1
-
 						mat = CreateMaterial("markup_fixmat_" .. tex_path, "UnlitGeneric", params)
 					end
 				end
@@ -390,28 +373,29 @@ if gmod then
 				return mat
 			end
 		end,
-
 		TranslateMatrix = mstack.Translate,
 		ScaleMatrix = mstack.Scale,
 		RotateMatrix = mstack.Rotate,
-
 		CreateMatrix = mstack.Push,
-		PopMatrix = function() mstack.Pop() cam.PopModelMatrix() end,
-		PushMatrix = function() cam.PushModelMatrix(mstack.matrix) end,
-
-		OpenURL = function(str) gui.OpenURL(str) end,
+		PopMatrix = function()
+			mstack.Pop()
+			cam.PopModelMatrix()
+		end,
+		PushMatrix = function()
+			cam.PushModelMatrix(mstack.matrix)
+		end,
+		OpenURL = function(str)
+			gui.OpenURL(str)
+		end,
 		SetAlphaMultiplier = surface.SetAlphaMultiplier,
 	}
 else
-	-- Removed because the API sucks.
 end
 
-EXT.CountChar = function(str, pattern)
-	return select(2, str:gsub(pattern, ""))
-end
+-- Removed because the API sucks.
+EXT.CountChar = function(str, pattern) return select(2, str:gsub(pattern, "")) end
 
 function EXT.GetCharType(char)
-
 	if char:find("%p") and char ~= "_" then
 		return "punctation"
 	elseif char:find("%s") then
@@ -428,6 +412,7 @@ end
 function EXT.FixIndices(tbl)
 	local temp = {}
 	local i = 1
+
 	for k, v in pairs(tbl) do
 		temp[i] = v
 		tbl[k] = nil
@@ -440,7 +425,6 @@ function EXT.FixIndices(tbl)
 end
 
 -- config start
-
 do
 	META.default_font = {
 		name = "markup_default",
@@ -452,25 +436,27 @@ do
 			shadow = true,
 			prettyblur = 1,
 			read_speed = 100,
-		} ,
+		},
 	}
 
 	EXT.CreateFont(META.default_font.name, META.default_font.data)
 end
 
-do -- tags
+-- tags
+do
 	CHATHUD_TAGS = {}
 
-	do -- base
-		CHATHUD_TAGS.click =
-		{
+	-- base
+	do
+		CHATHUD_TAGS.click = {
 			arguments = {},
-
 			mouse = function(markup, self, button, press, x, y)
 				if button == "button_1" and press then
 					local str = ""
-					for i = self.i+1, math.huge do
+
+					for i = self.i + 1, math.huge do
 						local chunk = markup.chunks[i]
+
 						if chunk.type == self.type or i > #markup.chunks then
 							EXT.OpenURL(str)
 							break
@@ -478,83 +464,68 @@ do -- tags
 							str = str .. chunk.val
 						end
 					end
+
 					return false
 				end
 			end,
-
 			post_draw_chunks = function(markup, self, chunk)
 				EXT.DrawLine(chunk.x, chunk.top, chunk.right, chunk.top)
 			end,
 		}
 
 		if false and string.anime then
-			CHATHUD_TAGS.anime =
-			{
+			CHATHUD_TAGS.anime = {
 				arguments = {},
-				modify_text = function(markup, self, str)
-					return str:anime()
-				end,
+				modify_text = function(markup, self, str) return str:anime() end,
 			}
 		end
 
-		CHATHUD_TAGS.wrong =
-		{
+		CHATHUD_TAGS.wrong = {
 			arguments = {},
 			post_draw_chunks = function(markup, self, chunk)
-				local r,g,b,a = EXT.SetColor(255, 0, 0, 255)
+				local r, g, b, a = EXT.SetColor(255, 0, 0, 255)
+
 				-- todo: LOL
 				for x = chunk.x, chunk.right do
-					EXT.DrawLine(x, chunk.top + math.sin(x), x+1, chunk.top +math.sin(x))
+					EXT.DrawLine(x, chunk.top + math.sin(x), x + 1, chunk.top + math.sin(x))
 				end
 
-				EXT.SetColor(r,g,b,a)
+				EXT.SetColor(r, g, b, a)
 			end,
 		}
 
 		if gmod then
 			local size = 8
-			local _size = size/2
+			local _size = size / 2
 
-			CHATHUD_TAGS.chatbubble =
-			{
+			CHATHUD_TAGS.chatbubble = {
 				arguments = {},
 				pre_draw = function(markup, self, x, y)
-					local r,g,b,a = EXT.GetColor()
+					local r, g, b, a = EXT.GetColor()
 					local w, h = self.tag_width, self.tag_height
-					draw.RoundedBox(size, x + _size, y - h/2 - _size, w + size, h + size, Color(r,g,b,a))
-					--EXT.SetColor(r,g,b,a)
+					draw.RoundedBox(size, x + _size, y - h / 2 - _size, w + size, h + size, Color(r, g, b, a))
 				end,
-
-				post_draw = function()
-					-- if we don't have this we don't get tag_center_x and stuff due to performance reasons
-				end,
-
-				get_size = function()
-					return size, size
-				end,
+				--EXT.SetColor(r,g,b,a)
+				post_draw = function() end,
+				-- if we don't have this we don't get tag_center_x and stuff due to performance reasons
+				get_size = function() return size, size end,
 			}
 		end
 
-		CHATHUD_TAGS.background =
-		{
-			arguments = {0,0,0,255},
-			pre_draw = function(markup, self, x,y, r,g,b,a)
-				local r,g,b,a = EXT.SetColor(r,g,b,a)
-
+		CHATHUD_TAGS.background = {
+			arguments = {0, 0, 0, 255},
+			pre_draw = function(markup, self, x, y, r, g, b, a)
+				local r, g, b, a = EXT.SetColor(r, g, b, a)
 				local w, h = self.tag_width, self.tag_height
-
 				EXT.SetWhiteTexture()
 				EXT.DrawRect(x, y - h, w, h)
-				EXT.SetColor(r,g,b,a)
+				EXT.SetColor(r, g, b, a)
 			end,
-
-			post_draw = function()
-				-- if we don't have this we don't get tag_center_x and stuff due to performance reasons
-			end,
+			post_draw = function() end,
 		}
 
-		CHATHUD_TAGS.mark =
-		{
+		-- if we don't have this we don't get tag_center_x and stuff due to performance reasons
+		CHATHUD_TAGS.mark = {
 			arguments = {},
 			post_draw_chunks = function(markup, self, chunk)
 				local r, g, b, a = EXT.SetColor(255, 255, 0, 255)
@@ -564,33 +535,30 @@ do -- tags
 			end,
 		}
 
-		CHATHUD_TAGS.hsv =
-		{
+		CHATHUD_TAGS.hsv = {
 			arguments = {0, 1, 1},
-
-			pre_draw = function(markup, self, x,y, h, s, v)
-				local r,g,b = EXT.HSVToColor(h, s, v)
+			pre_draw = function(markup, self, x, y, h, s, v)
+				local r, g, b = EXT.HSVToColor(h, s, v)
 				EXT.SetColor(r, g, b, 255)
 			end,
 		}
 
-		CHATHUD_TAGS.color =
-		{
+		CHATHUD_TAGS.color = {
 			arguments = {255, 255, 255, 255},
-
-			pre_draw = function(markup, self, x,y, r,g,b,a)
+			pre_draw = function(markup, self, x, y, r, g, b, a)
 				EXT.SetColor(r, g, b, a)
 			end,
 		}
-		CHATHUD_TAGS.c =
-		{
-			arguments = {"FFFFFF"},
 
+		CHATHUD_TAGS.c = {
+			arguments = {"FFFFFF"},
 			init = function(markup, self, col)
-				if self.R==nil then
+				if self.R == nil then
 					local col = parse_hexcolor(col)
+
 					if not col then
-						Msg"ChatColor failed parsing "print(col)
+						Msg"ChatColor failed parsing "
+						print(col)
 						self.R = false
 					else
 						self.R = col.r
@@ -600,16 +568,10 @@ do -- tags
 					end
 				end
 			end,
-
-
-			pre_draw = function(markup, self, x,y)
-				EXT.SetColor(self.R or 255,
-							 self.G or 0,
-							 self.B or 255,
-							 self.A or 255)
+			pre_draw = function(markup, self, x, y)
+				EXT.SetColor(self.R or 255, self.G or 0, self.B or 255, self.A or 255)
 			end,
 		}
-
 
 		-- CHATHUD_TAGS.blackhole = {
 		-- 	arguments = {1},
@@ -634,7 +596,7 @@ do -- tags
 		-- 				-- velocity
 		-- 				phys.pos.x = phys.pos.x + (phys.vel.x * delta)
 		-- 				phys.pos.y = phys.pos.y + (phys.vel.y * delta)
-        --
+		--
 		-- 				-- friction
 		-- 				phys.vel.x = phys.vel.x * 0.97
 		-- 				phys.vel.y = phys.vel.y * 0.97
@@ -649,10 +611,10 @@ do -- tags
 		-- CHATHUD_TAGS.physics =
 		-- {
 		-- 	arguments = {1, 0, 0, 0, 0.997, 0.1},
-        --
+		--
 		-- 	init = function(markup, self, gx, gy, vx, vy, drag, rand_mult)
 		-- 		local part = {}
-        --
+		--
 		-- 		part =
 		-- 		{
 		-- 			pos = {x = 0, y = 0},
@@ -661,22 +623,22 @@ do -- tags
 		-- 			rand_mult = rand_mult,
 		-- 			drag = drag,
 		-- 		}
-        --
+		--
 		-- 		self.part = part
 		-- 	end,
-        --
+		--
 		-- 	pre_draw = function(markup, self, x,y, gravity_y, gravity_x, vx, vy, drag, rand_mult)
 		-- 		local delta = EXT.GetFrameTime() * 5
-        --
+		--
 		-- 		local part = self.part
-        --
+		--
 		-- 		local W, H = markup.width, markup.height
 		-- 		W = W - self.x
 		-- 		H = H - self.y + part.siz.h
-        --
+		--
 		-- 		local xvel
 		-- 		local yvel
-        --
+		--
 		-- 		if gmod then
 		-- 			local ply = LocalPlayer()
 		-- 			local ang = ply:EyeAngles()
@@ -701,44 +663,44 @@ do -- tags
 		-- 		-- random velocity for some variation
 		-- 		part.vel.y = part.vel.y + gravity_y + (EXT.Rand(-1,1) * rand_mult) + yvel
 		-- 		part.vel.x = part.vel.x + gravity_x + (EXT.Rand(-1,1) * rand_mult) + xvel
-        --
+		--
 		-- 		-- velocity
 		-- 		part.pos.x = part.pos.x + (part.vel.x * delta)
 		-- 		part.pos.y = part.pos.y + (part.vel.y * delta)
-        --
+		--
 		-- 		-- friction
 		-- 		part.vel.x = part.vel.x * part.drag
 		-- 		part.vel.y = part.vel.y * part.drag
-        --
+		--
 		-- 		-- collision
 		-- 		if part.pos.x + part.siz.w < 0 then
 		-- 			part.pos.x = -part.siz.w
 		-- 			part.vel.x = part.vel.x * -part.drag
 		-- 		end
-        --
+		--
 		-- 		if part.pos.x + part.siz.w > W then
 		-- 			part.pos.x = W - part.siz.w
 		-- 			part.vel.x = part.vel.x * -part.drag
 		-- 		end
-        --
+		--
 		-- 		if part.pos.y + part.siz.h < 0 then
 		-- 			part.pos.y = -part.siz.h
 		-- 			part.vel.y = part.vel.y * -part.drag
 		-- 		end
-        --
+		--
 		-- 		if part.pos.y + part.siz.h > H then
 		-- 			part.pos.y = H - part.siz.h
 		-- 			part.vel.y = part.vel.y * -part.drag
 		-- 		end
 		--
 		-- 		EXT.CreateMatrix()
-        --
+		--
 		--
 		-- 		local center_x = self.tag_center_x
 		-- 		local center_y = self.tag_center_y
-        --
+		--
 		-- 		EXT.TranslateMatrix(part.pos.x, part.pos.y)
-        --
+		--
 		--
 		-- 		EXT.TranslateMatrix(center_x, center_y)
 		-- 			EXT.RotateMatrix(math.deg(math.atan2(part.vel.y, part.vel.x)))
@@ -746,88 +708,88 @@ do -- tags
 		--
 		-- 		EXT.PushMatrix()
 		-- 	end,
-        --
+		--
 		-- 	post_draw = function()
 		-- 		EXT.PopMatrix()
 		-- 	end,
 		-- }
-
 		local blacklist = {
-				creditslogo=true,
-				weaponiconsselected=true,
-				hl2mptypedeath=true,
-				weaponicons=true,
-				nametags=true,
-				creditsoutrologos=true,
+			creditslogo = true,
+			weaponiconsselected = true,
+			hl2mptypedeath = true,
+			weaponicons = true,
+			nametags = true,
+			creditsoutrologos = true,
 		}
-		CHATHUD_TAGS.font =
-		{
-			arguments = {"markup_default"},
 
-			pre_draw = function(markup, self, x,y, font)
+		CHATHUD_TAGS.font = {
+			arguments = {"markup_default"},
+			pre_draw = function(markup, self, x, y, font)
 				if blacklist[font:lower()] or font == "NameTags" then return end
 				EXT.SetFont(font)
 			end,
-
 			init = function(markup, self, font)
 				if blacklist[font:lower()] then return end
 				EXT.SetFont(font)
 			end,
 		}
 
-		CHATHUD_TAGS.texture =
-		{
-			arguments = {"error", {default = 16, min = 4, max = 128}},
-
+		CHATHUD_TAGS.texture = {
+			arguments = {
+				"error", {
+					default = 16,
+					min = 4,
+					max = 128
+				}
+			},
 			init = function(markup, self, path)
 				self.mat = EXT.FindMaterial(path)
 			end,
-
-			get_size = function(markup, self, path, size)
-				return size, size
-			end,
-
-			pre_draw = function(markup, self, x,y, path, size)
+			get_size = function(markup, self, path, size) return size, size end,
+			pre_draw = function(markup, self, x, y, path, size)
 				EXT.SetMaterial(self.mat)
 				EXT.DrawRect(x, y, size, size)
 			end,
 		}
 
-		CHATHUD_TAGS.se =
-		{
+		CHATHUD_TAGS.se = {
 			allowNumbers = true,
-
-			arguments = {"", {default = 27, min = 4, max = 128}},
-
+			arguments = {
+				"", {
+					default = 27,
+					min = 4,
+					max = 128
+				}
+			},
 			init = function(markup, self, name)
 				name = tostring(name)
-
 				--if tonumber(name) then return end
 				self.name = name
 				self.git = false
 				local se = GetSteamEmoticon(name)
+
 				--print(name,se)
-				if se==false then
+				if se == false then
 					local ge = GetGitHubEmoticon(name)
+
 					--print("GE",ge)
-					if ge==false then
+					if ge == false then
 						self.name = nil
 					else
 						self.git = true
 					end
 				end
 			end,
-
 			get_size = function(markup, self, path, size)
 				if self.git then
-					return 32,32
+					return 32, 32
 				else
 					return size, size
 				end
 			end,
-
-			pre_draw = function(markup, self, x,y, path, size)
+			pre_draw = function(markup, self, x, y, path, size)
 				local dat = self.name
+
 				if dat then
 					if self.git then
 						dat = GetGitHubEmoticon(dat)
@@ -837,45 +799,43 @@ do -- tags
 				end
 
 				if not dat then return end
-
 				EXT.SetMaterial(dat)
 				EXT.DrawRect(x, y, size, size)
 			end,
 		}
 
 		if not gmod then
-			CHATHUD_TAGS.silkicon =
-			{
-				arguments = {"world", {default = 1}},
-
+			CHATHUD_TAGS.silkicon = {
+				arguments = {
+					"world", {
+						default = 1
+					}
+				},
 				init = function(markup, self, path)
 					self.mat = EXT.FindMaterial("textures/silkicons/" .. path .. ".png")
 				end,
-
-				get_size = function(markup, self, path, size_mult)
-					return 16, 16
-				end,
-
-				pre_draw = function(markup, self, x,y, path)
+				get_size = function(markup, self, path, size_mult) return 16, 16 end,
+				pre_draw = function(markup, self, x, y, path)
 					EXT.SetMaterial(self.mat)
 					EXT.DrawRect(x, y, self.w, self.h)
 				end,
 			}
 		end
-
 	end
 
-	do -- matrix originally made !cake
-		local function detM2x2 (m11, m12, m21, m22)
+	-- matrix originally made !cake
+	do
+		local function detM2x2(m11, m12, m21, m22)
 			return m11 * m22 - m12 * m21
 		end
 
-		local function mulM2x2V2 (m11, m12, m21, m22, v1, v2)
+		local function mulM2x2V2(m11, m12, m21, m22, v1, v2)
 			return v1 * m11 + v2 * m12, v1 * m21 + v2 * m22
 		end
 
 		local function normalizeV2(x, y)
 			local length = math.sqrt(x * x + y * y)
+
 			return x / length, y / length
 		end
 
@@ -886,7 +846,7 @@ do -- tags
 		local function eigenvector2(l, a, d)
 			-- (a - ?) u1 + d u2 = 0
 			if a - l == 0 then return 1, 0 end
-			if     d == 0 then return 0, 1 end
+			if d == 0 then return 0, 1 end
 
 			return normalizeV2(-d / (a - l), 1)
 		end
@@ -898,61 +858,50 @@ do -- tags
 				EXT.ScaleMatrix(1, -1)
 			end
 
-			local angle = math.atan2 (m21, m11)
+			local angle = math.atan2(m21, m11)
 			EXT.RotateMatrix(math.deg(angle))
 		end
 
-		CHATHUD_TAGS.translate =
-		{
+		CHATHUD_TAGS.translate = {
 			arguments = {0, 0},
-
 			pre_draw = function(markup, self, x, y, dx, dy)
 				EXT.CreateMatrix()
-
 				EXT.TranslateMatrix(dx, dy)
-
 				EXT.PushMatrix()
 			end,
-
 			post_draw = function()
 				EXT.PopMatrix()
 			end,
 		}
 
-		CHATHUD_TAGS.scale =
-		{
+		CHATHUD_TAGS.scale = {
 			arguments = {1, nil},
-
-			init = function()
-
-			end,
-
+			init = function() end,
 			pre_draw = function(markup, self, x, y, scaleX, scaleY)
 				EXT.CreateMatrix()
 
-				if scaleY == nil then scaleY = scaleX end
+				if scaleY == nil then
+					scaleY = scaleX
+				end
 
 				self.matrixDeterminant = scaleX * scaleY
 
-				if math.abs (self.matrixDeterminant) > 1 then
-					scaleX, scaleY = scaleV2(scaleX, scaleY, 1 / math.sqrt (self.matrixDeterminant))
+				if math.abs(self.matrixDeterminant) > 1 then
+					scaleX, scaleY = scaleV2(scaleX, scaleY, 1 / math.sqrt(self.matrixDeterminant))
 				end
 
 				local centerY = y - self.tag_height / 2
-
 				EXT.TranslateMatrix(x, centerY)
-					EXT.ScaleMatrix(scaleX, scaleY)
+				EXT.ScaleMatrix(scaleX, scaleY)
 
-					if scaleX < 0 then
-						EXT.TranslateMatrix(-self.tag_width, 0)
-					end
+				if scaleX < 0 then
+					EXT.TranslateMatrix(-self.tag_width, 0)
+				end
+
 				EXT.TranslateMatrix(-x, -centerY)
-
 				EXT.PushMatrix()
-
 				EXT.SetCullClockWise(self.matrixDeterminant < 0)
 			end,
-
 			post_draw = function(markup, self)
 				if self.matrixDeterminant < 0 then
 					EXT.SetCullClockWise(false)
@@ -962,76 +911,63 @@ do -- tags
 			end,
 		}
 
-		CHATHUD_TAGS.size =
-		{
+		CHATHUD_TAGS.size = {
 			arguments = {1},
-
 			pre_draw = function(markup, self, x, y, size)
 				CHATHUD_TAGS.scale.pre_draw(markup, self, x, y, size, size)
 			end,
-
 			post_draw = function(markup, self)
 				CHATHUD_TAGS.scale.post_draw(markup, self, x, y, size, size)
 			end,
 		}
 
-		CHATHUD_TAGS.rotate =
-		{
+		CHATHUD_TAGS.rotate = {
 			arguments = {45},
-
 			pre_draw = function(markup, self, x, y, deg)
 				EXT.CreateMatrix()
-
 				local center_x = self.tag_center_x
 				local center_y = self.tag_center_y
-
 				EXT.TranslateMatrix(center_x, center_y)
-					EXT.RotateMatrix(deg)
+				EXT.RotateMatrix(deg)
 				EXT.TranslateMatrix(-center_x, -center_y)
-
 				EXT.PushMatrix()
 			end,
-
 			post_draw = function()
 				EXT.PopMatrix()
 			end,
 		}
 
-		CHATHUD_TAGS.matrixez =
-		{
-			arguments = {0,0,1,1,0},
-
+		CHATHUD_TAGS.matrixez = {
+			arguments = {0, 0, 1, 1, 0},
 			pre_draw = function(markup, self, x, y, X, Y, scaleX, scaleY, angleInDegrees)
 				self.matrixDeterminant = scaleX * scaleY
 
-				if math.abs (self.matrixDeterminant) > 10 then
+				if math.abs(self.matrixDeterminant) > 10 then
 					scaleX, scaleY = normalizeV2(scaleX, scaleY)
 					scaleX, scaleY = scaleV2(scaleX, scaleY, 10)
 				end
 
 				local centerX = self.tag_center_x
 				local centerY = self.tag_center_y
-
 				EXT.CreateMatrix()
-
 				EXT.TranslateMatrix(x, centerY)
-					EXT.TranslateMatrix(X,Y)
-					EXT.ScaleMatrix(scaleX, scaleY)
-					if scaleX < 0 then
-						EXT.TranslateMatrix(-self.tag_width, 0)
-					end
-					if angleInDegrees ~= 0 then
-						EXT.TranslateMatrix(centerX)
-							EXT.RotateMatrix(angleInDegrees)
-						EXT.TranslateMatrix(-centerX)
-					end
+				EXT.TranslateMatrix(X, Y)
+				EXT.ScaleMatrix(scaleX, scaleY)
+
+				if scaleX < 0 then
+					EXT.TranslateMatrix(-self.tag_width, 0)
+				end
+
+				if angleInDegrees ~= 0 then
+					EXT.TranslateMatrix(centerX)
+					EXT.RotateMatrix(angleInDegrees)
+					EXT.TranslateMatrix(-centerX)
+				end
+
 				EXT.TranslateMatrix(x, -centerY)
-
 				EXT.PushMatrix()
-
 				EXT.SetCullClockWise(self.matrixDeterminant < 0)
 			end,
-
 			post_draw = function(markup, self)
 				if self.matrixDeterminant < 0 then
 					EXT.SetCullClockWise(false)
@@ -1041,23 +977,18 @@ do -- tags
 			end,
 		}
 
-		CHATHUD_TAGS.matrix =
-		{
+		CHATHUD_TAGS.matrix = {
 			arguments = {1, 0, 0, 1, 0, 0},
-
 			pre_draw = function(markup, self, x, y, a11, a12, a21, a22, dx, dy)
 				-- Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn
-
 				-- A = Q1 ? Q2
-
 				-- B = transpose (A) * A
 				local b11 = a11 * a11 + a21 * a21
 				local b12 = a11 * a12 + a21 * a22
 				local b21 = a12 * a11 + a22 * a21
 				local b22 = a12 * a12 + a22 * a22
-				local trB  = b11 + b22
+				local trB = b11 + b22
 				local detB = detM2x2(b11, b12, b21, b22)
-
 				-- Finding eigenvalues of B...
 				-- det (B - ?I) = 0
 				-- | a - ?        b | = 0
@@ -1069,12 +1000,10 @@ do -- tags
 				--     a + d ± sqrt ((a + d)² - 4 (ad - bc))
 				-- ? = -------------------------------------
 				--                      2
-
 				-- This is never negative
 				local sqrtInside = trB * trB - 4 * detB
 				local eigenvalue1 = 0.5 * (trB + math.sqrt(sqrtInside))
 				local eigenvalue2 = 0.5 * (trB - math.sqrt(sqrtInside))
-
 				-- (B - ?I) u = 0
 				--
 				-- [ a - ?        b ] [ u1 ] = [ 0 ]
@@ -1090,9 +1019,8 @@ do -- tags
 				end
 
 				-- Those will never be negative as well #yolo
-				local scaleX = math.sqrt (eigenvalue1)
-				local scaleY = math.sqrt (eigenvalue2)
-
+				local scaleX = math.sqrt(eigenvalue1)
+				local scaleY = math.sqrt(eigenvalue2)
 				local detQ2 = q211 * q222 - q212 * q221
 				local q111, q121 = mulM2x2V2(a11, a12, a21, a22, q211, q221)
 				local q112, q122 = mulM2x2V2(a11, a12, a21, a22, q212, q222)
@@ -1107,27 +1035,18 @@ do -- tags
 
 				-- transpose Q2
 				q212, q221 = q221, q212
-
 				-- End of Cthulhu summoning
-
 				self.matrixDeterminant = detM2x2(a11, a12, a21, a22)
-
 				EXT.CreateMatrix()
-
 				EXT.TranslateMatrix(x, y)
-					EXT.TranslateMatrix(dx, dy)
-
-					orthonormalM2x2ToVMatrix(q211, q212, q221, q222)
-						EXT.ScaleMatrix(scaleX, scaleY)
-					orthonormalM2x2ToVMatrix(q111, q112, q121, q122)
-
+				EXT.TranslateMatrix(dx, dy)
+				orthonormalM2x2ToVMatrix(q211, q212, q221, q222)
+				EXT.ScaleMatrix(scaleX, scaleY)
+				orthonormalM2x2ToVMatrix(q111, q112, q121, q122)
 				EXT.TranslateMatrix(-x, -y)
-
 				EXT.PushMatrix()
-
 				EXT.SetCullClockWise(self.matrixDeterminant < 0)
 			end,
-
 			post_draw = function(markup, self)
 				if self.matrixDeterminant < 0 then
 					EXT.SetCullClockWise(false)
@@ -1140,12 +1059,10 @@ do -- tags
 end
 
 -- internal
-
 -- normalize everything into a consistent markup table
 -- strings are also parsed
 -- go through every argument
 -- markup:SetTable({Color(1,1,1), "asdasd", {"asdasd"}, ...})
-
 function META:Clear()
 	self.chunks = {}
 	self:Invalidate()
@@ -1153,7 +1070,6 @@ end
 
 function META:SetTable(tbl, tags)
 	self.Table = tbl
-
 	self:Clear()
 
 	for i, var in ipairs(tbl) do
@@ -1168,19 +1084,32 @@ function META:AddTable(tbl, tags)
 end
 
 function META:BeginLifeTime(time)
-	table.insert(self.chunks, {type = "start_fade", val = os.clock() + time})
+	table.insert(self.chunks, {
+		type = "start_fade",
+		val = os.clock() + time
+	})
 end
 
 function META:EndLifeTime()
-	table.insert(self.chunks, {type = "end_fade", val = true})
+	table.insert(self.chunks, {
+		type = "end_fade",
+		val = true
+	})
 end
 
 function META:AddTagStopper()
-	table.insert(self.chunks, {type = "tag_stopper", val = true})
+	table.insert(self.chunks, {
+		type = "tag_stopper",
+		val = true
+	})
 end
 
 function META:AddColor(color)
-	table.insert(self.chunks, {type = "color", val = color})
+	table.insert(self.chunks, {
+		type = "color",
+		val = color
+	})
+
 	self.need_layout = true
 end
 
@@ -1192,14 +1121,21 @@ function META:AddString(str, tags)
 			table.insert(self.chunks, chunk)
 		end
 	else
-		table.insert(self.chunks, {type = "string", val = str})
+		table.insert(self.chunks, {
+			type = "string",
+			val = str
+		})
 	end
 
 	self.need_layout = true
 end
 
 function META:AddFont(font)
-	table.insert(self.chunks, {type = "font", val = font})
+	table.insert(self.chunks, {
+		type = "font",
+		val = font
+	})
+
 	self.need_layout = true
 end
 
@@ -1235,7 +1171,6 @@ local function call_tag_func(self, chunk, name, ...)
 	if not chunk.val.tag then return end
 
 	if chunk.type == "custom" and not chunk.panic then
-
 		local func = chunk.val.tag and chunk.val.tag[name]
 
 		if func then
@@ -1246,6 +1181,7 @@ local function call_tag_func(self, chunk, name, ...)
 
 				if type(val) == "function" then
 					local ok, v = pcall(val, chunk.exp_env)
+
 					if ok then
 						val = v
 					end
@@ -1281,23 +1217,26 @@ end
 -- tag parsing
 do
 	local function parse_tag_arguments(self, arg_line)
-    	local out = {}
-        local str = {}
-        local in_lua = false
+		local out = {}
+		local str = {}
+		local in_lua = false
 
-        for i, char in pairs(utf8.totable(arg_line)) do
-            if char == "[" then
+		for i, char in pairs(utf8.totable(arg_line)) do
+			if char == "[" then
 				in_lua = true
-			elseif in_lua and char == "]" then -- todo: longest match
+			elseif in_lua and char == "]" then
+				-- todo: longest match
 				in_lua = false
 				local exp = table.concat(str, "")
 				local ok, func = expression.Compile(exp)
+
 				if ok then
 					table.insert(out, func)
 				else
-                    EXT.LogF(exp)
+					EXT.LogF(exp)
 					EXT.LogF("markup expression error: %s", func)
 				end
+
 				str = {}
 			elseif char == "," and not in_lua then
 				if #str > 0 then
@@ -1307,14 +1246,14 @@ do
 			else
 				table.insert(str, char)
 			end
-        end
+		end
 
 		if #str > 0 then
 			table.insert(out, table.concat(str, ""))
 			str = {}
 		end
 
-		for k,v in pairs(out) do
+		for k, v in pairs(out) do
 			if tonumber(v) then
 				out[k] = tonumber(v)
 			end
@@ -1324,35 +1263,31 @@ do
 	end
 
 	function META:ParseTags(str)
-
 		str = tostring(str)
 
 		str = str:gsub("<rep=(%d+)>(.-)</rep>", function(count, str)
 			count = math.min(math.max(tonumber(count), 1), 500)
-
-			if #str:rep(count):gsub("<(.-)=(.-)>", ""):gsub("</(.-)>", ""):gsub("%^%d","") > 500 then
-				return "rep limit reached"
-			end
+			if #str:rep(count):gsub("<(.-)=(.-)>", ""):gsub("</(.-)>", ""):gsub("%^%d", "") > 500 then return "rep limit reached" end
 
 			return str:rep(count)
 		end)
 
 		local chunks = {}
 		local found = false
-
 		local in_tag = false
 		local current_string = {}
 		local current_tag = {}
-
 		local last_font
 		local last_color
 
 		for i, char in pairs(utf8.totable(str)) do
 			if char == "<" then
-
 				-- if we've been parsing a string add it
 				if current_string then
-					table.insert(chunks, {type = "string", val = table.concat(current_string, "")})
+					table.insert(chunks, {
+						type = "string",
+						val = table.concat(current_string, "")
+					})
 				end
 
 				-- stat a new tag
@@ -1382,14 +1317,12 @@ do
 
 						if not stop_tag then
 							info.arg_types = {}
-
 							args = parse_tag_arguments(self, arg_str or "")
 
 							for i = 1, #info.arguments do
 								local arg = args[i]
 								local default = info.arguments[i]
 								local t = type(default)
-
 								info.arg_types[i] = t == "table" and "number" or t
 
 								if t == "number" then
@@ -1428,6 +1361,7 @@ do
 												elseif default.max then
 													args[i] = function(...) return math.max(arg(...) or default.default, default.max) end
 												end
+
 												is_expression = true
 											else
 												args[i] = default.default
@@ -1439,7 +1373,7 @@ do
 
 							-- some arguments can have a default value of nil
 							for i = #info.arguments + 1, #args do
-								info.arg_types[i] = type (args [i])
+								info.arg_types[i] = type(args[i])
 							end
 						end
 
@@ -1449,25 +1383,46 @@ do
 						if not is_expression and tagType == "font" then
 							if stop_tag then
 								if last_font then
-									table.insert(chunks, {type = "font", val = last_font})
+									table.insert(chunks, {
+										type = "font",
+										val = last_font
+									})
 								end
 							else
-								table.insert(chunks, {type = "font", val = args[1]})
+								table.insert(chunks, {
+									type = "font",
+									val = args[1]
+								})
+
 								last_font = args[1]
 							end
 						elseif not is_expression and tagType == "color" then
 							if stop_tag then
 								if last_color then
-									table.insert(chunks, {type = "color", val = Color(unpack(last_color))})
+									table.insert(chunks, {
+										type = "color",
+										val = Color(unpack(last_color))
+									})
 								end
 							else
-								table.insert(chunks, {type = "color", val = Color(unpack(args))})
+								table.insert(chunks, {
+									type = "color",
+									val = Color(unpack(args))
+								})
+
 								last_color = args
 							end
 						else
-							table.insert(chunks, {type = "custom", val = {tag = info, type = tagType, args = args, stop_tag = stop_tag}})
+							table.insert(chunks, {
+								type = "custom",
+								val = {
+									tag = info,
+									type = tagType,
+									args = args,
+									stop_tag = stop_tag
+								}
+							})
 						end
-
 					end
 				end
 
@@ -1483,9 +1438,17 @@ do
 		end
 
 		if found then
-			table.insert(chunks, {type = "string", val = table.concat(current_string, "")})
+			table.insert(chunks, {
+				type = "string",
+				val = table.concat(current_string, "")
+			})
 		else
-			chunks = {{type = "string", val = str}}
+			chunks = {
+				{
+					type = "string",
+					val = str
+				}
+			}
 		end
 
 		-- text modifiers
@@ -1503,9 +1466,7 @@ do
 						chunk.val = func(self, chunk, chunk.val, unpack(start_chunk.val.args)) or chunk.val
 					end
 
-					if chunk.type == "tag_stopper" or (chunk.type == "custom" and chunk.val.type == start_chunk.val.type and chunk.val.stop_tag) then
-						break
-					end
+					if chunk.type == "tag_stopper" or (chunk.type == "custom" and chunk.val.type == start_chunk.val.type and chunk.val.stop_tag) then break end
 				end
 			end
 		end
@@ -1515,20 +1476,18 @@ do
 end
 
 do
-
 	local function prepare_chunks(self)
 		-- this is needed when invalidating the chunks table again
 		-- anything that need to add more chunks need to store the
 		-- old chunk as old_chunk key
-
-
 		local temp = {}
 		local old_chunks = {}
-
 		local skipped = 0
 
 		for i, chunk in ipairs(self.chunks) do
-			if chunk.internal or chunk.type == "string" and chunk.val == "" then goto continue_ end
+			if chunk.internal or chunk.type == "string" and chunk.val == "" then
+				goto continue_
+			end
 
 			local old = chunk.old_chunk
 
@@ -1546,16 +1505,31 @@ do
 			::continue_::
 		end
 
-		table.insert(temp, 1, {type = "font", val = self.default_font.name, internal = true})
-		table.insert(temp, 1, {type = "color", val = EXT.Color(255, 255, 255), internal = true})
-		for i = 1, 3 do table.insert(temp, {type = "string", val = "", internal = true}) end
+		table.insert(temp, 1, {
+			type = "font",
+			val = self.default_font.name,
+			internal = true
+		})
+
+		table.insert(temp, 1, {
+			type = "color",
+			val = EXT.Color(255, 255, 255),
+			internal = true
+		})
+
+		for i = 1, 3 do
+			table.insert(temp, {
+				type = "string",
+				val = "",
+				internal = true
+			})
+		end
 
 		return temp
 	end
 
 	local function split_by_space_and_punctation(self, chunks)
 		-- solve white space and punctation
-
 		local out = {}
 
 		for i, chunk in ipairs(chunks) do
@@ -1565,7 +1539,12 @@ do
 				for i, char in ipairs(utf8.totable(chunk.val)) do
 					if char:find("%s") then
 						if #str ~= 0 then
-							table.insert(out, {type = "string", val = table.concat(str), old_chunk = chunk})
+							table.insert(out, {
+								type = "string",
+								val = table.concat(str),
+								old_chunk = chunk
+							})
+
 							if table.clear then
 								table.clear(str)
 							else
@@ -1574,18 +1553,29 @@ do
 						end
 
 						if char == "\n" then
-							table.insert(out, {type = "newline", old_chunk = chunk})
+							table.insert(out, {
+								type = "newline",
+								old_chunk = chunk
+							})
 						else
-							table.insert(out, {type = "string", val = char, whitespace = true, old_chunk = chunk})
+							table.insert(out, {
+								type = "string",
+								val = char,
+								whitespace = true,
+								old_chunk = chunk
+							})
 						end
 					else
 						table.insert(str, char)
 					end
 				end
 
-
 				if #str ~= 0 then
-					table.insert(out, {type = "string", val = table.concat(str), old_chunk = chunk})
+					table.insert(out, {
+						type = "string",
+						val = table.concat(str),
+						old_chunk = chunk
+					})
 				end
 			else
 				table.insert(out, chunk)
@@ -1598,14 +1588,11 @@ do
 	local function get_size_info(self, chunks)
 		-- get the size of each object
 		for i, chunk in ipairs(chunks) do
-
-
 			if chunk.type == "font" then
 				-- set the font so GetTextSize will be correct
 				EXT.SetFont(chunk.val)
 			elseif chunk.type == "string" then
 				local w, h = EXT.GetTextSize(chunk.val)
-
 				chunk.w = w
 				chunk.h = h
 
@@ -1617,19 +1604,16 @@ do
 				end
 			elseif chunk.type == "newline" then
 				local w, h = EXT.GetTextSize("|")
-
 				chunk.w = w
 				chunk.h = h
-			elseif chunk.type == "custom" and not chunk.val.stop_tag  then
+			elseif chunk.type == "custom" and not chunk.val.stop_tag then
 				local ok, w, h = call_tag_func(self, chunk, "get_size")
 				chunk.w = w
 				chunk.h = h
-
 				chunk.pre_called = false
 			end
 
 			-- for consistency everything should have x y w h
-
 			chunk.x = chunk.x or 0
 			chunk.y = chunk.y or 0
 			chunk.w = chunk.w or 0
@@ -1639,17 +1623,13 @@ do
 		return chunks
 	end
 
-
 	local function solve_max_width(self, chunks)
 		-- solve max width
 		local current_x = 0
 		local current_y = 0
-
 		local chunk_height = 0 -- the height to advance y in
 
 		for i, chunk in ipairs(chunks) do
-
-
 			-- is the previous line a newline?
 			local newline = chunks[i - 1] and chunks[i - 1].type == "newline"
 
@@ -1660,26 +1640,21 @@ do
 
 			-- is this a new line or are we going to exceed the maximum width?
 			if newline or (self.LineWrap and current_x + chunk.w >= self.MaxWidth) then
-
 				-- if this is whitespace just get rid of it and pretend it wasn't there
 				-- this causes issues with newlines
 				--[[if chunk.whitespace then
 					current_x = current_x - chunk.w
 					goto continue_
 				end]]
-
 				-- reset the width
 				current_x = 0
-
 				-- advance y with the height of the tallest chunk
 				current_y = current_y + chunk_height
-
 				chunk_height = chunk.h
 			end
 
 			chunk.x = current_x
 			chunk.y = current_y
-
 			current_x = current_x + chunk.w
 		end
 
@@ -1688,9 +1663,8 @@ do
 
 	local function string_wrap(self, chunks)
 		local out = {}
+
 		for i, chunk in ipairs(chunks) do
-
-
 			local split = false
 
 			if chunk.type == "font" then
@@ -1699,12 +1673,10 @@ do
 			elseif chunk.type == "string" then
 				-- if x+w exceeds maxwidth split!
 				if self.LineWrap and chunk.x + chunk.w >= self.MaxWidth then
-
 					-- start from the chunk's y
 					local current_x = chunk.x
 					local current_y = chunk.y
 					local chunk_height = 0 -- the height to advance y in
-
 					local str = ""
 
 					for i, char in ipairs(utf8.totable(chunk.val)) do
@@ -1718,23 +1690,36 @@ do
 						current_x = current_x + w
 
 						if current_x + w > self.MaxWidth then
-							table.insert(out, {type = "string", val = str, x = 0, y = current_y, w = current_x, h = chunk_height, old_chunk = chunk})
-							current_y = current_y + chunk_height
+							table.insert(out, {
+								type = "string",
+								val = str,
+								x = 0,
+								y = current_y,
+								w = current_x,
+								h = chunk_height,
+								old_chunk = chunk
+							})
 
+							current_y = current_y + chunk_height
 							current_x = 0
 							chunk_height = 0
 							split = true
 							str = ""
 						end
-
-
 					end
 
 					if split then
-						table.insert(out, {type = "string", val = str, x = 0, y = current_y, w = current_x, h = chunk_height, old_chunk = chunk})
+						table.insert(out, {
+							type = "string",
+							val = str,
+							x = 0,
+							y = current_y,
+							w = current_x,
+							h = chunk_height,
+							old_chunk = chunk
+						})
 					end
 				end
-
 			end
 
 			if not split then
@@ -1742,7 +1727,6 @@ do
 				-- if i don't have this the chunk table will
 				-- continue to grow when invalidating itself
 				chunk.old_chunk = chunk
-
 				table.insert(out, chunk)
 			end
 		end
@@ -1753,26 +1737,23 @@ do
 	local function solve_max_width2(self, chunks)
 		-- solve max width once more but for every letter
 		-- note: slow and useless?
-
 		if self.LineWrap then
 			local current_y = 0
 			local last_y = 0
 			local chunk_height = 0 -- the height to advance y in
-
 			local line = {}
 
 			for i, chunk in ipairs(chunks) do
-
-
 				if chunk.h > chunk_height then
 					chunk_height = chunk.h
 				end
 
 				if last_y ~= chunk.y then
-					for k,v in pairs(line) do
+					for k, v in pairs(line) do
 						v.y = current_y
 						line[k] = nil
 					end
+
 					current_y = current_y + chunk_height
 					chunk_height = 0
 				end
@@ -1787,32 +1768,25 @@ do
 
 	local function newline_break(self, chunks)
 		-- break by newlines
-
 		local current_x = 0
 		local current_y = 0
 
 		for i, chunk in ipairs(chunks) do
-
-
 			-- is the previous line a newline?
 			local newline = chunks[i - 1] and chunks[i - 1].type == "newline"
 
 			if newline and chunk.type == "string" and not chunk.whitespace then
-
 				-- is this a new line or are we going to exceed the maximum width?
 				if newline or current_x + chunk.w >= self.MaxWidth then
 					-- reset the width
 					current_x = 0
-
 					-- advance y with the height of the tallest chunk
 					current_y = chunk.y
 				end
 
 				chunk.x = current_x
 				chunk.y = current_y
-
 				current_x = current_x + chunk.w
-
 			end
 		end
 
@@ -1824,16 +1798,14 @@ do
 		local width = 0
 		local height = 0
 		local last_y
-
 		local font = self.default_font.name
-		local color = Color(1,1,1,1)
+		local color = Color(1, 1, 1, 1)
 
 		local function build_chars(chunk)
 			if not chunk.chars then
 				EXT.SetFont(chunk.font)
 				chunk.chars = {}
 				local width = 0
-
 				local str = chunk.val
 
 				if str == "" and chunk.internal then
@@ -1853,13 +1825,12 @@ do
 						right = x + char_width,
 						top = y + char_height,
 						char = char,
-						i  = i,
+						i = i,
 						chunk = chunk,
 					}
 
 					chunk.chars[i].unicode = #char > 1
 					chunk.chars[i].length = #char
-
 					width = width + char_width
 				end
 
@@ -1878,17 +1849,13 @@ do
 		local chunk_line = {}
 		local line_height = 0
 		local line_width = 0
-
 		self.chars = {}
 		self.lines = {}
-
 		local char_line = 1
 		local char_line_pos = 0
 		local char_line_str = {}
 
 		for i, chunk in ipairs(chunks) do
-
-
 			-- this is for expressions to be use d like line.i+time()
 			chunk.exp_env = {
 				i = chunk.real_i,
@@ -1909,11 +1876,13 @@ do
 			end
 
 			local w = chunk.x + chunk.w
+
 			if w > width then
 				width = w
 			end
 
 			local h = chunk.y + chunk.h
+
 			if h > height then
 				height = h
 			end
@@ -1925,19 +1894,18 @@ do
 			line_width = line_width + chunk.w
 
 			if chunk.y ~= last_y then
-				line =  line + 1
+				line = line + 1
 				last_y = chunk.y
 
 				for i, chunk in pairs(chunk_line) do
 					--if type(chunk.val) == "string" and chunk.val:find("bigtable") then print("\n\n",chunk,"\n\n")  end
-			--		log(chunk.type == "string" and chunk.val or ( "<"..  chunk.type .. ">"))
+					--		log(chunk.type == "string" and chunk.val or ( "<"..  chunk.type .. ">"))
 					chunk.line_height = line_height
 					chunk.line_width = line_width
 					chunk_line[i] = nil
 				end
 
-		--		log(chunk.y - chunks[i+1].y, "\n")
-
+				--		log(chunk.y - chunks[i+1].y, "\n")
 				line_height = chunk.h
 				line_width = chunk.w
 			end
@@ -1948,29 +1916,26 @@ do
 			chunk.real_i = chunk.real_i or i -- expressions need this
 
 			if chunk.type == "custom" and not chunk.val.stop_tag then
-
 				-- only bother with this if theres post_draw or post_draw_chunks for performance
 				if CHATHUD_TAGS[chunk.val.type].post_draw or CHATHUD_TAGS[chunk.val.type].post_draw_chunks or CHATHUD_TAGS[chunk.val.type].pre_draw_chunks then
-
 					local current_width = 0
 					local current_height = 0
 					local width = 0
 					local height = 0
 					local last_y
-
 					local tag_type = chunk.val.type
 					local start_chunk = chunk
 					local line = {}
-
 					local start_found = 1
 					local stops = {}
 
-					for i = i+1, math.huge do
+					for i = i + 1, math.huge do
 						local chunk = chunks[i]
 
 						if chunk then
-
-							if not last_y then last_y = chunk.y end
+							if not last_y then
+								last_y = chunk.y
+							end
 
 							current_width = current_width + chunk.w
 
@@ -1998,9 +1963,7 @@ do
 									start_found = start_found + 1
 								else
 									table.insert(stops, chunk)
-									if start_found == 1 then
-										break
-									end
+									if start_found == 1 then break end
 								end
 							else
 								table.insert(line, chunk)
@@ -2022,10 +1985,8 @@ do
 						stop_chunk.chunks_inbetween = line
 						stop_chunk.start_chunk = chunk
 						stop_chunk.tag_stop_draw = true
-
 						local center_x = chunk.x + width / 2
 						local center_y = chunk.y + height / 2
-
 						chunk.tag_start_draw = true
 						chunk.tag_center_x = center_x
 						chunk.tag_center_y = center_y
@@ -2041,7 +2002,6 @@ do
 							chunk.tag_width = width
 							chunk.chunks_inbetween = line
 						end
-
 					end
 				else
 					chunk.tag_start_draw = true
@@ -2068,13 +2028,10 @@ do
 						})
 
 						char_line_pos = char_line_pos + 1
-
 						table.insert(char_line_str, char.char)
 					end
-
 				elseif chunk.type == "newline" then
 					local data = {}
-
 					data.w = chunk.w
 					data.h = chunk.h
 					data.x = chunk.x
@@ -2082,16 +2039,25 @@ do
 					data.right = chunk.x + chunk.w
 					data.top = chunk.y + chunk.h
 
-					table.insert(self.chars, {chunk = chunk, i = i, str = "\n", data = data, y = char_line, x = char_line_pos})
+					table.insert(self.chars, {
+						chunk = chunk,
+						i = i,
+						str = "\n",
+						data = data,
+						y = char_line,
+						x = char_line_pos
+					})
+
 					char_line = char_line + 1
 					char_line_pos = 0
-
 					table.insert(self.lines, table.concat(char_line_str, ""))
 
 					if table.clear then
 						table.clear(char_line_str)
 					else
-						for i = 1, #char_line_str do char_line_str[i] = nil end
+						for i = 1, #char_line_str do
+							char_line_str[i] = nil
+						end
 					end
 				end
 
@@ -2105,8 +2071,7 @@ do
 		end
 
 		for i, chunk in pairs(chunk_line) do
-	--		log(chunk.type == "string" and chunk.val or ( "<"..  chunk.type .. ">"))
-
+			--		log(chunk.type == "string" and chunk.val or ( "<"..  chunk.type .. ">"))
 			chunk.line_height = line_height
 			chunk.line_width = line_width
 			chunk_line[i] = nil
@@ -2114,12 +2079,9 @@ do
 
 		-- add the last line since there's probably not a newline at the very end
 		table.insert(self.lines, table.concat(char_line_str, ""))
-
 		self.text = table.concat(self.lines, "\n")
 		--timer.Measure("chars build")
-
-	--	log(line_height, "\n")
-
+		--	log(line_height, "\n")
 		self.line_count = line
 		self.width = width
 		self.height = height
@@ -2127,8 +2089,6 @@ do
 
 	local function align_y_axis(self, chunks)
 		for _, chunk in ipairs(chunks) do
-
-
 			-- align the y axis properly
 			if chunk.type ~= "newline" then
 				chunk.y = chunk.y - chunk.h + chunk.line_height
@@ -2140,7 +2100,7 @@ do
 		end
 
 		-- fix last newline..
-		local chunk = chunks[#chunks-1]
+		local chunk = chunks[#chunks - 1]
 
 		if chunk and chunk.type == "newline" then
 			chunk.y = chunk.y + chunk.line_height + chunk.h
@@ -2152,16 +2112,12 @@ do
 		local chunks = prepare_chunks(self)
 		chunks = split_by_space_and_punctation(self, chunks)
 		chunks = get_size_info(self, chunks)
-
-
 		chunks = solve_max_width(self, chunks)
 		chunks = string_wrap(self, chunks)
 		chunks = solve_max_width(self, chunks)
 		chunks = newline_break(self, chunks)
-
 		store_tag_info(self, chunks)
 		align_y_axis(self, chunks)
-
 		self.chunks = chunks
 
 		-- preserve caret positions
@@ -2186,7 +2142,6 @@ do
 end
 
 function META:GetNextCharacterClassPos(delta, next_space)
-
 	if next_space == nil then
 		next_space = not self.caret_shift_pos
 	end
@@ -2198,18 +2153,15 @@ function META:GetNextCharacterClassPos(delta, next_space)
 	end
 
 	if delta > 0 then
-
-		if pos > 0 and self.chars[pos-1] then
-			local type = EXT.GetCharType(self.chars[pos-1].str)
+		if pos > 0 and self.chars[pos - 1] then
+			local type = EXT.GetCharType(self.chars[pos - 1].str)
 
 			while pos > 0 and self.chars[pos] and EXT.GetCharType(self.chars[pos].str) == type do
 				pos = pos + 1
 			end
 		end
 
-		if pos >= #self.chars then
-			return pos, 1
-		end
+		if pos >= #self.chars then return pos, 1 end
 
 		if next_space then
 			while pos > 0 and self.chars[pos] and EXT.GetCharType(self.chars[pos].str) == "space" and self.chars[pos].str ~= "\n" do
@@ -2217,9 +2169,8 @@ function META:GetNextCharacterClassPos(delta, next_space)
 			end
 		end
 
-		return self.chars[pos-1].x, self.chars[pos-1].y
+		return self.chars[pos - 1].x, self.chars[pos - 1].y
 	else
-
 		-- this isn't really scintilla behaviour but I think it makes sense
 		if next_space then
 			while pos > 1 and EXT.GetCharType(self.chars[pos - 1].str) == "space" and self.chars[pos - 1].str ~= "\n" do
@@ -2235,21 +2186,16 @@ function META:GetNextCharacterClassPos(delta, next_space)
 			end
 		end
 
-		if pos == 1 then
-			return 0, 1
-		end
+		if pos == 1 then return 0, 1 end
 
-		return self.chars[pos+1].x, self.chars[pos+1].y
+		return self.chars[pos + 1].x, self.chars[pos + 1].y
 	end
 end
 
 function META:InsertString(str, skip_move, start_offset, stop_offset)
-
 	start_offset = start_offset or 0
 	stop_offset = stop_offset or 0
-
 	local sub_pos = self:GetCaretSubPos()
-
 	self:DeleteSelection(true)
 
 	do
@@ -2265,7 +2211,6 @@ function META:InsertString(str, skip_move, start_offset, stop_offset)
 		end
 
 		self:SelectStart(x, y)
-
 		local x, y = self.caret_pos.x, self.caret_pos.y
 
 		for i = 1, stop_offset do
@@ -2278,22 +2223,27 @@ function META:InsertString(str, skip_move, start_offset, stop_offset)
 		end
 
 		self:SelectStop(x, y)
-
 		self:DeleteSelection(true)
 	end
 
 	self.text = utf8.sub(self.text, 1, sub_pos - 1) .. str .. utf8.sub(self.text, sub_pos)
 
-	do -- fix chunks
+	-- fix chunks
+	do
 		local sub_pos = self.caret_pos.char.data.i
 		local chunk = self.caret_pos.char.chunk
 
 		-- if we're in a sea of non strings we need to make one
-		if chunk.internal or chunk.type ~= "string" and ((self.chunks[chunk.i-1] and self.chunks[chunk.i-1].type ~= "string") or (self.chunks[chunk.i+1] and self.chunks[chunk.i+1].type ~= "string")) then
-			table.insert(self.chunks, chunk.internal and #self.chunks or chunk.i , {type = "string", val = str})
+		if chunk.internal or chunk.type ~= "string" and ((self.chunks[chunk.i - 1] and self.chunks[chunk.i - 1].type ~= "string") or (self.chunks[chunk.i + 1] and self.chunks[chunk.i + 1].type ~= "string")) then
+			table.insert(self.chunks, chunk.internal and #self.chunks or chunk.i, {
+				type = "string",
+				val = str
+			})
+
 			self:Invalidate()
 		else
-			do -- sub the start
+			-- sub the start
+			do
 				local pos = chunk.i
 
 				while chunk.type ~= "string" and pos > 1 do
@@ -2326,23 +2276,19 @@ function META:InsertString(str, skip_move, start_offset, stop_offset)
 		end
 
 		self.real_x = x
-
 		self:SetCaretPos(x, y)
 	end
 
 	self:InvalidateEditedText()
-
 	self.caret_shift_pos = nil
 end
 
 function META:Backspace()
 	local sub_pos = self:GetCaretSubPos()
-
 	local prev_line = self.lines[self.caret_pos.y - 1]
 
 	if not self:DeleteSelection() and sub_pos ~= 1 then
 		if self.ControlDown then
-
 			local x, y = self:GetNextCharacterClassPos(-1, true)
 			x = x - 1
 
@@ -2354,7 +2300,6 @@ function META:Backspace()
 			self:SelectStart(self.caret_pos.x, self.caret_pos.y)
 			self:SelectStop(x, y)
 			self:DeleteSelection()
-
 			self.real_x = x
 		else
 			local x, y = self.caret_pos.x, self.caret_pos.y
@@ -2362,10 +2307,8 @@ function META:Backspace()
 			if self.chars[self.caret_pos.i - 1] then
 				x = self.chars[self.caret_pos.i - 1].x
 				y = self.chars[self.caret_pos.i - 1].y
-
 				self:SelectStart(self.caret_pos.x, self.caret_pos.y)
 				self:SelectStop(x, y)
-
 				self:DeleteSelection()
 			end
 		end
@@ -2383,12 +2326,9 @@ function META:Delete()
 
 		if self.ControlDown then
 			local x, y = self:GetNextCharacterClassPos(1, true)
-
 			x = x + 1
-
 			self:SelectStart(self.caret_pos.x, self.caret_pos.y)
 			self:SelectStop(x, y)
-
 			ok = self:DeleteSelection()
 		end
 
@@ -2398,7 +2338,6 @@ function META:Delete()
 			if self.chars[self.caret_pos.i + 1] then
 				x = self.chars[self.caret_pos.i + 1].x
 				y = self.chars[self.caret_pos.i + 1].y
-
 				self:SelectStart(self.caret_pos.x, self.caret_pos.y)
 				self:SelectStop(x, y)
 				self:DeleteSelection()
@@ -2417,27 +2356,18 @@ function META:InvalidateEditedText()
 end
 
 function META:GetSubPosFromPos(x, y)
-
-	if x == math.huge and y == math.huge then
-		return #self.chars
-	end
-
-	if x == 0 and y == 0 then
-		return 0
-	end
+	if x == math.huge and y == math.huge then return #self.chars end
+	if x == 0 and y == 0 then return 0 end
 
 	for sub_pos, char in pairs(self.chars) do
-		if char.x == x and char.y == y then
-			return sub_pos
-		end
+		if char.x == x and char.y == y then return sub_pos end
 	end
 
 	if x == math.huge then
 		for sub_pos, char in pairs(self.chars) do
-			if char.y == y and char.str == "\n" then
-				return sub_pos - 1
-			end
+			if char.y == y and char.str == "\n" then return sub_pos - 1 end
 		end
+
 		return self.chars[#self.chars]
 	end
 
@@ -2445,10 +2375,7 @@ function META:GetSubPosFromPos(x, y)
 		for i = 1, self.chars do
 			i = -i + #self.chars
 			local char = self.chars[i]
-
-			if char.x == x then
-				return sub_pos - 1
-			end
+			if char.x == x then return sub_pos - 1 end
 		end
 	end
 
@@ -2457,28 +2384,24 @@ end
 
 function META:Indent(back)
 	local sub_pos = self:GetCaretSubPos()
-
 	local select_start = self:GetSelectStart()
 	local select_stop = self:GetSelectStop()
 
 	if select_start and select_start.y ~= select_stop.y then
-
 		-- first select everything
 		self:SelectStart(0, select_start.y)
 		self:SelectStop(math.huge, select_stop.y)
-
 		-- and move the caret to bottom
 		self:SetCaretPos(select_stop.x, select_stop.y)
-
 		local select_start = self:GetSelectStart()
 		local select_stop = self:GetSelectStop()
-
 		local text = utf8.sub(self.text, select_start.sub_pos, select_stop.sub_pos)
 
 		if back then
 			if text:sub(1, 1) == "\t" then
 				text = text:sub(2)
 			end
+
 			text = text:gsub("\n\t", "\n")
 		else
 			text = "\t" .. text
@@ -2492,13 +2415,17 @@ function META:Indent(back)
 
 		self.text = utf8.sub(self.text, 1, select_start.sub_pos - 1) .. text .. utf8.sub(self.text, select_stop.sub_pos + 1)
 
-		do -- fix chunks
-			for i = select_start.char.chunk.i-1, select_stop.char.chunk.i-1 do
+		-- fix chunks
+		do
+			for i = select_start.char.chunk.i - 1, select_stop.char.chunk.i - 1 do
 				local chunk = self.chunks[i]
-				if chunk.type == "newline" then
 
-					if not back and self.chunks[i+1].type ~= "string" then
-						table.insert(self.chunks, i+1, {type = "string", val = "\t"})
+				if chunk.type == "newline" then
+					if not back and self.chunks[i + 1].type ~= "string" then
+						table.insert(self.chunks, i + 1, {
+							type = "string",
+							val = "\t"
+						})
 					else
 						local pos = i
 
@@ -2508,13 +2435,12 @@ function META:Indent(back)
 						end
 
 						if back then
-							if chunk.val:sub(1,1) == "\t" then
+							if chunk.val:sub(1, 1) == "\t" then
 								chunk.val = chunk.val:sub(2)
 							end
 						else
 							chunk.val = "\t" .. chunk.val
 						end
-
 					end
 				end
 			end
@@ -2523,7 +2449,7 @@ function META:Indent(back)
 		end
 	else
 		-- TODO
-		if back and self.text:sub(sub_pos-1, sub_pos-1) == "\t" then
+		if back and self.text:sub(sub_pos - 1, sub_pos - 1) == "\t" then
 			self:Backspace()
 		else
 			self:InsertString("\t")
@@ -2535,10 +2461,8 @@ end
 
 function META:Enter()
 	self:DeleteSelection(true)
-
 	local x = 0
 	local y = self.caret_pos.y
-
 	local cur_space = utf8.sub(self.lines[y], 1, self.caret_pos.x):match("^(%s*)") or ""
 	x = x + #cur_space
 
@@ -2547,19 +2471,16 @@ function META:Enter()
 	end
 
 	self:InsertString("\n" .. cur_space, true)
-
-
 	self:InvalidateEditedText()
-
 	self.real_x = x
-
 	self:SetCaretPos(x, y + 1, true)
 end
 
-do -- caret
+-- caret
+do
 	function META:SetCaretPos(x, y, later)
 		if later then
-			self.caret_later_pos = {x,y}
+			self.caret_later_pos = {x, y}
 		else
 			self.caret_pos = self:CaretFromPos(x, y)
 		end
@@ -2567,11 +2488,11 @@ do -- caret
 
 	function META:GetCaretSubPos()
 		local caret = self.caret_pos
+
 		return self:GetSubPosFromPos(caret.x, caret.y)
 	end
 
 	function META:CaretFromPixels(x, y)
-
 		if self.current_x then
 			x = x - self.current_x
 			y = y - self.current_y
@@ -2581,10 +2502,7 @@ do -- caret
 		local POS
 
 		for i, char in ipairs(self.chars) do
-			if
-				x > char.data.x and y > char.data.y and
-				x < char.data.right and y < char.data.top
-			then
+			if x > char.data.x and y > char.data.y and x < char.data.right and y < char.data.top then
 				POS = i
 				CHAR = char
 				break
@@ -2592,12 +2510,12 @@ do -- caret
 		end
 
 		-- if nothing was found we need to check things differently
-
 		if not CHAR then
 			local line = {}
 
 			for i, char in ipairs(self.chars) do
-				if y > char.data.y and y < char.data.top + 1 then -- todo: remove +1
+				-- todo: remove +1
+				if y > char.data.y and y < char.data.top + 1 then
 					table.insert(line, {i, char})
 				end
 			end
@@ -2619,6 +2537,7 @@ do -- caret
 			if not CHAR then
 				for i, v in ipairs(line) do
 					local i, char = unpack(v)
+
 					if x < char.data.x then
 						POS = i - 1
 						CHAR = self.chars[POS]
@@ -2632,7 +2551,6 @@ do -- caret
 			CHAR = self.chars[#self.chars]
 			POS = #self.chars
 		end
-
 
 		local data = CHAR.data
 
@@ -2652,10 +2570,8 @@ do -- caret
 	function META:CaretFromPos(x, y)
 		x = x or 0
 		y = y or 0
-
 		y = math.min(math.max(y, 1), #self.lines)
 		x = math.min(math.max(x, 0), self.lines[y] and utf8.length(self.lines[y]) or 0)
-
 		local CHAR
 		local POS
 
@@ -2694,7 +2610,6 @@ do -- caret
 			CHAR = self.chars[#self.chars] -- something is wrong!
 		end
 
-
 		local data = CHAR.data
 
 		return {
@@ -2711,7 +2626,6 @@ do -- caret
 	end
 
 	function META:AdvanceCaret(X, Y)
-
 		if self.ControlDown then
 			if X < 0 then
 				self:SetCaretPos(self:GetNextCharacterClassPos(-1))
@@ -2749,7 +2663,6 @@ do -- caret
 				x = utf8.length(self.lines[self.caret_pos.y - 1])
 				y = y - 1
 			end
-
 		else
 			if X == math.huge then
 				x = utf8.length(line)
@@ -2770,7 +2683,6 @@ do -- caret
 			end
 
 			self:SetCaretPos(x, y)
-
 			self.suppress_end_char = false
 		end
 
@@ -2778,7 +2690,8 @@ do -- caret
 	end
 end
 
-do -- selection
+-- selection
+do
 	function META:SelectStart(x, y)
 		self.select_start = self:CaretFromPos(x, y)
 	end
@@ -2789,7 +2702,7 @@ do -- selection
 
 	function META:GetSelectStart()
 		if self.select_start and self.select_stop then
-			if self.select_start.i == self.select_stop.i  then return end
+			if self.select_start.i == self.select_stop.i then return end
 
 			if self.select_start.i < self.select_stop.i then
 				return self.select_start
@@ -2820,7 +2733,6 @@ do -- selection
 	function META:SelectCurrentWord()
 		local x, y = self:GetNextCharacterClassPos(-1, false)
 		self:SelectStart(x - 1, y)
-
 		local x, y = self:GetNextCharacterClassPos(1, false)
 		self:SelectStop(x + 1, y)
 	end
@@ -2839,7 +2751,6 @@ do -- selection
 	function META:GetText(tags)
 		local start, stop = self:GetSelectStart(), self:GetSelectStop()
 		local caret = self.caret_pos
-
 		self:SelectAll()
 		local str = self:GetSelection(tags)
 
@@ -2863,7 +2774,6 @@ do -- selection
 
 	function META:GetSelection(tags)
 		local out = {}
-
 		local START = self:GetSelectStart()
 		local STOP = self:GetSelectStop()
 
@@ -2910,18 +2820,17 @@ do -- selection
 		local stop = self:GetSelectStop()
 
 		if start then
-
 			if not skip_move then
 				self:SetCaretPos(start.x, start.y)
 			end
 
 			self.text = utf8.sub(self.text, 1, start.sub_pos - 1) .. utf8.sub(self.text, stop.sub_pos)
-
 			self:Unselect()
 
-			do -- fix chunks
-
+			-- fix chunks
+			do
 				local need_fix = false
+
 				for i = start.char.chunk.i + 1, stop.char.chunk.i - 1 do
 					if not self.chunks[i].internal then
 						self.chunks[i] = nil
@@ -2967,10 +2876,10 @@ do -- selection
 
 		return false
 	end
-
 end
 
-do -- clipboard
+-- clipboard
+do
 	function META:Copy(tags)
 		return self:GetSelection(tags)
 	end
@@ -2978,18 +2887,17 @@ do -- clipboard
 	function META:Cut()
 		local str = self:GetSelection()
 		self:DeleteSelection()
+
 		return str
 	end
 
 	function META:Paste(str)
 		str = str:gsub("\r", "")
-
 		print(str)
-
 		self:DeleteSelection()
 
 		if #str > 0 then
-			self:InsertString(str, (str:find("\n")))
+			self:InsertString(str, str:find("\n"))
 			self:InvalidateEditedText()
 
 			if str:find("\n") then
@@ -2999,8 +2907,8 @@ do -- clipboard
 	end
 end
 
-do -- input
-
+-- input
+do
 	function META:OnCharInput(char)
 		self:InsertString(char)
 	end
@@ -3010,14 +2918,12 @@ do -- input
 		down = true,
 		left = true,
 		right = true,
-
 		home = true,
 		["end"] = true,
 	}
 
 	function META:OnKeyInput(key, press)
 		if not self.Editable or #self.chunks == 0 then return end
-
 		if not self.caret_pos then return end
 
 		do
@@ -3083,7 +2989,8 @@ do -- input
 			self:Delete()
 		end
 
-		do -- selecting
+		-- selecting
+		do
 			if key ~= "tab" then
 				if self.ShiftDown then
 					if self.caret_shift_pos then
@@ -3099,23 +3006,15 @@ do -- input
 
 	function META:OnMouseInput(button, press, x, y)
 		if #self.chunks == 0 then return end
-
 		local chunk = self:CaretFromPixels(x, y).char.chunk
 
 		if chunk.type == "string" and chunk.chunks_inbetween then
 			chunk = chunk.chunks_inbetween[1]
 		end
 
-		if
-			chunk.type == "custom" and
-			call_tag_func(self, chunk, "mouse", button, press, x, y) == false
-		then
-			return
-		end
+		if chunk.type == "custom" and call_tag_func(self, chunk, "mouse", button, press, x, y) == false then return end
 
 		if button == "button_1" then
-
-
 			if press then
 				if self.last_click and self.last_click > os.clock() then
 					self.times_clicked = (self.times_clicked or 1) + 1
@@ -3131,7 +3030,7 @@ do -- input
 					end
 
 					self:SelectCurrentWord()
-				elseif self.times_clicked == 3  then
+				elseif self.times_clicked == 3 then
 					self:SelectCurrentLine()
 				end
 
@@ -3143,7 +3042,6 @@ do -- input
 				self.select_start = self:CaretFromPixels(x, y)
 				self.select_stop = nil
 				self.mouse_selecting = true
-
 				self.caret_pos = self:CaretFromPixels(x, y)
 
 				if self.caret_pos and self.caret_pos.char then
@@ -3161,14 +3059,16 @@ do -- input
 	end
 end
 
-do -- drawing
-
+-- drawing
+do
 	function META:Draw(x, y, w, h, no_translation)
 		if gmod then
 			EXT.CreateMatrix(true)
+
 			if not no_translation then
 				EXT.TranslateMatrix(x, y)
 			end
+
 			EXT.PushMatrix()
 		end
 
@@ -3187,29 +3087,22 @@ do -- drawing
 
 		if self.caret_later_pos then
 			self:SetCaretPos(unpack(self.caret_later_pos))
-			self.caret_later_pos  = nil
+			self.caret_later_pos = nil
 		end
 
 		-- reset font and color for every line
 		EXT.SetFont(self.default_font.name)
 		EXT.SetColor(1, 1, 1, 1)
-
 		local remove_these = {}
 		local start_remove = false
 		local started_tags = {}
 
 		for i, chunk in ipairs(self.chunks) do
-
 			if not chunk.internal then
 				if not chunk.x then return end -- UMM
 
-				if
-					chunk.x < w and chunk.y < h and
-					chunk.x >= 0 and chunk.y >= 0 or
+				if chunk.x < w and chunk.y < h and chunk.x >= 0 and chunk.y >= 0 or (chunk.type == "start_fade" or chunk.type == "end_fade") or start_remove then
 					-- these are important since they will remove anything in between
-					(chunk.type == "start_fade" or chunk.type == "end_fade") or
-					start_remove
-				then
 					if chunk.type == "start_fade" then
 						chunk.alpha = math.min(math.max(chunk.val - os.clock(), 0), 1) ^ 5
 						EXT.SetAlphaMultiplier(chunk.alpha)
@@ -3228,10 +3121,9 @@ do -- drawing
 					elseif chunk.type == "string" then
 						EXT.SetTextPos(chunk.x, chunk.y)
 						EXT.DrawText(chunk.val)
-						--if gmod then EXT.SetTextPos(chunk.x, chunk.y)  end -- GRRRRR
 					elseif chunk.type == "color" then
+						--if gmod then EXT.SetTextPos(chunk.x, chunk.y)  end -- GRRRRR
 						local c = chunk.val
-
 						EXT.SetColor(c.r, c.g, c.b, c.a)
 					elseif chunk.type == "tag_stopper" then
 						for _, chunks in pairs(started_tags) do
@@ -3250,7 +3142,6 @@ do -- drawing
 							end
 						end
 					elseif chunk.type == "custom" then
-
 						-- init
 						if not chunk.init_called and not chunk.val.stop_tag then
 							call_tag_func(self, chunk, "init")
@@ -3265,7 +3156,6 @@ do -- drawing
 						if chunk.tag_start_draw then
 							if call_tag_func(self, chunk, "pre_draw", chunk.x, chunk.y) then
 								--print("pre_draw", chunk.val.type, chunk.i)
-
 								-- only if there's a post_draw
 								if CHATHUD_TAGS[chunk.val.type].post_draw then
 									table.insert(started_tags[chunk.val.type], chunk)
@@ -3292,7 +3182,6 @@ do -- drawing
 					-- this is not only for tags. a tag might've been started without being ended
 					if chunk.tag_stop_draw then
 						--print("post_draw_chunks", chunk.type, chunk.i, chunk.chunks_inbetween, chunk.start_chunk.val.type)
-
 						if table.remove(started_tags[chunk.start_chunk.val.type]) then
 							--print("post_draw", chunk.start_chunk.val.type, chunk.i)
 							call_tag_func(self, chunk.start_chunk, "post_draw", chunk.start_chunk.x, chunk.start_chunk.y)
@@ -3314,18 +3203,16 @@ do -- drawing
 		for _, chunks in pairs(started_tags) do
 			for _, chunk in pairs(chunks) do
 				--print("force stop", chunk.val.type, chunk.i)
-
 				call_tag_func(self, chunk, "post_draw", chunk.x, chunk.y)
 			end
 		end
 
 		if next(remove_these) then
-			for k,v in pairs(remove_these) do
+			for k, v in pairs(remove_these) do
 				self.chunks[k] = nil
 			end
 
 			EXT.FixIndices(self.chunks)
-
 			self:Invalidate()
 		end
 
@@ -3333,7 +3220,6 @@ do -- drawing
 		self.current_y = y
 		self.current_width = w
 		self.current_height = h
-
 		self:DrawSelection()
 
 		if gmod then
@@ -3342,7 +3228,6 @@ do -- drawing
 	end
 
 	function META:DrawSelection()
-
 		if self.mouse_selecting then
 			local x, y = EXT.GetMousePos()
 			local caret = self:CaretFromPixels(x, y, true)
@@ -3369,6 +3254,7 @@ do -- drawing
 
 			for i = START.i, END.i - 1 do
 				local char = self.chars[i]
+
 				if char then
 					local data = char.data
 					EXT.DrawRect(data.x, data.y, data.w, data.h)
@@ -3385,7 +3271,10 @@ do -- drawing
 	end
 
 	function META:DrawLineHighlight(y)
-		do return end
+		do
+			return
+		end
+
 		local start_chunk = self:CaretFromPos(0, y).char.chunk
 		EXT.SetColor(1, 1, 1, 0.1)
 		EXT.DrawRect(start_chunk.x, start_chunk.y, self.width, start_chunk.line_height)
@@ -3399,6 +3288,7 @@ do -- drawing
 
 			if self.caret_pos.char.chunk.internal then
 				local chunk = self.chunks[self.caret_pos.char.chunk.i - 1]
+
 				if chunk then
 					x = chunk.right
 					y = chunk.y
@@ -3412,16 +3302,16 @@ do -- drawing
 
 			EXT.SetWhiteTexture()
 			self.blink_offset = self.blink_offset or 0
-			EXT.SetColor(1, 1, 1, (EXT.GetTime() - self.blink_offset)%0.5 > 0.25 and 1 or 0)
+			EXT.SetColor(1, 1, 1, (EXT.GetTime() - self.blink_offset) % 0.5 > 0.25 and 1 or 0)
 			EXT.DrawRect(x, y, 1, h)
 		end
 	end
 end
 
-do -- test case
+-- test case
+do
 	function META:Test()
 		self:AddString("Hello markup test!\n\n?????\n????????????\n??? ??? ??? ?????")
-
 		self:AddString[[
 
 
@@ -3433,20 +3323,26 @@ markup todo:
 	the ability to edit (remove and copy) custom tags that have a size (like textures)
 	alignment tags
 		]]
-
 		local small_font = "markup_small"
-		EXT.CreateFont(small_font, {size = 8, read_speed = 100})
+
+		EXT.CreateFont(small_font, {
+			size = 8,
+			read_speed = 100
+		})
 
 		self:AddFont(small_font)
 		self:AddString("\nhere's some text in chinese:\n??????????,???????????????Unicode??????????!\n")
 		self:AddString("some normal string again\n")
 		self:AddString("and another one\n")
-
 		self:AddFont("markup_default")
 		self:AddString("back to normal!\n\n")
-
 		local small_font = "markup_small4"
-		EXT.CreateFont(small_font, {size = 14, read_speed = 100, monospace = true})
+
+		EXT.CreateFont(small_font, {
+			size = 14,
+			read_speed = 100,
+			monospace = true
+		})
 
 		self:AddFont(small_font)
 		self:AddString("monospace\n")
@@ -3457,9 +3353,10 @@ markup todo:
 		do
 			local icons = file.Find("materials/icon16/*", "GAME")
 			local tags = ""
+
 			for i = 1, 32 do
 				local path = table.Random(icons)
-				tags = tags .. ("<texture=icon16/%s>%s"):format(path, i%16 == 0 and "\n" or "")
+				tags = tags .. ("<texture=icon16/%s>%s"):format(path, i % 16 == 0 and "\n" or "")
 			end
 
 			self:AddString(tags, true)
@@ -3473,25 +3370,32 @@ markup todo:
 <color=0.5,0.62,0.75,1>	end
 end
 	]], true)
-
 		local big_font = "markup_test_big"
-		EXT.CreateFont(big_font, {font = "arial", size = 30, read_speed = 100})
+
+		EXT.CreateFont(big_font, {
+			font = "arial",
+			size = 30,
+			read_speed = 100
+		})
 
 		self:AddFont(big_font)
-		self:AddColor(Color(0,255,0,255))
+		self:AddColor(Color(0, 255, 0, 255))
 		self:AddString("This font is huge and green for some reason!\n")
 		self:AddColor(Color(255, 255, 255, 255))
 		self:AddFont("markup_default")
-
 		local big_font = "markup_big2"
-		EXT.CreateFont(big_font, {font = "verdana", size = 20, read_speed = 100})
+
+		EXT.CreateFont(big_font, {
+			font = "verdana",
+			size = 20,
+			read_speed = 100
+		})
 
 		self:AddFont(big_font)
-		self:AddColor(Color(255,0,255,255))
+		self:AddColor(Color(255, 0, 255, 255))
 		self:AddString("This one is slightly smaller bug with a different font\n")
 		self:AddColor(Color(255, 255, 255, 255))
 		self:AddFont("markup_default")
-
 		--self:AddString("rotated grin<rotate=90>:D</rotate> \n", true)
 		--self:AddString("that's <wrong>WRONG</wrong>\n", true)
 		self:AddString("Hey look it's gordon freeman!\n")
@@ -3502,7 +3406,6 @@ end
 		self:AddString("<hsv=[t()+input.rand/10],[(t()+input.rand)/100]>", true)
 		self:AddString("<rotate=1>i'm not sure it seems to be</rotate><rotate=-1>some kind of</rotate><physics=0,0>interference</physics>\n", true)
 		self:AddString("<scale=[((t()/10)%5^5)+1],1>you don't say</scale>\n", true)
-
 		self:AddString("smileys?")
 		self:AddString("\n")
 		self:AddString("<rotate=90>:D</rotate>", true)
@@ -3511,15 +3414,19 @@ end
 		self:AddString("<rotate=90>:P</rotate>", true)
 		self:AddString("<rotate=90>:O</rotate>", true)
 		self:AddString("<rotate=90>:]</rotate>", true)
-		self:AddString("<rotate=90></rotate>", true)-- FIX ME
+		self:AddString("<rotate=90></rotate>", true) -- FIX ME
 		self:AddString("\n")
 		self:AddString("maybe..\n\n")
-
 		local big_font = "markup_big3"
-		EXT.CreateFont(big_font, {font = "looney", size = 50, read_speed = 100})
+
+		EXT.CreateFont(big_font, {
+			font = "looney",
+			size = 50,
+			read_speed = 100
+		})
+
 		self:AddFont(big_font)
 		local str = "That's all folks!"
-
 		self:AddFont("markup_default")
 		self:AddString("\n")
 		self:AddString([[
@@ -3529,8 +3436,8 @@ Self publishing
 	end
 end
 
-if gmod then -- register a panel
-
+-- register a panel
+if gmod then
 	function MarkupTest()
 		if markup_frame and markup_frame:IsValid() then
 			markup_frame:Remove()
@@ -3539,9 +3446,7 @@ if gmod then -- register a panel
 		local frame = vgui.Create("DFrame")
 		local scroll = vgui.Create("DScrollPanel", frame)
 		local markup = vgui.Create("Markup", scroll)
-
 		scroll:Dock(FILL)
-
 		markup:Test()
 
 		function frame.PerformLayout(...)
@@ -3551,17 +3456,14 @@ if gmod then -- register a panel
 
 		frame:SetSize(1000, 1000)
 		frame:SetSizable(true)
-
 		markup_frame = frame
 	end
 
 	local PANEL = {}
 
-	for k,v in pairs(META) do
+	for k, v in pairs(META) do
 		if type(v) == "function" then
-			PANEL[k] = function(s, ...)
-				return s.markup[k](s.markup, ...)
-			end
+			PANEL[k] = function(s, ...) return s.markup[k](s.markup, ...) end
 		end
 	end
 
@@ -3585,19 +3487,15 @@ if gmod then -- register a panel
 
 	function PANEL:Paint(w, h)
 		local markup = self.markup
-
 		markup:SetShiftDown(input.IsKeyDown(KEY_LSHIFT) or input.IsKeyDown(KEY_RSHIFT))
 		markup:SetControlDown(input.IsKeyDown(KEY_LCONTROL) or input.IsKeyDown(KEY_RCONTROL))
-
 		-- this is needed for proper mouse coordinates
 		local x, y = self:LocalToScreen(0, 0)
-
 		markup:Draw(x, y, w, self.accurate_height or h, true)
 	end
 
 	function PANEL:PerformLayout()
 		self.markup:SetMaxWidth(self:GetWide())
-
 		local parent = self:GetParent() or NULL
 		local h = parent:GetTall()
 
@@ -3605,13 +3503,15 @@ if gmod then -- register a panel
 			if parent:GetTall() < h then
 				h = parent:GetTall()
 			end
+
 			parent = parent:GetParent() or NULL
 		end
 
 		self.accurate_height = h + 100 -- optimizations for scroll panels
 	end
 
-	do -- mouse input
+	-- mouse input
+	do
 		local translate = {
 			[MOUSE_LEFT] = "button_1",
 			[MOUSE_RIGHT] = "button_2",
@@ -3619,8 +3519,8 @@ if gmod then -- register a panel
 
 		function PANEL:OnMousePressed(button)
 			self.markup:OnMouseInput(translate[button], true, gui.MousePos())
-
 			local pnl = self.text_entry_hack
+
 			if pnl:IsValid() then
 				pnl:MakePopup()
 				pnl:RequestFocus()
@@ -3630,10 +3530,10 @@ if gmod then -- register a panel
 		function PANEL:OnMouseReleased(button)
 			self.markup:OnMouseInput(translate[button], false, gui.MousePos())
 		end
-
 	end
 
-	do -- keyboard input
+	-- keyboard input
+	do
 		local translate = {
 			[KEY_BACKSPACE] = "backspace",
 			[KEY_TAB] = "tab",
@@ -3661,7 +3561,6 @@ if gmod then -- register a panel
 
 		function PANEL:OnKeyInput(key)
 			if self.OnKey and self:OnKey(key) == false then return end
-
 			key = translate[key]
 
 			if key then
@@ -3671,7 +3570,6 @@ if gmod then -- register a panel
 
 		function PANEL:OnCharInput(char)
 			if self.OnChar and self:OnChar(char) == false then return end
-
 			self.markup:OnCharInput(char)
 		end
 	end
@@ -3682,16 +3580,16 @@ if gmod then -- register a panel
 		end
 
 		local pnl = vgui.Create("DTextEntry", self)
-
 		pnl:MakePopup()
 		pnl:RequestFocus()
-		pnl:SetSize(0,0)
+		pnl:SetSize(0, 0)
 		pnl:SetPos(self:LocalToScreen())
 		pnl:SetHistoryEnabled(false)
 		pnl:SetAllowNonAsciiCharacters(true)
 
 		pnl.OnTextChanged = function(pnl)
 			local str = pnl:GetValue()
+
 			if str ~= "" then
 				self:OnCharInput(str)
 				pnl:SetText("")

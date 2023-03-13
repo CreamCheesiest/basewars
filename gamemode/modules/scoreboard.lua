@@ -141,7 +141,7 @@ if CLIENT then
         local ColumnGap_Half = ColumnGap_Width * .5
         Scoreboard.NamesListPanel = vgui.Create("DPanelList")
         Scoreboard.NamesListPanel.PlayerBars = {}
-        Scoreboard.NamesListPanel.AdminBars = {}    
+        Scoreboard.NamesListPanel.AdminBars = {}
         Scoreboard.NamesListPanel.NextRefresh = CurTime() + 3
         Scoreboard.NamesListPanel:SetParent(Scoreboard)
         Scoreboard.NamesListPanel:SetPos(Scoreboard_XGap, Scoreboard_YGap + Scoreboard.TitlePanel:GetTall() + Scoreboard_TitleToNamesGap + InfoBar_Height)
@@ -184,7 +184,7 @@ if CLIENT then
                 muteButton:SetSize(100, y)
                 muteButton:Dock(LEFT)
                 function muteButton:DoClick()
-                    if(LocalPlayer():IsAdmin()) then 
+                    if(LocalPlayer():IsAdmin()) then
                         net.Start("Bw_MutePlayer")
                         net.WriteEntity(Scoreboard.NamesListPanel.AdminBars[k])
                         net.SendToServer()
@@ -264,13 +264,13 @@ if CLIENT then
                     net.SendToServer()
                 end
                 if LocalPlayer():IsSuperAdmin() then
-                    playerType = "superAdmin"
+                    local playerType = "superAdmin"
                     self.AdminBars[ID]:SetAlpha(255)
                 elseif LocalPlayer():IsAdmin() then
-                    playerType = "admin"
+                    local playerType = "admin"
                     self.AdminBars[ID]:SetAlpha(255)
                 else 
-                    playerType = "user"
+                    local playerType = "user"
                     self.AdminBars[ID]:SetAlpha(0)
                 end 
                 self:AddItem(self.AdminBars[ID]) 
@@ -281,6 +281,7 @@ if CLIENT then
                 bringButton:SetVisible(config[playerType].bring)
                 gotoButton:SetVisible(config[playerType].goto)
                 returnButton:SetVisible(config[playerType].returnButton)
+                
             end
         end
         Scoreboard.NamesListPanel.Think = function(self)

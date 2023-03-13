@@ -5,7 +5,7 @@
 - [ ] Visual
     - [x] Fix Interaction HUD (it only looks okay after a reload of the script... what?)
     - [ ] Set correct holdtypes on Twitch SWEPs
-    
+
 ---
 ####Normal
 - [x] Visual
