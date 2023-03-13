@@ -1098,37 +1098,37 @@ BaseWars.SpawnList.Models.Entities["Printers (T2)"] = {
 		Model = "models/props_lab/reciever01a.mdl",
 		Price = 60000,
 		ClassName = "bw_printer_darkmatter",
-		Level = 100
+		Level = 110
 	},
 	["Red Matter Printer"] = BaseWars.GSL{
 		Model = "models/props_lab/reciever01a.mdl",
 		Price = 66000,
 		ClassName = "bw_printer_redmatter",
-		Level = 120
+		Level = 140
 	},
 	["Monolith Printer"] = BaseWars.GSL{
 		Model = "models/props_lab/reciever01a.mdl",
 		Price = 72000,
 		ClassName = "bw_printer_monolith",
-		Level = 140
+		Level = 170
 	},
 	["Quantum Printer"] = BaseWars.GSL{
 		Model = "models/props_lab/reciever01a.mdl",
 		Price = 78000,
 		ClassName = "bw_printer_quantum",
-		Level = 160
+		Level = 200
 	},
 	["Spacetime Printer"] = BaseWars.GSL{
 		Model = "models/props_lab/reciever01a.mdl",
 		Price = 84000,
 		ClassName = "bw_printer_spacetime",
-		Level = 180
+		Level = 230
 	},
 	["Universe Printer"] = BaseWars.GSL{
 		Model = "models/props_lab/reciever01a.mdl",
 		Price = 90000,
 		ClassName = "bw_printer_universe",
-		Level = 200
+		Level = 260
 	},
 }
 
