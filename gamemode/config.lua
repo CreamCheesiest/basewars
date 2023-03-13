@@ -1210,42 +1210,42 @@ BaseWars.SpawnList.Models.Fun["Synthesizer"] = {
 BaseWars.SpawnList.Models.Loadout["Drugs"] = {
 	["DoubleJump"] = BaseWars.GSL{
 		Drug = true,
-		Price = 1000000,
+		Price = 100000,
 		ClassName = "DoubleJump"
 	},
 	["Regen"] = BaseWars.GSL{
 		Drug = true,
-		Price = 1000000,
+		Price = 100000,
 		ClassName = "Regen"
 	},
 	["PainKiller"] = BaseWars.GSL{
 		Drug = true,
-		Price = 1000000,
+		Price = 100000,
 		ClassName = "PainKiller"
 	},
 	["Steroid"] = BaseWars.GSL{
 		Drug = true,
-		Price = 1000000,
+		Price = 100000,
 		ClassName = "Steroid"
 	},
 	["Adrenaline"] = BaseWars.GSL{
 		Drug = true,
-		Price = 1000000,
+		Price = 100000,
 		ClassName = "Adrenaline"
 	},
 	["Rage"] = BaseWars.GSL{
 		Drug = true,
-		Price = 1000000,
+		Price = 100000,
 		ClassName = "Rage"
 	},
 	["Shield"] = BaseWars.GSL{
 		Drug = true,
-		Price = 1000000,
+		Price = 100000,
 		ClassName = "Shield"
 	},
 	["Antidote"] = BaseWars.GSL{
 		Drug = true,
-		Price = 1000000,
+		Price = 100000,
 		ClassName = "Antidote"
 	},
 }
