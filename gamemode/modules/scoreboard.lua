@@ -3,7 +3,41 @@ MODULE.Author = "CreamCheese"
 tag = "BaseWars.Scoreboard"
 
 if CLIENT then
+
   ----------LAUNCH SEQUENCE----------
+
+  local config = {
+    superAdmin = {
+        mute = true,
+        kick = true,
+        ban = true,
+        jail = true,
+        bring = true,
+        goto = true,
+        returnButton = true,
+    },
+    admin = {
+        mute = true,
+        kick = false,
+        ban = false,
+        jail = false,
+        bring = true,
+        goto = false,
+        returnButton = true,
+    },
+    user = {
+        mute = false,
+        kick = false,
+        ban = false,
+        jail = false,
+        bring = false,
+        goto = false,
+        returnButton = false,
+    },
+}
+
+
+
     local CreateScoreboard = function()
         local Scoreboard_Roundness = 8
         local Scoreboard_Color = Color(0, 0, 0, 220)
@@ -142,6 +176,7 @@ if CLIENT then
                 self.AdminBars[ID] = vgui.Create("DPanel")
                 self.AdminBars[k] = Player(pl:UserID())
                 self.AdminBars[ID]:SetPos(0,0)
+                self.AdminBars[ID]:SetAlpha(0)
                 self.AdminBars[ID]:SetParent(Scoreboard.NamesListPanel)
                 self.AdminBars[ID]:SetSize(20,y)
                 local muteButton = vgui.Create("DButton", self.AdminBars[ID])
@@ -229,32 +264,23 @@ if CLIENT then
                     net.SendToServer()
                 end
                 if LocalPlayer():IsSuperAdmin() then
-                    self:AddItem(self.AdminBars[ID])
-                    muteButton:SetVisible(true)
-                    kickButton:SetVisible(true)
-                    banButton:SetVisible(true)
-                    jailButton:SetVisible(true)
-                    bringButton:SetVisible(true)
-                    gotoButton:SetVisible(true)
-                    returnButton:SetVisible(true)
-                elseif (LocalPlayer():IsAdmin()) then 
-                    self:AddItem(self.AdminBars[ID])
-                    jailButton:SetVisible(true)
-                    banButton:SetVisible(false)
-                    muteButton:SetVisible(true)
-                    bringButton:SetVisible(true)
-                    returnButton:SetVisible(true)
-                    gotoButton:SetVisible(true)
-                else
-                    self.AdminBars[ID]:SetVisible(false)
-                    muteButton:SetVisible(false)
-                    kickButton:SetVisible(false)
-                    banButton:SetVisible(false)
-                    jailButton:SetVisible(false)
-                    bringButton:SetVisible(false)
-                    gotoButton:SetVisible(false)
-                    returnButton:SetVisible(false)
-                end
+                    playerType = "superAdmin"
+                    self.AdminBars[ID]:SetAlpha(255)
+                elseif LocalPlayer():IsAdmin() then
+                    playerType = "admin"
+                    self.AdminBars[ID]:SetAlpha(255)
+                else 
+                    playerType = "user"
+                    self.AdminBars[ID]:SetAlpha(0)
+                end 
+                self:AddItem(self.AdminBars[ID]) 
+                muteButton:SetVisible(config[playerType].mute)
+                kickButton:SetVisible(config[playerType].kick)
+                banButton:SetVisible(config[playerType].ban)
+                jailButton:SetVisible(config[playerType].jail)
+                bringButton:SetVisible(config[playerType].bring)
+                gotoButton:SetVisible(config[playerType].goto)
+                returnButton:SetVisible(config[playerType].returnButton)
             end
         end
         Scoreboard.NamesListPanel.Think = function(self)
