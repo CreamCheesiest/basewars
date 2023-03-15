@@ -871,6 +871,8 @@ local function MakeMenu(mainFrame, tabPanel, ftionTab, raidsTab, bountyTab, rule
         10: Use common-sense.
 
         11: All judgements made by admins are final.
+		
+		12: Third partying is allowed, however, you cannot help an attacker in raid in any form on purpose.
 
         ]]
 		rulesLabel2:SetFont("Trebuchet18")

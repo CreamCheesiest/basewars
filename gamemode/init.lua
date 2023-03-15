@@ -163,6 +163,10 @@ function GM:EntityTakeDamage(ent, dmginfo)
 	local Player = BaseWars.Ents:ValidPlayer(ent)
 	local Owner = BaseWars.Ents:ValidOwner(ent)
 
+	if ent:IsNPC() then
+		return false
+	end
+
 	if not Player and not Owner then
 		dmginfo:ScaleDamage(0)
 		dmginfo:SetDamage(0)

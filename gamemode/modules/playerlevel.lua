@@ -36,8 +36,8 @@ end
 PLAYER.GetXP = Curry(MODULE.GetXP)
 
 function MODULE:GetXPNextLevel(ply)
-	local n = ply:GetLevel()
-
+	local n = ply:GetLevel() * 3
+	
 	return (500 * n) + 500
 end
 

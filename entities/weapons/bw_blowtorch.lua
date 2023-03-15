@@ -56,7 +56,12 @@ function SWEP:PrimaryAttack()
 
 	if SERVER then
 		if IsValid(trace.Entity) then
-			trace.Entity:TakeDamageInfo(dmginfo)
+			if trace.Entity:IsPlayer() then
+				dmginfo:SetDamage(5)
+				trace.Entity:TakeDamageInfo(dmginfo)
+			else
+				trace.Entity:TakeDamageInfo(dmginfo)
+			end
 		end
 	end
 

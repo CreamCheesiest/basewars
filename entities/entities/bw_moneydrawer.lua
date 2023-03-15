@@ -12,7 +12,7 @@ ENT.Capacity = 2000000000
 local Clamp = math.Clamp
 
 function ENT:GSAT(slot, name, min, max)
-	self:NetworkVar("Int", slot, name)
+	self:NetworkVar("Float", slot, name)
 
 	local getVar = function(minMax)
 		if self[minMax] and isfunction(self[minMax]) then return self[minMax](self) end

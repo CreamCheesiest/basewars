@@ -270,7 +270,7 @@ BaseWars.Commands.AddCommand({"sellall"}, function(ply)
 	local entities = ents.FindByClass("bw_*")
 
 	for _, ent in ipairs(entities) do
-		if ent:CPPIGetOwner() == ply then
+		if ent:CPPIGetOwner() == ply and not ply:InRaid() then
 			BaseWars.UTIL.PayOut(ent, ply)
 			ent:Remove()
 		end

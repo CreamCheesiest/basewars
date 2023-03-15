@@ -18,8 +18,8 @@ BaseWars.Config = {
 			Duration = 120,
 		},
 		Steroid = {
-			Walk = 180 * 2,
-			Run = 300 * 2,
+			Walk = 180 * 1.4,
+			Run = 300 * 1.4,
 			Duration = 120,
 		},
 		Regen = {
@@ -793,7 +793,7 @@ BaseWars.SpawnList.Models.Loadout["Sniper Rifles - T1"] = {
 	["G3SG1"] = BaseWars.GSL{
 		Gun = true,
 		Model = "models/weapons/w_snip_g3sg1.mdl",
-		Price = 125000,
+		Price = 1250000,
 		ClassName = "arc9_go_g1sg3",
 		Level = 250
 	},
