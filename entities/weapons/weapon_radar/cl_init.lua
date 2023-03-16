@@ -107,14 +107,6 @@ local function DrawDots(w, h)
 					offscreenbits = bit.bor(offscreenbits, 8)
 				end
 			end
-
-			-- if(!isJammed) then
-			-- elseif( IsJammed and v:GetClass() == 'bw_base_jammer' ) then
-			--     if  nextglitch <= CurTime() then
-			--         nextglitch = CurTime() + math.random( 5, 8 ) / 10
-			--         glitchamount = 0
-			--     end
-			-- end
 			surface.SetDrawColor(0, 0, 0, 255)
 			surface.DrawTexturedRect(w * b_c_x - dotSizeX / 2 + rndx + pos.x * w * 0.80, h * b_c_y - dotSizeY / 2 + rndy + pos.y * (h * b_c_y) * 2, dotSizeX, dotSizeY)
 		end
@@ -179,21 +171,21 @@ function DrawMotionTracker()
 		return
 	end
 
-	-- if !snd_Noise then
-	--     snd_Noise = CreateSound( LocalPlayer(), 'weapons/motiontracker_noise_loop.wav' )
-	--     snd_Noise:Play()
-	--     snd_NoiseActive = true
-	--     snd_NoiseRestart = CurTime() + SoundDuration( 'weapons/motiontracker_noise_loop.wav' )
-	-- end
-	-- if !snd_NoiseActive then
-	--     snd_NoiseActive = true
-	--     snd_Noise:Play()
-	-- end
-	-- if snd_NoiseRestart <= CurTime() then
-	--     snd_Noise:Stop()
-	--     snd_Noise:Play()
-	--     snd_NoiseRestart = CurTime() + SoundDuration( 'weapons/motiontracker_noise_loop.wav' )
-	-- end
+	if !snd_Noise then
+	    snd_Noise = CreateSound( LocalPlayer(), 'weapons/motiontracker_noise_loop.wav' )
+	    snd_Noise:Play()
+	    snd_NoiseActive = true
+	    snd_NoiseRestart = CurTime() + SoundDuration( 'weapons/motiontracker_noise_loop.wav' )
+	end
+	if !snd_NoiseActive then
+	    snd_NoiseActive = true
+	    snd_Noise:Play()
+	end
+	if snd_NoiseRestart <= CurTime() then
+	    snd_Noise:Stop()
+	    snd_Noise:Play()
+	    snd_NoiseRestart = CurTime() + SoundDuration( 'weapons/motiontracker_noise_loop.wav' )
+	end
 	nearestTarget = 99999
 
 	if nextglitch <= CurTime() and IsJammed then
@@ -340,19 +332,17 @@ function DrawMotionTracker()
 		surface.SetMaterial(mat_screen_scanlines)
 		local uvshift = ((CurTime() * 0.05) % 1) * 0.4
 		surface.DrawTexturedRectUV(0, 0, w, h, 0, uvshift, 0.6, 0.6 + uvshift)
-
-		if #targets ~= 0 and nextblip <= CurTime() then
-			nextblip = CurTime() + 0.20 + 0.5 * closestTarget
-			-- surface.PlaySound( 'weapons/motiontracker_blep02.wav' )
-			-- sound.Play( 'weapons/motiontracker_blep02.wav',
-			--     LocalPlayer():EyePos(),
-			--     75,
-			--     100 + 5 * ( 1 - closestTarget ),
-			--     1 )
-		end
+			if #targets ~= 0 and nextblip <= CurTime() then
+				nextblip = CurTime() + 0.20 + 0.5 * closestTarget
+				surface.PlaySound( 'weapons/motiontracker_blep02.wav' )
+				sound.Play( 'weapons/motiontracker_blep02.wav',
+					LocalPlayer():EyePos(),
+					75,
+					100 + 5 * ( 1 - closestTarget ),
+					1 )
+			end
 	end
 
-	-- print(math.Round(glitchamount))
 	if glitchamount > 0 then
 		surface.SetDrawColor(255, 150, 150, 255 * glitchamount)
 		surface.SetMaterial(mat_screen_glitchovr)
