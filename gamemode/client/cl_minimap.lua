@@ -4,7 +4,7 @@ MiniMap.Radius = 75
 local circles = {}
 local deg = 0
 local sin, cos, rad = math.sin, math.cos, math.rad
-
+local playerVis = false 
 function draw.DrawCircle(name, quality, xpos, ypos, size, color)
 	circles[name] = {}
 
@@ -69,9 +69,9 @@ function MiniMap:Draw()
 	if not self:ShoulDraw(me) then return end
 	local x, y = ScrW() - 25 - MiniMap.Radius, ScrH() - 25 - MiniMap.Radius
 	draw.DrawCircle("minimap_bg", 60, x, y, MiniMap.Radius, grey)
-
 	for _, ply in next, ents.FindInSphere(me:GetPos(), self:GetRange()) do
 		if not BaseWars.Ents:ValidPlayer(ply) or ply == me then continue end
+		if ply:GetNW2Bool("isInvis", false) then continue end
 		local dist = MiniMap:GetDist(me, ply)
 		local ang = MiniMap:GetAngle(me, ply)
 		local posx, posy = MiniMap:GetPos(dist, ang)
@@ -88,6 +88,9 @@ function MiniMap:Draw()
 		surface.DrawTexturedRectRotated(x + posx, y + posy, 16, 16, -math.AngleDifference(me:EyeAngles().y, ply:EyeAngles().y))
 	end
 end
+
+
+
 
 hook.Add("HUDPaint", "MiniMap", function()
 	MiniMap:Draw()
