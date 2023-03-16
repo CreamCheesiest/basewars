@@ -60,6 +60,15 @@ function ENT:Use(activator, caller, usetype, value)
 
 	if BaseWars.Ents:Valid(Wep) then
 		for _, w in pairs(activator:GetWeapons()) do
+			if Class == "arc9_go_nade_frag"
+			or Class == "arc9_go_nade_flashbang"
+			or Class == "arc9_go_nade_incendiary"
+			or Class == "arc9_go_nade_molotov"
+			or Class == "arc9_go_nade_sonar"
+			or Class == "arc9_go_nade_smoke" then
+				activator:GiveAmmo(1, "grenade")
+				break
+			end
 			if w:GetClass() == Class then
 				BaseWars.Inventory:AddToInv(activator, Wep)
 				self:Remove()
@@ -67,8 +76,8 @@ function ENT:Use(activator, caller, usetype, value)
 			end
 		end
 
-		local Clip = Wep.Primary and Wep.Primary.DefaultClip
-		activator:GiveAmmo(Clip or 30, Wep:GetPrimaryAmmoType())
+		--local Clip = Wep.Primary and Wep.Primary.DefaultClip
+		--activator:GiveAmmo(Clip or 30, Wep:GetPrimaryAmmoType())
 	else
 		activator:Give(Class)
 	end

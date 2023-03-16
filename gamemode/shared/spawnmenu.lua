@@ -39,7 +39,9 @@ if SERVER then
 		if not i then return end
 		local model, price, ent, sf, lim = i.Model, i.Price, i.ClassName, i.UseSpawnFunc, i.Limit
 		local gun, drug = i.Gun, i.Drug
+		local timelimit = i.TimeLimit
 		local level = i.Level
+		if not i.lastSpawnTime then i.lastSpawnTime = 0 end
 
 		if gun and (not level or level < BaseWars.Config.LevelSettings.BuyWeapons) then
 			level = BaseWars.Config.LevelSettings.BuyWeapons
@@ -74,6 +76,15 @@ if SERVER then
 			ply:Notify(BaseWars.LANG.CannotPurchaseRaid, BASEWARS_NOTIFICATION_ERROR)
 
 			return
+		end
+
+		if timelimit then
+			print(CurTime() .. " " .. tostring(i.lastSpawnTime + timelimit))
+			if CurTime() < i.lastSpawnTime + timelimit then
+				ply:Notify(string.format(BaseWars.LANG.SpawnMenuTimeLimit, math.Round((i.lastSpawnTime + timelimit) - CurTime())), BASEWARS_NOTIFICATION_ERROR)
+				return
+			end
+			i.lastSpawnTime = CurTime()
 		end
 
 		if lim then

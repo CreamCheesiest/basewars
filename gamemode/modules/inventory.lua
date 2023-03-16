@@ -109,9 +109,9 @@ if SERVER then
 		end
 
 		if not contains and not isLeftClicked then
-			BaseWars.Inventory:AddToInv(ply, weap)
+			--BaseWars.Inventory:AddToInv(ply, weap)
 
-			return false
+			return true -- swapped from false
 		elseif not contains and isLeftClicked then
 			isLeftClicked = false
 

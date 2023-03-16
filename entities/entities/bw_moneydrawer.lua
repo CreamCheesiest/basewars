@@ -84,6 +84,7 @@ if SERVER then
 
 	function ENT:Use(activator, caller, usetype, value)
 		if self.Disabled then return end
+		if self:CPPIGetOwner() ~= activator then return end
 
 		if activator:IsPlayer() and caller:IsPlayer() and self:GetMoney() > 0 then
 			self:PlayerTakeMoney(activator)

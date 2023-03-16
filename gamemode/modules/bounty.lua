@@ -22,6 +22,7 @@ if SERVER then
 	function MODULE:PlaceBounty(ply, who, amt)
 		if not IsValid(ply) or not IsValid(who) then return false, BaseWars.LANG.InvalidPlayer end
 		if who:GetMoney() < amt then return false, BaseWars.LANG.BountyNotEnoughMoney end
+		if amt > 100000 then return false, "Bounties cannot be above $100,000!" end
 		local tbl = self:GetBountyTbl()
 		ply:SetNW2Bool("hasBounty", true)
 		ply:SetNW2Int("bounty", amt)

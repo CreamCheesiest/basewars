@@ -79,7 +79,6 @@ function MODULE:PlayerInvolved(ply)
 	if not self:IsOnGoing() then return false end
 	if Participant1 == ply or Participant2 == ply then return true end
 	if IsFaction and (ply:InFaction(P1Faction) or ply:InFaction(P2Faction)) then return true end
-
 	return false
 end
 

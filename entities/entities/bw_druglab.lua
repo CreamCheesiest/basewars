@@ -38,7 +38,7 @@ if SERVER then
 		local Ent = ents.Create("bw_drink_drug")
 		Ent:SetDrugEffect(drug)
 		Ent.Random = false
-		Ent:SetPos(self:GetPos() + self:GetUp() * 16)
+		Ent:SetPos(self:GetPos() + self:GetUp() * 30)
 		Ent:SetAngles(self:GetAngles())
 		Ent:Spawn()
 		Ent:Activate()

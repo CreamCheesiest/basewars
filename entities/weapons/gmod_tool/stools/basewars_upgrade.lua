@@ -34,20 +34,24 @@ function TOOL:RightClick(trace)
 	local Ent = trace.Entity
 	local ply = self:GetOwner()
 	if not Upgradable(ply, Ent) then return false end
-	local maxlvl = Ent.MaxLevel
-	local currentlvl = Ent:GetLevel()
-	local cost = 0
-	local count = 0
 
-	for i = currentlvl, maxlvl - 1 do
-		if currentlvl * Ent.CurrentValue < ply:GetMoney() then
-			Ent:Upgrade(ply)
-		else
-			Ent:Upgrade(ply)
-		end
-	end
+	self:CanUpgradeAgain(trace)
 
 	return true
+end
+
+function TOOL:CanUpgradeAgain(trace)
+	local Ent = trace.Entity
+	local ply = self:GetOwner()
+	local currentlvl = Ent:GetLevel()
+	if Ent:GetNWInt("UpgradeCost") * currentlvl < ply:GetMoney() and currentlvl < 20 then
+		Ent:Upgrade(ply)
+		if currentlvl < 20 then
+			timer.Simple(0.05, function()
+				self:CanUpgradeAgain(trace)
+			end)
+		end
+	end
 end
 
 function TOOL:Reload(trace)

@@ -102,6 +102,12 @@ function GM:OnEntityCreated(ent)
 			ent:SetMaxHealth(HP)
 			ent.MaxHealth = HP
 			ent.DestructableProp = true
+		elseif Class == "prop_physics" and ent:Health() > 0 then
+			local HP = math.Clamp(ent:Health(), 0, 500)
+			ent:SetHealth(HP)
+			ent:SetMaxHealth(HP)
+			ent.MaxHealth = HP
+			ent.DestructableProp = true
 		end
 	end
 
@@ -162,10 +168,6 @@ end
 function GM:EntityTakeDamage(ent, dmginfo)
 	local Player = BaseWars.Ents:ValidPlayer(ent)
 	local Owner = BaseWars.Ents:ValidOwner(ent)
-
-	if ent:IsNPC() then
-		return false
-	end
 
 	if not Player and not Owner then
 		dmginfo:ScaleDamage(0)
@@ -361,6 +363,9 @@ function GM:Think()
 		for k, v in next, ents.GetAll() do
 			if v:IsOnFire() then
 				v:Extinguish()
+			end
+			if v:GetClass() == "prop_physics" and not BaseWars.Raid:PlayerInvolved(v:CPPIGetOwner()) and v:Health() < v.MaxHealth then
+				v:SetHealth(v:Health() + 0.5)
 			end
 		end
 

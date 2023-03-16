@@ -223,7 +223,7 @@ BaseWars.Commands.AddCommand({"discord", "disc", "d"}, function(ply)
 	ply:SendLua([[gui.OpenURL"]] .. BaseWars.Config.Forums .. [["]])
 end, false)
 
-BaseWars.Commands.AddCommand({"givemoney", "pay", "moneygive"}, function(caller, line, ply, amount)
+/*BaseWars.Commands.AddCommand({"givemoney", "pay", "moneygive"}, function(caller, line, ply, amount)
 	if not amount then return false, BaseWars.LANG.InvalidAmount end
 	amount, ply = amount:Trim(), ply and ply:Trim() or ""
 
@@ -264,7 +264,7 @@ BaseWars.Commands.AddCommand({"givemoney", "pay", "moneygive"}, function(caller,
 	local Gave = string.format(BaseWars.LANG.GaveMoney, ply:Nick(), BaseWars.NumberFormat(amount))
 	caller:ChatPrint(Gave)
 	ply:ChatPrint(Given)
-end, false)
+end, false)*/
 
 BaseWars.Commands.AddCommand({"sellall"}, function(ply)
 	local entities = ents.FindByClass("bw_*")

@@ -66,6 +66,7 @@ BaseWars.LANG.__LANGUAGELOOK.ENGLISH = {
 	SpawnMenuBuy = "You bought a(n) \"%s\" for " .. CURRENCY .. "%s.",
 	SpawnMenuBuyConfirm = "Are you sure you want to by a(n) \"%s\" for " .. CURRENCY .. "%s?",
 	SpawnMenuConf = "Purchase Confirmation",
+	SpawnMenuTimeLimit = "You cannot spawn this item that quickly! (%s seconds)",
 	DeadBuy = "Dead people buy nothing.",
 	EntLimitReached = "You have reached the limit of \"%s\"s.",
 	AddToInventory = "You have added %s to your inventory!",
@@ -93,6 +94,8 @@ BaseWars.LANG.__LANGUAGELOOK.ENGLISH = {
 	InvalidPlayer = "Invalid Player!",
 	InvalidAmount = "Invalid Amount!",
 	TooPoor = "You're too poor for this transaction!",
+	UseMedkit = "You just consumed a level %s medkit!",
+	UseArmorKit = "You just consumed a level %s armor kit!"
 }
 
 local INVALID_LANGUAGE = "INVALID LANGUAGE SELECTED! NOTIFY THE SERVER ADMIN!"
