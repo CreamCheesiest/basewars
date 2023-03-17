@@ -38,7 +38,7 @@ if SERVER then
 		i = i[item]
 		if not i then return end
 		local model, price, ent, sf, lim = i.Model, i.Price, i.ClassName, i.UseSpawnFunc, i.Limit
-		local gun, drug = i.Gun, i.Drug
+		local gun, drug, grenade, kit = i.Gun, i.Drug, i.Grenade, i.Kit
 		local timelimit = i.TimeLimit
 		local level = i.Level
 		if not i.lastSpawnTime then i.lastSpawnTime = 0 end
@@ -72,7 +72,7 @@ if SERVER then
 		SpawnAng.y = SpawnAng.y + 180
 		SpawnAng.y = math.Round(SpawnAng.y / 45) * 45
 
-		if not gun and not drug and ply:InRaid() then
+		if not gun and not drug and not grenade and not kit and ply:InRaid() then
 			ply:Notify(BaseWars.LANG.CannotPurchaseRaid, BASEWARS_NOTIFICATION_ERROR)
 
 			return

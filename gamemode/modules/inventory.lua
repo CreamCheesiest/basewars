@@ -173,9 +173,7 @@ if SERVER then
 				end
 			end
 
-			ply:Give(Class)
-			local wep = ply:GetWeapon(Class)
-			ply:RemoveAmmo(180, wep:GetPrimaryAmmoType())
+			ply:Give(Class, true)
 			BaseWars.Inventory:RemoveFromInv(ply, Class)
 			isLeftClicked = false
 

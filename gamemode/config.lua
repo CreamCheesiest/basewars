@@ -433,19 +433,22 @@ BaseWars.SpawnList.Models.Loadout["Ammo and Kits"] = {
 		Model = "models/items/arc9/ammo_middle_box.mdl",
 		Price = 5000,
 		ClassName = "arc9_ammo_big",
-		TimeLimit = 20
+		TimeLimit = 20,
+		Kit = true,
 	},
 	["Health Kit"] = BaseWars.GSL{
 		Model = "models/items/healthkit.mdl",
 		Price = 10000,
 		TimeLimit = 20,
-		ClassName = "bw_healthkit"
+		ClassName = "bw_healthkit",
+		Kit = true,
 	},
 	["Armor Kit"] = BaseWars.GSL{
 		Model = "models/props_lab/reciever01d.mdl",
 		Price = 10000,
 		TimeLimit = 20,
-		ClassName = "bw_armorkit"
+		ClassName = "bw_armorkit",
+		Kit = true,
 	}
 }
 
@@ -838,42 +841,48 @@ BaseWars.SpawnList.Models.Loadout["Throwables - T1"] = {
 		Model = "models/weapons/csgo/w_eq_flashbang.mdl",
 		Price = 7500,
 		ClassName = "arc9_go_nade_flashbang",
-		Level = 50
+		Level = 50,
+		Grenade = true
 	},
 	["Frag Grenade"] = BaseWars.GSL{
 		Gun = true,
 		Model = "models/weapons/csgo/w_eq_fraggrenade.mdl",
 		Price = 10000,
 		ClassName = "arc9_go_nade_frag",
-		Level = 60
+		Level = 60,
+		Grenade = true
 	},
 	["Incendiary Grenade"] = BaseWars.GSL{
 		Gun = true,
 		Model = "models/weapons/csgo/w_eq_incendiary.mdl",
 		Price = 10000,
 		ClassName = "arc9_go_nade_incendiary",
-		Level = 80
+		Level = 80,
+		Grenade = true
 	},
 	["Molotov"] = BaseWars.GSL{
 		Gun = true,
 		Model = "models/weapons/csgo/w_eq_molotov.mdl",
 		Price = 10000,
 		ClassName = "arc9_go_nade_molotov",
-		Level = 80
+		Level = 80,
+		Grenade = true
 	},
 	["Smoke Grenade"] = BaseWars.GSL{
 		Gun = true,
 		Model = "models/weapons/csgo/w_eq_smoke_grenade.mdl",
 		Price = 7500,
 		ClassName = "arc9_go_nade_smoke",
-		Level = 40
+		Level = 40,
+		Grenade = true
 	},
 	["Sonar Nade"] = BaseWars.GSL{
 		Gun = true,
 		Model = "models/weapons/csgo/w_eq_sensor_grenade.mdl",
 		Price = 25000,
 		ClassName = "arc9_go_nade_sonar",
-		Level = 200
+		Level = 200,
+		Grenade = true
 	},
 }
 

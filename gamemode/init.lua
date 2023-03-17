@@ -364,9 +364,9 @@ function GM:Think()
 			if v:IsOnFire() then
 				v:Extinguish()
 			end
-			if v:GetClass() == "prop_physics" and not BaseWars.Raid:PlayerInvolved(v:CPPIGetOwner()) and v:Health() < v.MaxHealth then
+			/*if v:GetClass() == "prop_physics" and not BaseWars.Raid:PlayerInvolved(v:CPPIGetOwner()) and v:Health() < v.MaxHealth then
 				v:SetHealth(v:Health() + 0.5)
-			end
+			end*/
 		end
 
 		for k, s in next, Spawns do

@@ -79,7 +79,7 @@ function ENT:Use(activator, caller, usetype, value)
 		--local Clip = Wep.Primary and Wep.Primary.DefaultClip
 		--activator:GiveAmmo(Clip or 30, Wep:GetPrimaryAmmoType())
 	else
-		activator:Give(Class)
+		activator:Give(Class, true)
 	end
 
 	self:Remove()

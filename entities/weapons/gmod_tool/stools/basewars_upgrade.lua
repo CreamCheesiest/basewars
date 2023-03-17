@@ -12,7 +12,7 @@ if CLIENT then
 	language.Add("tool." .. FileName .. ".0", "Left click to upgrade printer one level. Right click to max upgrade printer.")
 end
 
-local dist = 100 ^ 2
+local dist = 200 ^ 2
 
 local function Upgradable(ply, ent)
 	local Eyes = ply:EyePos()
